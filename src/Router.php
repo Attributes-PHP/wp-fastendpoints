@@ -33,6 +33,8 @@ use Wp\FastEndpoints\Contracts\Http\Router as RouterContract;
  */
 class Router implements RouterContract
 {
+    use PluginDependsTrait;
+
     /**
      * Router rest base
      *
@@ -80,13 +82,6 @@ class Router implements RouterContract
      * @since 0.9.0
      */
     protected string $version;
-
-    /**
-     * Required dependencies for this router
-     *
-     * @since 2.1.0
-     */
-    protected string|array|null $plugins = null;
 
     /**
      * Creates a new Router instance
@@ -331,19 +326,5 @@ class Router implements RouterContract
         $this->endpoints[] = $endpoint;
 
         return $endpoint;
-    }
-
-    /**
-     * Specifies a set of plugins that are needed by this router and all sub-routers
-     */
-    public function depends(string|array $plugins): self
-    {
-        if (is_string($plugins)) {
-            $plugins = [$plugins];
-        }
-
-        $this->plugins = array_merge($this->plugins ?: [], $plugins);
-
-        return $this;
     }
 }

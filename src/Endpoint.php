@@ -30,6 +30,7 @@ use WP_REST_Response;
 class Endpoint implements EndpointInterface
 {
     use DependencyInjectionTrait;
+    use PluginDependsTrait;
 
     /**
      * HTTP endpoint method - also supports values from WP_REST_Server (e.g. WP_REST_Server::READABLE)
@@ -60,15 +61,6 @@ class Endpoint implements EndpointInterface
      * @var callable
      */
     protected $handler;
-
-    /**
-     * Plugins needed for the REST route
-     *
-     * @since 1.3.0
-     *
-     * @var ?array<string>
-     */
-    protected ?array $plugins = null;
 
     /**
      * Same as the register_rest_route $override parameter
@@ -210,20 +202,6 @@ class Endpoint implements EndpointInterface
         if (method_exists($middleware, 'onResponse')) {
             $this->onResponseHandlers[] = [$middleware, 'onResponse'];
         }
-
-        return $this;
-    }
-
-    /**
-     * Specifies a set of plugins that are needed by the endpoint
-     */
-    public function depends(string|array $plugins): self
-    {
-        if (is_string($plugins)) {
-            $plugins = [$plugins];
-        }
-
-        $this->plugins = array_merge($this->plugins ?: [], $plugins);
 
         return $this;
     }
