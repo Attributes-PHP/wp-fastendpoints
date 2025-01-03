@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Wp\FastEndpoints;
 
 trait PluginDependsTrait
@@ -14,7 +16,6 @@ trait PluginDependsTrait
     /**
      * Specifies a set of plugins that are needed by this router and all sub-routers
      *
-     * @param string|array $plugins
      * @return Router|Endpoint|PluginDependsTrait
      */
     public function depends(string|array $plugins): self

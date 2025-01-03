@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Wp\FastEndpoints;
 
 use DI\Container;
@@ -9,9 +11,11 @@ use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
 
+use function DI\create;
+
 trait DependencyInjectionTrait
 {
-    private Container $container;
+    private ?Container $container = null;
 
     /**
      * Calls each handler.
@@ -44,17 +48,15 @@ trait DependencyInjectionTrait
      *
      * @throws Exception
      */
-    protected function buildContainer($request): void
+    protected function buildContainer(WP_REST_Request $request): void
     {
         if ($this->container) {
             return;
         }
 
         $builder = new ContainerBuilder;
-        do_action('fastendpoints_container_builder', $builder, $request);
-
-        $this->container = $builder->build();
-        do_action('fastendpoints_container', $this->container, $request);
+        $builder = apply_filters('fastendpoints_container_builder', $builder, $request);
+        $this->container = apply_filters('fastendpoints_container', $builder->build(), $request);
     }
 
     /**
@@ -72,10 +74,13 @@ trait DependencyInjectionTrait
             }));
         }
         if (! $this->container->has('___response')) {
-            $this->container->set('___response', \DI\create('WP_REST_Response'));
+            $this->container->set('___response', create('WP_REST_Response'));
         }
-        if (! $this->container->has('___self')) {
-            $this->container->set('___self', $this);
+        if (! $this->container->has('___endpoint')) {
+            $endpoint = $this;
+            $this->container->set('___endpoint', \DI\value(function () use ($endpoint) {
+                return $endpoint;
+            }));
         }
     }
 }
