@@ -52,7 +52,7 @@ function castValueFromReflectionNamedType(ReflectionNamedType $propertyType, mix
 {
     if ($propertyType->isBuiltin()) {
         if (!settype($value, $propertyType->getName())) {
-            throw new CastException("Invalid type '{$propertyType->getName()}'");
+            throw new CastException("Unable to cast '$value' into a '{$propertyType->getName()}'");
         }
     }
 
@@ -70,14 +70,16 @@ function castPropertyValue(ReflectionProperty $property, mixed $value): mixed
         return castValueFromReflectionNamedType($propertyType, $value);
     }
 
-    foreach ($propertyType->getTypes() as $type) {
-        var_dump($type);
+    $allPropertyTypes = $propertyType->getTypes();
+    // Looping reversely on purpose to cast sensible types first e.g. bool -> float -> int -> string -> array -> object
+    for ($i = count($allPropertyTypes) - 1; $i >= 0; $i--) {
+        $type = $allPropertyTypes[$i];;
         try {
             return castValueFromReflectionNamedType($type, $value);
         } catch (CastException $error) {}
     }
 
-    throw new CastException("Invalid type '{$propertyType->getName()}' for property '{$property->getName()}'");
+    throw new CastException("Unable to cast property value '{$property->getName()}' into any of the Union types");
 }
 
 class Person
@@ -87,7 +89,7 @@ class Person
 }
 
 $personArray = [
-    'age' => '10.90',
+    'age' => '10.9',
     'createdAt' => '2025-01-01a15:46:55',
 ];
 
