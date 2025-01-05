@@ -13,15 +13,14 @@
         "matapatos/wp-fastendpoints-contracts": "dev-typing-validation",
         "symfony/validator": "^6.4",
         "symfony/serializer": "^6.4",
-        "php-di/php-di": "^7.0"
+        "php-di/php-di": "^7.0",
+        "symfony/property-access": "^6.4",
+        "respect/validation": "^2.3"
     },
     "autoload": {
         "psr-4": {
             "Wp\\FastEndpoints\\": "src/"
-        },
-        "files": [
-            "src/Validation/DefaultOptions.php"
-        ]
+        }
     },
     "autoload-dev": {
         "psr-4": {
