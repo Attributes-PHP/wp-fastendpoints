@@ -3,14 +3,12 @@
 /**
  * Holds Class that removes repeating http status in $data.
  *
- * @since 0.9.0
- *
  * @license MIT
  */
 
 declare(strict_types=1);
 
-namespace Wp\FastEndpoints\Helpers;
+namespace Attributes\Wp\FastEndpoints\Helpers;
 
 use WP_Error;
 

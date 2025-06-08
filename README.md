@@ -1,12 +1,12 @@
 # WP-FastEndpoints
 
-<img src="https://raw.githubusercontent.com/matapatos/wp-fastendpoints/main/docs/images/wp-fastendpoints-wallpaper.png" alt="WordPress REST endpoints made easy">
+<img src="https://raw.githubusercontent.com/Attributes-PHP/wp-fastendpoints/main/docs/images/wp-fastendpoints-wallpaper.png" alt="WordPress REST endpoints made easy">
 <p align="center">
-    <a href="https://github.com/matapatos/wp-fastendpoints/actions"><img alt="GitHub Actions Workflow Status (main)" src="https://img.shields.io/github/actions/workflow/status/matapatos/wp-fastendpoints/tests.yml"></a>
-    <a href="https://codecov.io/gh/matapatos/wp-fastendpoints" ><img alt="Code Coverage" src="https://codecov.io/gh/matapatos/wp-fastendpoints/graph/badge.svg?token=8N7N9NMGLG"/></a>
-    <a href="https://packagist.org/packages/matapatos/wp-fastendpoints"><img alt="Latest Version" src="https://img.shields.io/packagist/v/matapatos/wp-fastendpoints"></a>
-    <a href="https://packagist.org/packages/matapatos/wp-fastendpoints"><img alt="Supported WordPress Versions" src="https://img.shields.io/badge/6.x-versions?logo=wordpress&label=versions"></a>
-    <a href="https://packagist.org/packages/matapatos/wp-fastendpoints"><img alt="Software License" src="https://img.shields.io/packagist/l/matapatos/wp-fastendpoints"></a>
+    <a href="https://github.com/Attributes-PHP/wp-fastendpoints/actions"><img alt="GitHub Actions Workflow Status (main)" src="https://img.shields.io/github/actions/workflow/status/Attributes-PHP/wp-fastendpoints/tests.yml"></a>
+    <a href="https://codecov.io/gh/Attributes-PHP/wp-fastendpoints" ><img alt="Code Coverage" src="https://codecov.io/gh/Attributes-PHP/wp-fastendpoints/graph/badge.svg?token=8N7N9NMGLG"/></a>
+    <a href="https://packagist.org/packages/Attributes-PHP/wp-fastendpoints"><img alt="Latest Version" src="https://img.shields.io/packagist/v/Attributes-PHP/wp-fastendpoints"></a>
+    <a href="https://packagist.org/packages/Attributes-PHP/wp-fastendpoints"><img alt="Supported WordPress Versions" src="https://img.shields.io/badge/6.x-versions?logo=wordpress&label=versions"></a>
+    <a href="https://packagist.org/packages/Attributes-PHP/wp-fastendpoints"><img alt="Software License" src="https://img.shields.io/packagist/l/Attributes-PHP/wp-fastendpoints"></a>
 </p>
 
 ------
@@ -36,7 +36,7 @@ We aim to support versions that haven't reached their end-of-life.
 ## Installation
 
 ```bash
-composer require wp-fastendpoints
+composer require attributes-php/wp-fastendpoints
 ```
 
 FastEndpoints was created by **[André Gil](https://www.linkedin.com/in/andre-gil/)** and is open-sourced software licensed under the **[MIT license](https://opensource.org/licenses/MIT)**.

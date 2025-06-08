@@ -37,7 +37,7 @@ test('Creating post endpoint has correct permissions and schema', function () {
 ```
 
 The reason we are able to make the assertions above is
-[due to this line](https://github.com/matapatos/wp-fastendpoints/wiki/Quick-start#the-actual-code---srcapirouterspostsphp).
+[due to this line](https://github.com/Attributes-PHP/wp-fastendpoints/wiki/Quick-start#the-actual-code---srcapirouterspostsphp).
 Specially, regarding this part ```$router ??```. This allows us to replace our original router with our mocked version.
 
 Nothing magical happening here, just pure PHP code! 🪄

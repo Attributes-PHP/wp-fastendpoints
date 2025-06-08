@@ -3,19 +3,15 @@
 /**
  * Holds array helper functions
  *
- * @since 0.9.0
- *
  * @license MIT
  */
 
 declare(strict_types=1);
 
-namespace Wp\FastEndpoints\Helpers;
+namespace Attributes\Wp\FastEndpoints\Helpers;
 
 /**
  * Class that holds array helper functions
- *
- * @since 0.9.0
  *
  * @author André Gil <andre_gil22@hotmail.com>
  */
@@ -23,8 +19,6 @@ class Arr
 {
     /**
      * Checks if the given array is an associative array.
-     *
-     * @version 0.9.0
      *
      * @param  array  $array  Array to be checked.
      * @return bool true if it seems an associative array or false otherwise.
@@ -38,8 +32,6 @@ class Arr
 
     /**
      * Wraps a variable as an array
-     *
-     * @since 0.9.0
      *
      * @param  mixed  $value  The variable to be wrapped as an array.
      */
@@ -78,13 +70,5 @@ class Arr
         }
 
         return $path;
-    }
-
-    /**
-     * Converts an object to an array
-     */
-    public static function fromObjectToArray(mixed $data): mixed
-    {
-        return is_object($data) ? array_map([Arr::class, __FUNCTION__], (array) $data) : $data;
     }
 }

@@ -10,8 +10,11 @@
 
 declare(strict_types=1);
 
-namespace Wp\FastEndpoints\Tests\Unit\Schemas;
+namespace Attributes\Wp\FastEndpoints\Tests\Unit\Schemas;
 
+use Attributes\Wp\FastEndpoints\Endpoint;
+use Attributes\Wp\FastEndpoints\Router;
+use Attributes\Wp\FastEndpoints\Tests\Helpers\Helpers;
 use Brain\Monkey;
 use Brain\Monkey\Actions;
 use Brain\Monkey\Filters;
@@ -19,9 +22,6 @@ use Brain\Monkey\Functions;
 use Exception;
 use Mockery;
 use TypeError;
-use Wp\FastEndpoints\Endpoint;
-use Wp\FastEndpoints\Router;
-use Wp\FastEndpoints\Tests\Helpers\Helpers;
 
 beforeEach(function () {
     Monkey\setUp();

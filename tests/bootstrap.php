@@ -1,6 +1,6 @@
 <?php
 
-use Wp\FastEndpoints\Tests\Helpers\Helpers;
+use Attributes\Wp\FastEndpoints\Tests\Helpers\Helpers;
 use Yoast\WPTestUtils\WPIntegration;
 
 /**

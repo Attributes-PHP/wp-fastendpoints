@@ -10,8 +10,8 @@
 
 declare(strict_types=1);
 
-use Wp\FastEndpoints\Helpers\WpError;
-use Wp\FastEndpoints\Router;
+use Attributes\Wp\FastEndpoints\Helpers\WpError;
+use Attributes\Wp\FastEndpoints\Router;
 
 $router = new Router('my-posts', 'v1');
 $router->appendSchemaDir(\SCHEMAS_DIR, 'https://www.wp-fastendpoints.com');

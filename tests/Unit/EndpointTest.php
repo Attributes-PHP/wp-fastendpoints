@@ -21,8 +21,8 @@ use Mockery;
 use Wp\FastEndpoints\Contracts\Middlewares\Middleware;
 use Wp\FastEndpoints\Endpoint;
 use Wp\FastEndpoints\Helpers\WpError;
-use Wp\FastEndpoints\Schemas\ResponseMiddleware;
-use Wp\FastEndpoints\Schemas\SchemaMiddleware;
+use Wp\FastEndpoints\Middlewares\ResponseMiddleware;
+use Wp\FastEndpoints\Middlewares\SchemaMiddleware;
 use Wp\FastEndpoints\Tests\Helpers\Helpers;
 
 beforeEach(function () {

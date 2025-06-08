@@ -1,6 +1,6 @@
 site_name: WP-FastEndpoints
 site_description: FastEndpoints is an elegant way of writing custom WordPress REST endpoints with a focus on readability and IDE auto completion support
-site_url: https://matapatos.github.io/wp-fastendpoints/
+site_url: https://attributes-php.github.io/wp-fastendpoints/
 watch:
   - data
   - docs
@@ -24,9 +24,9 @@ theme:
   icon:
     repo: fontawesome/brands/github-alt
   language: en
-repo_name: matapatos/wp-fastendpoints
-repo_url: https://github.com/matapatos/wp-fastendpoints
-edit_uri: https://github.com/matapatos/wp-fastendpoints/tree/main/docs/docs
+repo_name: attributes-php/wp-fastendpoints
+repo_url: https://github.com/Attributes-PHP/wp-fastendpoints
+edit_uri: https://github.com/Attributes-PHP/wp-fastendpoints/tree/main/docs/docs
 plugins:
   search: null
   macros:
@@ -67,7 +67,7 @@ nav:
 extra:
   social:
     - icon: fontawesome/brands/github-alt
-      link: https://github.com/matapatos/wp-fastendpoints
+      link: https://github.com/Attributes-PHP/wp-fastendpoints
     - icon: fontawesome/brands/linkedin
       link: https://www.linkedin.com/in/andre-gil/
 extra_css:

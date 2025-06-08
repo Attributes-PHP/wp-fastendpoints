@@ -1,9 +1,9 @@
 <?php
 
-namespace Wp\FastEndpoints\Tests\Integration\Routers\Middlewares;
+namespace Attributes\Wp\FastEndpoints\Tests\Integration\Routers\Middlewares;
 
-use Wp\FastEndpoints\Contracts\Middlewares\Middleware;
-use Wp\FastEndpoints\Helpers\WpError;
+use Attributes\Wp\FastEndpoints\Contracts\Middlewares\Middleware;
+use Attributes\Wp\FastEndpoints\Helpers\WpError;
 
 class OnResponseErrorActionMiddleware extends Middleware
 {

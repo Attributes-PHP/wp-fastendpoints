@@ -45,7 +45,7 @@ the main endpoint handler and the later one should run after the main endpoint h
 Same as with the permission handlers, middlewares are called with the same order that they were attached.
 
 ```php
-class OnRequestMiddleware extends \Wp\FastEndpoints\Contracts\Middleware
+class OnRequestMiddleware extends \Attributes\Wp\FastEndpoints\Contracts\Middleware
 {
     public function onRequest(/* Type what you need */){
         return;
@@ -62,7 +62,7 @@ $router->post('/test', function () {return true;})
 Likewise, middlewares implementing onResponse functions will be triggered in the same order as they were attached.
 
 ```php
-class OnResponseMiddleware extends \Wp\FastEndpoints\Contracts\Middleware
+class OnResponseMiddleware extends \Attributes\Wp\FastEndpoints\Contracts\Middleware
 {
     public function onResponse(/* Type what you need */){
         return;

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace MyPlugin\Providers;
 
-use Wp\FastEndpoints\Router;
+use Attributes\Wp\FastEndpoints\Router;
 
 class ApiProvider implements ProviderContract
 {
@@ -42,4 +42,4 @@ class ApiProvider implements ProviderContract
 
 Now let's see [how to test it out](https://github.com/matapatos/wp-fastendpoints/wiki/Testing)! 😄
 
-Full source code can be found at **[matapatos/wp-fastendpoints-my-plugin »](https://github.com/matapatos/wp-fastendpoints-my-plugin)**
+Full source code can be found at **[attributes-php/wp-fastendpoints-my-plugin »](https://github.com/Attributes-PHP/wp-fastendpoints-my-plugin)**

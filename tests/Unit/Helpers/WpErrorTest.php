@@ -10,13 +10,13 @@
 
 declare(strict_types=1);
 
-namespace Wp\FastEndpoints\Tests\Unit\Schemas;
+namespace Attributes\Wp\FastEndpoints\Tests\Unit\Schemas;
 
+use Attributes\Wp\FastEndpoints\Helpers\WpError;
+use Attributes\Wp\FastEndpoints\Tests\Helpers\Helpers;
 use Brain\Monkey;
 use Brain\Monkey\Functions;
 use Mockery;
-use Wp\FastEndpoints\Helpers\WpError;
-use Wp\FastEndpoints\Tests\Helpers\Helpers;
 
 beforeEach(function () {
     Monkey\setUp();

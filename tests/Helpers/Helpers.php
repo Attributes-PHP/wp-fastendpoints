@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Wp\FastEndpoints\Tests\Helpers;
+namespace Attributes\Wp\FastEndpoints\Tests\Helpers;
 
-use Exception;
+use Attributes\Wp\FastEndpoints\Router;
 use Illuminate\Support\Str;
-use Wp\FastEndpoints\Router;
 
 class Helpers
 {
@@ -65,36 +64,6 @@ class Helpers
         $property = $reflection->getProperty($propertyName);
         $property->setAccessible(true);
         $property->setValue($class, $propertyValue);
-    }
-
-    /**
-     * Reads a schema from a file and parses it
-     *
-     * @since 0.9.0
-     *
-     * @param  string  $filepath  - SchemaMiddleware filepath to be loaded.
-     * @return mixed - Loaded schema.
-     *
-     * @throws Exception if unable to read or invalid schema
-     */
-    public static function loadSchema(string $filepath)
-    {
-        if (! \str_ends_with($filepath, '.json')) {
-            $filepath .= '.json';
-        }
-
-        // Read JSON file and retrieve it's content.
-        $result = \file_get_contents($filepath);
-        if ($result === false) {
-            throw new Exception(sprintf('Unable to read schema %s', $filepath));
-        }
-
-        $schema = \json_decode($result, true);
-        if ($schema === null && \json_last_error() !== \JSON_ERROR_NONE) {
-            throw new Exception(sprintf("Invalid schema %s. Are you sure it's a valid JSON?", $filepath));
-        }
-
-        return $schema;
     }
 
     /**

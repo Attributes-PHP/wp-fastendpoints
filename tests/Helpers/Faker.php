@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Wp\FastEndpoints\Tests\Helpers;
+namespace Attributes\Wp\FastEndpoints\Tests\Helpers;
 
 class Faker
 {

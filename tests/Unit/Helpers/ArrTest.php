@@ -10,12 +10,12 @@
 
 declare(strict_types=1);
 
-namespace Wp\FastEndpoints\Tests\Unit\Schemas;
+namespace Attributes\Wp\FastEndpoints\Tests\Unit\Schemas;
 
+use Attributes\Wp\FastEndpoints\Helpers\Arr;
+use Attributes\Wp\FastEndpoints\Tests\Helpers\Helpers;
 use Brain\Monkey;
 use Mockery;
-use Wp\FastEndpoints\Helpers\Arr;
-use Wp\FastEndpoints\Tests\Helpers\Helpers;
 
 beforeEach(function () {
     Monkey\setUp();
