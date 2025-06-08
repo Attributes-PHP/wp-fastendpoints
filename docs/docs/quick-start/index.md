@@ -7,7 +7,7 @@ This API will be able to:
 * Update and
 * Delete a blog post
 
-Full source code can be found at **[matapatos/wp-fastendpoints-my-plugin »](https://github.com/matapatos/wp-fastendpoints-my-plugin)**
+Full source code can be found at **[Attributes-PHP/wp-fastendpoints-my-plugin »](https://github.com/Attributes-PHP/wp-fastendpoints-my-plugin)**
 
 ## Plugin code structure 🔨
 

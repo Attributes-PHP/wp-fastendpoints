@@ -6,7 +6,7 @@
  * @since 0.9.0
  */
 
-use Wp\FastEndpoints\Tests\Helpers\Helpers;
+use Attributes\Wp\FastEndpoints\Tests\Helpers\Helpers;
 
 if (Helpers::isIntegrationTest()) {
     return;
@@ -67,6 +67,11 @@ if (! class_exists('WP_REST_Response')) {
         public function set_data($data)
         {
             $this->data = $data;
+        }
+
+        public function set_status(int $status)
+        {
+            $this->status = $status;
         }
     }
 }

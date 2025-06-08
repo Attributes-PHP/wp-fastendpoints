@@ -1,7 +1,7 @@
 The first thing we need to do is to create a Router.
 
 ```php
-use Wp\FastEndpoints\Router;
+use Attributes\Wp\FastEndpoints\Router;
 
 // Dependency injection to enable us to mock router in tests
 $router = $router ?? new Router('posts');
@@ -51,7 +51,7 @@ JSON schemas can help us to make sure that we are returning all the required fie
 as well as to avoid retrieving sensitive information. The last one is configurable.
 
 ```php
-use Wp\FastEndpoints\Helpers\WpError;
+use Attributes\Wp\FastEndpoints\Helpers\WpError;
 
 $router->get('(?P<ID>[\d]+)', function ($ID) {
     $post = get_post($ID);
@@ -109,7 +109,7 @@ which will try to replace it by the _ID_ parameter.
 ## Delete a post
 
 ```php
-use Wp\FastEndpoints\Helpers\WpError;
+use Attributes\Wp\FastEndpoints\Helpers\WpError;
 
 $router->delete('(?P<ID>[\d]+)', function ($ID) {
     $post = wp_delete_post($postId);
@@ -130,8 +130,8 @@ declare(strict_types=1);
 
 namespace MyPlugin\Api\Routers;
 
-use Wp\FastEndpoints\Helpers\WpError;
-use Wp\FastEndpoints\Router;
+use Attributes\Wp\FastEndpoints\Helpers\WpError;
+use Attributes\Wp\FastEndpoints\Router;
 
 // Dependency injection to enable us to mock router in the tests
 $router = $router ?? new Router('posts');

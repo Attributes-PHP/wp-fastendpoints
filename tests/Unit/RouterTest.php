@@ -10,8 +10,12 @@
 
 declare(strict_types=1);
 
-namespace Wp\FastEndpoints\Tests\Unit\Schemas;
+namespace Attributes\Wp\FastEndpoints\Tests\Unit\Schemas;
 
+use Attributes\Wp\FastEndpoints\DI\Invoker;
+use Attributes\Wp\FastEndpoints\Endpoint;
+use Attributes\Wp\FastEndpoints\Router;
+use Attributes\Wp\FastEndpoints\Tests\Helpers\Helpers;
 use Brain\Monkey;
 use Brain\Monkey\Actions;
 use Brain\Monkey\Filters;
@@ -19,9 +23,6 @@ use Brain\Monkey\Functions;
 use Exception;
 use Mockery;
 use TypeError;
-use Wp\FastEndpoints\Endpoint;
-use Wp\FastEndpoints\Router;
-use Wp\FastEndpoints\Tests\Helpers\Helpers;
 
 beforeEach(function () {
     Monkey\setUp();
@@ -151,54 +152,25 @@ test('Get router REST path', function (string $api, string $version) {
     ['/my-api/', '/v3/'],
 ])->group('router', 'getRestBase');
 
-// SchemaMiddleware dirs
-
-test('Append invalid schema directories', function ($invalidDir, $errorMessage) {
-    Functions\when('esc_html__')->returnArg();
-    Functions\when('esc_html')->returnArg();
-    Functions\when('wp_die')->alias(function ($msg) {
-        throw new Exception($msg);
-    });
-    $router = new Router('custom-api', 'v1');
-    expect(Helpers::getNonPublicClassProperty($router, 'schemaDirs'))->toBe([])
-        ->and(function () use ($invalidDir, $router) {
-            $router->appendSchemaDir($invalidDir, 'https://www.wp-fastendpoints.com');
-        })->toThrow(Exception::class, $errorMessage)
-        ->and(Helpers::getNonPublicClassProperty($router, 'schemaDirs'))->toBe([]);
-})->with([
-    ['', 'Invalid schema directory'],
-    ['/invalid', 'Invalid or not found schema directory: /invalid'],
-    [__FILE__, 'Invalid or not found schema directory: '.__FILE__],
-])->group('router', 'appendSchemaDir');
-
-test('Append schema directories', function ($dir) {
-    $router = new Router('custom-api', 'v1');
-    expect(Helpers::getNonPublicClassProperty($router, 'schemaDirs'))->toBe([]);
-    $router->appendSchemaDir($dir, 'https://www.wp-fastendpoints.com');
-    expect(Helpers::getNonPublicClassProperty($router, 'schemaDirs'))->toBe(['https://www.wp-fastendpoints.com' => $dir]);
-})->with([dirname(__FILE__), dirname(__FILE__).'/../Schemas'])->group('router', 'appendSchemaDir');
-
 // Register endpoints
 
 test('Register endpoints', function () {
-    $endpointMock1 = Mockery::mock(Endpoint::class)
-        ->expects()
-        ->depends(['router-plugin'])
-        ->getMock()
-        ->expects()
-        ->register('custom-api/v3', '')
-        ->getMock();
-    $endpointMock2 = Mockery::mock(Endpoint::class)
-        ->expects()
-        ->depends(['router-plugin'])
-        ->getMock()
-        ->expects()
-        ->register('custom-api/v3', '')
-        ->getMock();
+    $invoker = Mockery::mock(Invoker::class);
+    $invoker->expects()
+        ->setInjectables([])
+        ->times(2);
+    $endpointMock1 = Mockery::mock(Endpoint::class);
+    $endpointMock1->expects()->depends(['router-plugin']);
+    $endpointMock1->expects()->register('custom-api/v3', '');
+    $endpointMock1->expects()->getInvoker()->andReturn($invoker);
+
+    $endpointMock2 = Mockery::mock(Endpoint::class);
+    $endpointMock2->expects()->depends(['router-plugin']);
+    $endpointMock2->expects()->register('custom-api/v3', '');
+    $endpointMock2->expects()->getInvoker()->andReturn($invoker);
 
     $router = new Router('custom-api', 'v3');
     $router->depends('router-plugin');
-    Helpers::setNonPublicClassProperty($router, 'schemaDirs', ['fake-prefix' => 'tests-schema-dir']);
     Helpers::setNonPublicClassProperty($router, 'endpoints', [$endpointMock1, $endpointMock2]);
     expect(Helpers::getNonPublicClassProperty($router, 'registered'))->toBeFalse();
     $router->registerEndpoints();
@@ -289,22 +261,19 @@ test('Register router with sub-routers mocks', function () {
         ->with('Wp\FastEndpoints\Router->registerEndpoints()')
         ->times(1);
     $router = new Router('api', 'v1');
-    $subRouter1 = Mockery::mock(Router::class)
-        ->expects()
-        ->appendSchemaDir('/test-dir', 'fake-uri-prefix')
-        ->getMock()
-        ->expects()
-        ->register()
-        ->getMock();
-    $subRouter2 = Mockery::mock(Router::class)
-        ->expects()
-        ->appendSchemaDir('/test-dir', 'fake-uri-prefix')
-        ->getMock()
-        ->expects()
-        ->register()
-        ->getMock();
+
+    $returnNull = fn () => null;
+    $router->inject('test', $returnNull);
+
+    $subRouter1 = Mockery::mock(Router::class);
+    $subRouter1->expects()->inject('test', $returnNull);
+    $subRouter1->expects()->register();
+
+    $subRouter2 = Mockery::mock(Router::class);
+    $subRouter2->expects()->inject('test', $returnNull);
+    $subRouter2->expects()->register();
+
     Helpers::setNonPublicClassProperty($router, 'subRouters', [$subRouter1, $subRouter2]);
-    Helpers::setNonPublicClassProperty($router, 'schemaDirs', ['fake-uri-prefix' => '/test-dir']);
     $router->register();
 
     $this->assertSame(Filters\applied('fastendpoints_is_to_register'), 1);
@@ -390,3 +359,39 @@ test('Specifying router dependencies multiple times', function (string $firstDep
         ->toBeArray()
         ->toBe([$firstDependency, $secondDependency]);
 })->with([['plugin1', 'plugin2']])->group('router', 'depends');
+
+// Inject
+
+test('Inject', function () {
+    $router = new Router('api', 'v1');
+
+    $returnNull = fn () => null;
+    $router->inject('test', $returnNull);
+    $router->inject('test', fn () => false);
+
+    $router->inject('test-2', fn () => false);
+    $router->inject('test-2', $returnNull, override: true);
+
+    expect(Helpers::getNonPublicClassProperty($router, 'injectables'))
+        ->toBe([
+            'test' => $returnNull,
+            'test-2' => $returnNull,
+        ]);
+})->group('router', 'inject');
+
+test('Inject with sub-routers', function () {
+    $router = new Router('api', 'v1');
+
+    $returnNull = fn () => null;
+    $router->inject('test', $returnNull);
+
+    $subRouter = Mockery::mock(Router::class);
+    $subRouter->shouldReceive('inject')->withArgs(['test', $returnNull]);
+    $subRouter->expects()->register();
+
+    Helpers::setNonPublicClassProperty($router, 'subRouters', [$subRouter]);
+    $router->register();
+
+    expect(Helpers::getNonPublicClassProperty($router, 'injectables'))
+        ->toBe(['test' => $returnNull]);
+})->group('router', 'inject');

@@ -10,11 +10,18 @@
 
 declare(strict_types=1);
 
-namespace Wp\FastEndpoints;
+namespace Attributes\Wp\FastEndpoints;
 
-use Wp\FastEndpoints\Contracts\Http\Endpoint as EndpointContract;
-use Wp\FastEndpoints\Contracts\Http\Router as RouterContract;
-use Wp\FastEndpoints\Schemas\SchemaResolver;
+use Attributes\Wp\FastEndpoints\Contracts\Http\Endpoint as EndpointContract;
+use Attributes\Wp\FastEndpoints\Contracts\Http\Router as RouterContract;
+
+use function add_action;
+use function apply_filters;
+use function do_action;
+use function esc_html__;
+use function has_action;
+use function trim;
+use function wp_die;
 
 /**
  * A Router can help developers in creating groups of endpoints. This way developers can aggregate
@@ -28,16 +35,12 @@ use Wp\FastEndpoints\Schemas\SchemaResolver;
  *      $postsRouter->get(...); // Retrieve a post
  *      $postsRouter->put(...); // Update a post
  *
- * @since 0.9.0
- *
  * @author André Gil <andre_gil22@hotmail.com>
  */
 class Router implements RouterContract
 {
     /**
      * Router rest base
-     *
-     * @since 0.9.0
      */
     protected string $base;
 
@@ -45,22 +48,16 @@ class Router implements RouterContract
      * Flag to determine if the current router has already being built.
      * This is important to prevent building a subRouter before the parent
      * finishes the building process
-     *
-     * @since 0.9.0
      */
     protected bool $registered = false;
 
     /**
      * Parent router
-     *
-     * @since 0.9.0
      */
     protected ?Router $parent = null;
 
     /**
      * Sub routers
-     *
-     * @since 0.9.0
      *
      * @var array<RouterContract>
      */
@@ -69,41 +66,26 @@ class Router implements RouterContract
     /**
      * REST Router endpoints
      *
-     * @since 0.9.0
-     *
      * @var array<Endpoint>
      */
     protected array $endpoints = [];
 
     /**
-     * Dictionary of prefix and directories
-     *
-     * @since 0.9.0
-     *
-     * @var array<string,string>
-     */
-    protected array $schemaDirs = [];
-
-    /**
      * Router version used only if it's a parent router
-     *
-     * @since 0.9.0
      */
     protected string $version;
 
     /**
      * Required dependencies for this router
-     *
-     * @since 2.1.0
      */
     protected string|array|null $plugins = null;
 
     /**
-     * Looks for the correct JSON schema to be loaded
+     * Injectable dependencies that could be used in the associated endpoints
      *
-     * @since 1.2.1
+     * @var array<string,callable>
      */
-    protected SchemaResolver $schemaResolver;
+    protected array $injectables = [];
 
     /**
      * Creates a new Router instance
@@ -111,19 +93,15 @@ class Router implements RouterContract
      * @param  string  $base  Router base path if this router is the parent router would be used as
      *                        the namespace. Default value: 'api'.
      * @param  string  $version  Router version. Default value: ''.
-     * @param  string|array|null  $dependencies  Router dependencies. Default value: [].
      */
     public function __construct(string $base = 'api', string $version = '')
     {
         $this->base = $base;
         $this->version = $version;
-        $this->schemaResolver = new SchemaResolver;
     }
 
     /**
      * Adds a new GET endpoint
-     *
-     * @since 0.9.0
      *
      * @param  string  $route  Endpoint route.
      * @param  callable  $handler  User specified handler for the endpoint.
@@ -139,13 +117,11 @@ class Router implements RouterContract
     /**
      * Adds a new POST endpoint
      *
-     * @since 0.9.0
-     *
      * @param  string  $route  Endpoint route.
      * @param  callable  $handler  User specified handler for the endpoint.
      * @param  array  $args  Same as the WordPress register_rest_route $args parameter. If set it can override the default
      *                       WP FastEndpoints arguments. Default value: [].
-     * @param  bool  $override  Same as the WordPress register_rest_route $override parameter. Defaul value: false.
+     * @param  bool  $override  Same as the WordPress register_rest_route $override parameter. Default value: false.
      */
     public function post(string $route, callable $handler, array $args = [], bool $override = false): EndpointContract
     {
@@ -155,13 +131,11 @@ class Router implements RouterContract
     /**
      * Adds a new PUT endpoint
      *
-     * @since 0.9.0
-     *
      * @param  string  $route  Endpoint route.
      * @param  callable  $handler  User specified handler for the endpoint.
      * @param  array  $args  Same as the WordPress register_rest_route $args parameter. If set it can override the default
      *                       WP FastEndpoints arguments. Default value: [].
-     * @param  bool  $override  Same as the WordPress register_rest_route $override parameter. Defaul value: false.
+     * @param  bool  $override  Same as the WordPress register_rest_route $override parameter. Default value: false.
      */
     public function put(string $route, callable $handler, array $args = [], bool $override = false): EndpointContract
     {
@@ -171,13 +145,11 @@ class Router implements RouterContract
     /**
      * Adds a new DELETE endpoint
      *
-     * @since 0.9.0
-     *
      * @param  string  $route  Endpoint route.
      * @param  callable  $handler  User specified handler for the endpoint.
      * @param  array  $args  Same as the WordPress register_rest_route $args parameter. If set it can override the default
      *                       WP FastEndpoints arguments. Default value: [].
-     * @param  bool  $override  Same as the WordPress register_rest_route $override parameter. Defaul value: false.
+     * @param  bool  $override  Same as the WordPress register_rest_route $override parameter. Default value: false.
      */
     public function delete(string $route, callable $handler, array $args = [], bool $override = false): EndpointContract
     {
@@ -186,8 +158,6 @@ class Router implements RouterContract
 
     /**
      * Adds a new PATCH endpoint
-     *
-     * @since 0.9.0
      *
      * @param  string  $route  Endpoint route.
      * @param  callable  $handler  User specified handler for the endpoint.
@@ -203,8 +173,6 @@ class Router implements RouterContract
     /**
      * Includes a router as a sub router
      *
-     * @since 0.9.0
-     *
      * @param  RouterContract  $router  REST sub router.
      */
     public function includeRouter(RouterContract &$router): void
@@ -214,80 +182,68 @@ class Router implements RouterContract
     }
 
     /**
-     * Appends an additional directory where to look for the schema
-     *
-     * @param  string  $dir  Directory path where to look for JSON schemas.
-     * @param  string  $uriPrefix  Prefix used to associate schema directory.
-     *
-     * @since 0.9.0
-     */
-    public function appendSchemaDir(string $dir, string $uriPrefix): void
-    {
-        if (! $dir) {
-            \wp_die(\esc_html__('Invalid schema directory'));
-        }
-
-        if (! \is_dir($dir)) {
-            /* translators: 1: SchemaMiddleware directory */
-            \wp_die(\sprintf(\esc_html__('Invalid or not found schema directory: %s'), \esc_html($dir)));
-        }
-
-        $this->schemaDirs[$uriPrefix] = $dir;
-        $this->schemaResolver->registerPrefix($uriPrefix, $dir);
-    }
-
-    /**
      * Adds all actions required to register the defined endpoints
-     *
-     * @since 0.9.0
      */
     public function register(): void
     {
-        if (! \apply_filters('fastendpoints_is_to_register', true, $this)) {
+        if (! apply_filters('fastendpoints_is_to_register', true, $this)) {
             return;
         }
 
         if ($this->parent) {
-            if (! \has_action('rest_api_init', [$this->parent, 'registerEndpoints'])) {
-                \wp_die(\esc_html__('You are trying to build a sub-router before building the parent router. \
+            if (! has_action('rest_api_init', [$this->parent, 'registerEndpoints'])) {
+                wp_die(esc_html__('You are trying to build a sub-router before building the parent router. \
 					Call the build() function on the parent router only!'));
             }
         } else {
             if (! $this->base) {
-                \wp_die(\esc_html__('No api namespace specified in the parent router'));
+                wp_die(esc_html__('No api namespace specified in the parent router'));
             }
 
             if (! $this->version) {
-                \wp_die(\esc_html__('No api version specified in the parent router'));
+                wp_die(esc_html__('No api version specified in the parent router'));
             }
 
-            \do_action('fastendpoints_before_register', $this);
+            do_action('fastendpoints_before_register', $this);
         }
 
         // Build current router endpoints.
-        \add_action('rest_api_init', [$this, 'registerEndpoints']);
+        add_action('rest_api_init', [$this, 'registerEndpoints']);
 
         // Register each sub router, if any.
         foreach ($this->subRouters as $router) {
-            foreach ($this->schemaDirs as $uriPrefix => $dir) {
-                $router->appendSchemaDir($dir, $uriPrefix);
-            }
             if ($this->plugins !== null) {
                 $router->depends($this->plugins);
+            }
+
+            foreach ($this->injectables as $name => $callable) {
+                $router->inject($name, $callable);
             }
 
             $router->register();
         }
 
         if (! $this->parent) {
-            \do_action('fastendpoints_after_register', $this);
+            do_action('fastendpoints_after_register', $this);
         }
     }
 
     /**
+     * Specifies a set of plugins that are needed by the endpoint
+     */
+    public function inject(string $name, callable $callable, bool $override = false): self
+    {
+        if (isset($this->injectables[$name]) && ! $override) {
+            return $this;
+        }
+
+        $this->injectables[$name] = $callable;
+
+        return $this;
+    }
+
+    /**
      * Registers the current router REST endpoints
-     *
-     * @since 0.9.0
      *
      * @internal
      */
@@ -301,6 +257,7 @@ class Router implements RouterContract
             }
 
             $e->register($namespace, $restBase);
+            $e->getInvoker()->setInjectables($this->injectables);
         }
         $this->registered = true;
     }
@@ -331,8 +288,6 @@ class Router implements RouterContract
      * @param  bool  $isToApplyFilters  Flag used to ignore fastendpoints filters
      *                                  (i.e. this is needed to disable multiple calls to the filter given that it's a
      *                                  recursive function). Default value: true.
-     *
-     *@since 0.9.0
      */
     protected function getNamespace(bool $isToApplyFilters = true): string
     {
@@ -340,9 +295,9 @@ class Router implements RouterContract
             return $this->parent->getNamespace(false);
         }
 
-        $namespace = \trim($this->base, '/');
+        $namespace = trim($this->base, '/');
         if ($this->version) {
-            $namespace .= '/'.\trim($this->version, '/');
+            $namespace .= '/'.trim($this->version, '/');
         }
 
         // Ignore recursive call to apply_filters without it, would be annoying for developers.
@@ -350,14 +305,12 @@ class Router implements RouterContract
             return $namespace;
         }
 
-        return \apply_filters('fastendpoints_router_namespace', $namespace, $this);
+        return apply_filters('fastendpoints_router_namespace', $namespace, $this);
     }
 
     /**
      * Retrieves the base REST path of the current router, if any. The base is what follows
      * the namespace and is before the endpoint route.
-     *
-     * @since 0.9.0
      */
     protected function getRestBase(): string
     {
@@ -365,18 +318,16 @@ class Router implements RouterContract
             return '';
         }
 
-        $restBase = \trim($this->base, '/');
+        $restBase = trim($this->base, '/');
         if ($this->version) {
-            $restBase .= '/'.\trim($this->version, '/');
+            $restBase .= '/'.trim($this->version, '/');
         }
 
-        return \apply_filters('fastendpoints_router_rest_base', $restBase, $this);
+        return apply_filters('fastendpoints_router_rest_base', $restBase, $this);
     }
 
     /**
      * Creates and retrieves a new endpoint instance
-     *
-     * @since 0.9.0
      *
      * @param  string  $method  POST, GET, PUT or DELETE or a value from WP_REST_Server (e.g. WP_REST_Server::EDITABLE).
      * @param  string  $route  Endpoint route.
@@ -392,7 +343,7 @@ class Router implements RouterContract
         array $args = [],
         bool $override = false
     ): EndpointContract {
-        $endpoint = new Endpoint($method, $route, $handler, $args, $override, $this->schemaResolver);
+        $endpoint = new Endpoint($method, $route, $handler, $args, $override);
         $this->endpoints[] = $endpoint;
 
         return $endpoint;

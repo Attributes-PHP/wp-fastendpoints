@@ -4,7 +4,7 @@ Pest is a testing framework that makes it super easy to test functionality in PH
 that's why we are going to use it here. However, if you have a preference for some other testing
 framework, the some principles should apply 😊
 
-Full source code can be found at [**matapatos/wp-fastendpoints-my-plugin »**](https://github.com/matapatos/wp-fastendpoints-my-plugin)
+Full source code can be found at [**attributes-php/wp-fastendpoints-my-plugin »**](https://github.com/Attributes-PHP/wp-fastendpoints-my-plugin)
 
 ## Testing dependencies
 

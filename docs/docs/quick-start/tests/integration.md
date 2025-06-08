@@ -19,13 +19,13 @@ version you want and also set up the tests directory for you.
 ```
 
 !!! tip
-    If you use [matapatos/wp-fastendpoints-my-plugin](https://github.com/matapatos/wp-fastendpoints-my-plugin?tab=readme-ov-file#setup-wordpress)
+    If you use [attributes-php/wp-fastendpoints-my-plugin](https://github.com/Attributes-PHP/wp-fastendpoints-my-plugin?tab=readme-ov-file#setup-wordpress)
     you can use the already configured `composer setup:wp:6.x` commands
 
 #### Optional changes
 
 If you take a closer look at the resultant tests structure you might notice that is slightly
-different from [matapatos/wp-fastendpoints-my-plugin](https://github.com/matapatos/wp-fastendpoints-my-plugin?tab=readme-ov-file#setup-wordpress).
+different from [attributes-php/wp-fastendpoints-my-plugin](https://github.com/Attributes-PHP/wp-fastendpoints-my-plugin?tab=readme-ov-file#setup-wordpress).
 These changes are not mandatory and so, feel free to skip this section ⏩
 
 The main reason of these differences is to allow us to run tests without the
