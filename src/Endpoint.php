@@ -193,6 +193,11 @@ class Endpoint implements EndpointInterface
         return true;
     }
 
+    public function helloWorld()
+    {
+        return true;
+    }
+
     /**
      * Checks if the current user has the given WP capabilities. Example usage:
      *
