@@ -45,7 +45,6 @@ nav:
   - WP-FastEndpoints: index.md
   - Quick Start:
     - Quick Start: quick-start/index.md
-    - JSON Schemas: quick-start/json-schemas.md
     - Router: quick-start/router.md
     - Service Provider: quick-start/service-provider.md
     - Testing:
@@ -58,12 +57,7 @@ nav:
     - Dependency Injection: advanced-user-guide/dependency-injection.md
     - Responses: advanced-user-guide/responses.md
     - Middlewares: advanced-user-guide/middlewares.md
-    - JSON Schemas:
-      - Multiple Root Dirs: advanced-user-guide/json-schemas/multiple-root-dirs.md
-      - Validator: advanced-user-guide/json-schemas/validator.md
-      - References: advanced-user-guide/json-schemas/references.md
     - Treat plugins as dependencies: advanced-user-guide/plugins-as-dependencies.md
-  - Release Notes: release.md
 extra:
   social:
     - icon: fontawesome/brands/github-alt

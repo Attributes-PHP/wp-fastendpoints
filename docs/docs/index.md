@@ -1,7 +1,4 @@
----
-hide:
-  - navigation
----
+# WP-FastEndpoints
 
 <img src="https://raw.githubusercontent.com/Attributes-PHP/wp-fastendpoints/main/docs/images/wp-fastendpoints-wallpaper.png" alt="WordPress REST endpoints made easy">
 <p align="center">
@@ -13,23 +10,24 @@ hide:
 </p>
 
 ------
-**FastEndpoints** is an elegant way of writing custom WordPress REST endpoints with a focus on readability and IDE auto completion support.
+**FastEndpoints** is an elegant way of writing custom WordPress REST endpoints with a focus on simplicity and readability.
+
+- Explore our docs at **[FastEndpoints Docs »](https://matapatos.github.io/wp-fastendpoints/)**
 
 ## Features
 
-- Decouples request validation from main logic
+- Validates data via type-hints
 - Removes unwanted fields from responses
 - Middlewares support
-- IDE auto completion support
 - No magic router. It uses WordPress [`register_rest_route`](https://developer.wordpress.org/reference/functions/register_rest_route/)
-- Support for newer JSON schema drafts thanks to [opis/json-schema](https://opis.io/json-schema/2.x/)
-- Able to treat plugins as dependencies via [WP-FastEndpoints Depends](https://github.com/Attributes-PHP/wp-fastendpoints-depends)
+- Able to treat plugins as dependencies via [WP-FastEndpoints Depends](https://github.com/matapatos/wp-fastendpoints-depends)
 
 ## Requirements
 
 - PHP 8.1+
 - WordPress 6.x
-- [attributes-php/validation](https://github.com/Attributes-PHP/validation)
+- [Attributes-PHP/validation](https://packagist.org/packages/Attributes-PHP/validation)
+- [Attributes-PHP/serialization](https://packagist.org/packages/Attributes-PHP/serialization)
 - [php-di/invoker](https://packagist.org/packages/php-di/invoker)
 
 We aim to support versions that haven't reached their end-of-life.
@@ -40,12 +38,4 @@ We aim to support versions that haven't reached their end-of-life.
 composer require attributes-php/wp-fastendpoints
 ```
 
-## Sponsors
-
-{% if sponsors %}
-{% for sponsor in sponsors.companies -%}
-<a href="{{ sponsor.url }}" target="_blank" title="{{ sponsor.title }}"><img src="{{ sponsor.img }}" style="border-radius:15px; max-width: 200px; max-height: 200px;"></a>
-{% endfor -%}
-{% endif %}
-
-<!-- /sponsors -->
+FastEndpoints was created by **[André Gil](https://www.linkedin.com/in/andre-gil/)** and is open-sourced software licensed under the **[MIT license](https://opensource.org/licenses/MIT)**.
