@@ -28,9 +28,7 @@ my-plugin
 │   │   │   │   Posts.php  # Holds our custom endpoints
 │   │   │
 │   │   └───Models  # Holds classes to validate data
-│   │       │
-│   │       |   Posts.php
-│   │
+│   │       │   Posts.php
 │   │
 │   └───Providers
 │       │   ApiServiceProvider.php       # Registers all routers
