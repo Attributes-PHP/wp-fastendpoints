@@ -27,11 +27,9 @@ my-plugin
 │   │   └───Routers
 │   │   │   │   Posts.php  # Holds our custom endpoints
 │   │   │
-│   │   └───Schemas
+│   │   └───Models  # Holds classes to validate data
 │   │       │
-│   │       └───Posts
-│   │           │   CreateOrUpdate.json  # Validates request payload
-│   │           │   Get.json             # Validates responses and discards unwanted fields
+│   │       |   Posts.php
 │   │
 │   │
 │   └───Providers
