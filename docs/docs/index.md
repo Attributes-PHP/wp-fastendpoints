@@ -1,6 +1,6 @@
 # WP-FastEndpoints
 
-<img src="https://raw.githubusercontent.com/Attributes-PHP/wp-fastendpoints/main/docs/images/wp-fastendpoints-wallpaper.png" alt="WordPress REST endpoints made easy">
+<img src="https://raw.githubusercontent.com/Attributes-PHP/wp-fastendpoints/v3/docs/images/wp-fastendpoints-wallpaper.png" alt="WordPress REST endpoints made easy">
 <p align="center">
     <a href="https://github.com/Attributes-PHP/wp-fastendpoints/actions"><img alt="GitHub Actions Workflow Status (main)" src="https://img.shields.io/github/actions/workflow/status/Attributes-PHP/wp-fastendpoints/tests.yml"></a>
     <a href="https://codecov.io/gh/Attributes-PHP/wp-fastendpoints" ><img alt="Code Coverage" src="https://codecov.io/gh/Attributes-PHP/wp-fastendpoints/graph/badge.svg?token=8N7N9NMGLG"/></a>
@@ -10,15 +10,15 @@
 </p>
 
 ------
-**FastEndpoints** is an elegant way of writing custom WordPress REST endpoints with a focus on simplicity and readability.
+**FastEndpoints** is a micro-framework which speeds the development of custom WordPress REST endpoints with a focus on simplicity and readability.
 
 - Explore our docs at **[FastEndpoints Docs »](https://matapatos.github.io/wp-fastendpoints/)**
 
 ## Features
 
-- Validates data via type-hints
+- Data validation via type-hinting
 - Removes unwanted fields from responses
-- Middlewares support
+- Dependency injection and middlewares support
 - No magic router. It uses WordPress [`register_rest_route`](https://developer.wordpress.org/reference/functions/register_rest_route/)
 - Able to treat plugins as dependencies via [WP-FastEndpoints Depends](https://github.com/matapatos/wp-fastendpoints-depends)
 

@@ -8,7 +8,7 @@ watch:
 theme:
   name: material
   palette:
-    primary: indigo
+    primary: yellow
   features:
     - search.suggest
     - search.highlight
@@ -38,7 +38,8 @@ markdown_extensions:
   - pymdownx.snippets
   - pymdownx.superfences
   - pymdownx.highlight:
-      use_pygments: false
+      use_pygments: true
+  - pymdownx.inlinehilite
   - pymdownx.tabbed:
       alternate_style: true
 nav:

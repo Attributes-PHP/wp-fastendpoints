@@ -1,32 +1,66 @@
 The first thing we need to do is to create a Router.
 
-```php
+```php title="Api/Routers/Posts.php"
 use Attributes\Wp\FastEndpoints\Router;
 
-// Dependency injection to enable us to mock router in tests
+// To allow us to mock this router in unit tests
 $router = $router ?? new Router('posts');
 ```
 
 A router is a class which allow us to attach and register endpoints.
 
 An application can have one or multiple routers. One main benefit of using multiple routers is to group endpoints
-by same namespace and (optionally) same version. For instance,
-in this tutorial we are going to create a main router with a base namespace `my-plugin` and a version of `v1`
-which will add `/my-plugin/v1/` to the beginning of each attached endpoint from all sub-routers.
+by same namespace and (optionally) same version. For instance, in this tutorial we are going group all sub-routers,
+into another router with a namespace and version `my-plugin/v1`
+
+## Define the shape of our data
+
+Each endpoint might require different types of data. Thanks to [Attributes-PHP/validation](https://github.com/Attributes-PHP/validation)
+we can simply create our own PHP classes with the shape of the data we need and use them to validate our request payload
+via type-hinting 🤯
+
+```php title="Api/Models/Posts.php"
+namespace MyPlugin\Api\Models\Post;
+
+use Attributes\Serialization\SerializableTrait;
+use Attributes\Options\AliasGenerator;
+use Attributes\Options\Alias;
+use Respect\Validation\Rules;
+
+enum Status: string
+{
+    case PUBLISH = 'publish';
+    case DRAFT = 'draft';
+    case PRIVATE = 'private';
+}
+
+#[AliasGenerator('snake')]
+class Post
+{
+    use SerializableTrait;
+
+    #[Rules\Positive, Alias('ID')]
+    public int $id;
+    #[Rules\Positive]
+    public int $postAuthor;
+    public string $postTitle;
+    public Status $postStatus;
+}
+```
 
 ## Create a post
 
-With the posts router in place we can now start attaching our endpoints. We start adding the one
-responsible to create a new blog post.
+With the shape of the data defined we can now use it in our endpoint to create a new blog post.
 
-```php
-$router->post('/', function (\WP_REST_Request $request, \WP_REST_Response $response): int|\WP_Error {
+```php title="Api/Routers/Posts.php"
+use MyPlugin\Api\Models\Post;
+
+$router->post('/', function (Post $post): int|WP_Error {
     $response->set_status(201);
-    $payload = $request->get_params();
+    $payload = $post->serialize();
 
     return wp_insert_post($payload, true);
 })
-    ->schema('Posts/CreateOrUpdate')
     ->hasCap('publish_posts');
 ```
 
