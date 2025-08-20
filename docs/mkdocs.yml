@@ -8,6 +8,7 @@ watch:
 theme:
   name: material
   palette:
+    scheme: slate
     primary: yellow
   features:
     - search.suggest
@@ -65,10 +66,3 @@ extra:
       link: https://github.com/Attributes-PHP/wp-fastendpoints
     - icon: fontawesome/brands/linkedin
       link: https://www.linkedin.com/in/andre-gil/
-extra_css:
-  - https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css
-  - assets/css/highlight.css
-
-extra_javascript:
-  - https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js
-  - assets/js/initHighlight.js

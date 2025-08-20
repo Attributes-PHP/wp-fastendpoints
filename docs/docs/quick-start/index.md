@@ -3,8 +3,7 @@ To better exemplify the benefits of using **FastEndpoints** we are going to buil
 This API will be able to:
 
 * Create
-* Retrieve
-* Update and
+* Retrieve and
 * Delete a blog post
 
 Full source code can be found at **[Attributes-PHP/wp-fastendpoints-my-plugin »](https://github.com/Attributes-PHP/wp-fastendpoints-my-plugin)**
