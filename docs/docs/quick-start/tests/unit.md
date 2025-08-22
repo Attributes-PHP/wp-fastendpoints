@@ -4,7 +4,8 @@ used and 2) the necessary user permissions on the endpoint that allows a user to
 We could have separated each assertion in its own unit test but for the sake of simplicity we
 are going to make both of them in the same test.
 
-```php
+```php title="tests/Unit/PostsApiTest.php"
+<?php
 test('Creating post endpoint has correct permissions and schema', function () {
     // Create endpoint mock
     $endpoint = Mockery::mock(Endpoint::class);

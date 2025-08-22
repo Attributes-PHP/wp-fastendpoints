@@ -11,10 +11,13 @@ The following needs to happen in order to successfully run them:
 ### _wp-pest_ to the rescue 🦸
 
 However, thanks to [wp-pest](https://github.com/dingo-d/wp-pest) most of this trouble is no longer
-an issue. By simply running the command bellow, it will automatically pull the WordPress
-version you want and also set up the tests directory for you.
+an issue. Via a simple command it does all of that for us! 😎
 
 ```bash
+# Installs wp-pest
+composer require dingo-d/wp-pest --dev
+
+# Set's up WP
 ./vendor/bin/wp-pest setup plugin --plugin-slug my-plugin --wp-version 6.4.4
 ```
 
@@ -31,10 +34,10 @@ These changes are not mandatory and so, feel free to skip this section ⏩
 The main reason of these differences is to allow us to run tests without the
 need to always specify a group of tests. Those changes include:
 
-```php
-/**
-* tests/Helpers.php
- */ 
+```php title="tests/Helpers.php
+<?php
+declare(strict_types=1);
+ 
 namespace MyPlugin\Tests;
 
 class Helpers
@@ -49,10 +52,10 @@ class Helpers
 }
 ```
 
-```php
-/**
-* tests/Integration/*Test.php
- */ 
+```php title="tests/Integration/PostsApiTest.php"
+<?php
+declare(strict_types=1);
+
 namespace MyPlugin\Tests\Integration;
 
 use MyPlugin\Tests\Helpers;
@@ -67,7 +70,8 @@ if (! Helpers::isIntegrationTest()) {
 
 Now that everything is configured we can start creating integration tests:
 
-```php
+```php title="tests/Integration/PostsApiTest.php
+<?php
 test('Create a new post', function () {
     // Create user with correct permissions
     $userId = $this::factory()->user->create();
@@ -97,5 +101,5 @@ test('Create a new post', function () {
 
 Here, we take advantage of the existent [testing factories](https://make.wordpress.org/core/handbook/testing/automated-testing/writing-phpunit-tests/#fixtures-and-factories)
 to create a single user with the necessary capability to publish posts.
-Then, we make mimic a REST request from that given user, and lastly, we check if that
+Then, we mimic a REST request from that given user, and lastly, we check if that
 blog post was created.

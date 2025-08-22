@@ -51,8 +51,8 @@ nav:
     - Service Provider: quick-start/service-provider.md
     - Testing:
       - Testing:  quick-start/tests/index.md
-      - Integration Tests:  quick-start/tests/integration.md
       - Unit Tests:  quick-start/tests/unit.md
+      - Integration Tests:  quick-start/tests/integration.md
   - Advanced User Guide:
     - Advanced User Guide: advanced-user-guide/index.md
     - Request Life Cycle: advanced-user-guide/request-life-cycle.md
