@@ -13,7 +13,7 @@ composer require mockery/mockery --dev
 
 ## Testing structure
 
-We are going to write unit and integration tests and our testing structure should look like the following:
+We are going to write unit and integration tests. Our code structure would look like the following:
 
 ```text
 my-plugin
