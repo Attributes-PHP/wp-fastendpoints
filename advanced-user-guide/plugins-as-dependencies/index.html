@@ -10,17 +10,15 @@
       
       
       
-        <link rel="canonical" href="https://matapatos.github.io/wp-fastendpoints/advanced-user-guide/plugins-as-dependencies/">
+        <link rel="canonical" href="https://attributes-php.github.io/wp-fastendpoints/advanced-user-guide/plugins-as-dependencies/">
       
       
-        <link rel="prev" href="../json-schemas/references/">
+        <link rel="prev" href="../middlewares/">
       
-      
-        <link rel="next" href="../../release/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.23">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.16">
     
     
       
@@ -28,7 +26,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.6543a935.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.7e37652d.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
@@ -50,11 +48,7 @@
       
     
     
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
-    
-      <link rel="stylesheet" href="../../assets/css/highlight.css">
-    
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -69,7 +63,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="yellow" data-md-color-accent="indigo">
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -95,12 +89,12 @@
     <a href="../.." title="WP-FastEndpoints" class="md-header__button md-logo" aria-label="WP-FastEndpoints" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
       
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
     </label>
     <div class="md-header__title" data-md-component="header-title">
       <div class="md-header__ellipsis">
@@ -124,26 +118,28 @@
     
     
     
-      <label class="md-header__button md-icon" for="__search">
-        
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
-      </label>
-      <div class="md-search" data-md-component="search" role="dialog">
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
       <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
         
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
         
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
       </label>
       <nav class="md-search__options" aria-label="Search">
         
         <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
           
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </button>
       </nav>
       
@@ -151,7 +147,7 @@
       
     </form>
     <div class="md-search__output">
-      <div class="md-search__scrollwrap" data-md-scrollfix>
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
         <div class="md-search-result" data-md-component="search-result">
           <div class="md-search-result__meta">
             Initializing search
@@ -162,16 +158,17 @@
     </div>
   </div>
 </div>
+      
     
     
       <div class="md-header__source">
-        <a href="https://github.com/matapatos/wp-fastendpoints" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/Attributes-PHP/wp-fastendpoints" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M202.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1M496 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2m-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3m-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1"/></svg>
   </div>
   <div class="md-source__repository">
-    matapatos/wp-fastendpoints
+    attributes-php/wp-fastendpoints
   </div>
 </a>
       </div>
@@ -194,9 +191,11 @@
   
   
   
+  
     <li class="md-tabs__item">
       <a href="../.." class="md-tabs__link">
         
+  
   
     
   
@@ -211,11 +210,13 @@
   
   
   
+  
     
     
       <li class="md-tabs__item">
         <a href="../../quick-start/" class="md-tabs__link">
           
+  
   
     
   
@@ -230,6 +231,7 @@
         
   
   
+  
     
   
   
@@ -239,6 +241,7 @@
         <a href="../" class="md-tabs__link">
           
   
+  
     
   
   Advanced User Guide
@@ -246,23 +249,6 @@
         </a>
       </li>
     
-  
-
-      
-        
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../../release/" class="md-tabs__link">
-        
-  
-    
-  
-  Release Notes
-
-      </a>
-    </li>
   
 
       
@@ -291,20 +277,20 @@
     <a href="../.." title="WP-FastEndpoints" class="md-nav__button md-logo" aria-label="WP-FastEndpoints" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
     WP-FastEndpoints
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/matapatos/wp-fastendpoints" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/Attributes-PHP/wp-fastendpoints" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M202.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1M496 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2m-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3m-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1"/></svg>
   </div>
   <div class="md-source__repository">
-    matapatos/wp-fastendpoints
+    attributes-php/wp-fastendpoints
   </div>
 </a>
     </div>
@@ -321,8 +307,10 @@
       <a href="../.." class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
     WP-FastEndpoints
+    
   </span>
   
 
@@ -350,8 +338,7 @@
       
         
       
-        
-      
+    
     
     
       
@@ -365,13 +352,14 @@
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
         
           
-          
           <div class="md-nav__link md-nav__container">
             <a href="../../quick-start/" class="md-nav__link ">
               
   
+  
   <span class="md-ellipsis">
     Quick Start
+    
   </span>
   
 
@@ -400,32 +388,13 @@
   
   
     <li class="md-nav__item">
-      <a href="../../quick-start/json-schemas/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    JSON Schemas
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../quick-start/router/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
     Router
+    
   </span>
   
 
@@ -445,8 +414,10 @@
       <a href="../../quick-start/service-provider/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
     Service Provider
+    
   </span>
   
 
@@ -475,6 +446,7 @@
       
     
     
+    
       
       
     
@@ -483,30 +455,31 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
         
-          
           
           <div class="md-nav__link md-nav__container">
             <a href="../../quick-start/tests/" class="md-nav__link ">
               
   
+  
   <span class="md-ellipsis">
     Testing
+    
   </span>
   
 
             </a>
             
               
-              <label class="md-nav__link " for="__nav_2_5" id="__nav_2_5_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2_5">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
             <span class="md-nav__icon md-icon"></span>
             Testing
           </label>
@@ -521,11 +494,13 @@
   
   
     <li class="md-nav__item">
-      <a href="../../quick-start/tests/integration/" class="md-nav__link">
+      <a href="../../quick-start/tests/unit/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
-    Integration Tests
+    Unit Tests
+    
   </span>
   
 
@@ -542,11 +517,13 @@
   
   
     <li class="md-nav__item">
-      <a href="../../quick-start/tests/unit/" class="md-nav__link">
+      <a href="../../quick-start/tests/integration/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
-    Unit Tests
+    Integration Tests
+    
   </span>
   
 
@@ -596,8 +573,7 @@
       
         
       
-        
-      
+    
     
     
       
@@ -614,13 +590,14 @@
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
-          
           <div class="md-nav__link md-nav__container">
             <a href="../" class="md-nav__link ">
               
   
+  
   <span class="md-ellipsis">
     Advanced User Guide
+    
   </span>
   
 
@@ -652,8 +629,10 @@
       <a href="../request-life-cycle/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
     Request Life Cycle
+    
   </span>
   
 
@@ -673,8 +652,10 @@
       <a href="../dependency-injection/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
     Dependency Injection
+    
   </span>
   
 
@@ -694,8 +675,10 @@
       <a href="../responses/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
     Responses
+    
   </span>
   
 
@@ -715,129 +698,14 @@
       <a href="../middlewares/" class="md-nav__link">
         
   
+  
   <span class="md-ellipsis">
     Middlewares
+    
   </span>
   
 
       </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-      
-        
-      
-        
-      
-        
-      
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_6" >
-        
-          
-          <label class="md-nav__link" for="__nav_3_6" id="__nav_3_6_label" tabindex="0">
-            
-  
-  <span class="md-ellipsis">
-    JSON Schemas
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_6_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_6">
-            <span class="md-nav__icon md-icon"></span>
-            JSON Schemas
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../json-schemas/multiple-root-dirs/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Multiple Root Dirs
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../json-schemas/validator/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Validator
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../json-schemas/references/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    References
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
     </li>
   
 
@@ -860,8 +728,10 @@
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
   
+  
   <span class="md-ellipsis">
     Treat plugins as dependencies
+    
   </span>
   
 
@@ -871,8 +741,10 @@
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
+  
   <span class="md-ellipsis">
     Treat plugins as dependencies
+    
   </span>
   
 
@@ -963,26 +835,6 @@
           </ul>
         </nav>
       
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../release/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Release Notes
-  </span>
-  
-
-      </a>
     </li>
   
 
@@ -1085,6 +937,7 @@
                 
                   
 
+
   
   
 
@@ -1096,7 +949,7 @@ which allow us to fully customise a website in a short time period. However, eve
 is added it can negatively impact the performance of our API endpoints, because even
 though those endpoints might not need some of the activated plugins to work properly, they will
 still be loaded.</p>
-<p>To address this issue <a href="https://github.com/matapatos/wp-fastendpoints-depends">WP-FastEndpoints Depends</a>
+<p>To address this issue <a href="https://github.com/Attributes-PHP/wp-fastendpoints-depends">WP-FastEndpoints Depends</a>
 was created to enable us to treat plugins as REST endpoint dependencies.</p>
 <h2 id="adding-another-plugin">Adding another plugin?? 😱</h2>
 <p>Yes, this is a plugin! It could seem counterintuitive that adding another plugin could
@@ -1111,27 +964,29 @@ which allow us to decide which plugins are necessary for a given REST endpoint b
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">With FastEndpoints</label><label for="__tabbed_1_2">Native WP endpoints</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<pre class="highlight"><code class="language-php">$router-&gt;get('/example/all-plugins', function () {
-    return "Loads all active plugins";
-});
+<div class="highlight"><pre><span></span><code><span class="x">$router-&gt;get(&#39;/example/all-plugins&#39;, function () {</span>
+<span class="x">    return &quot;Loads all active plugins&quot;;</span>
+<span class="x">});</span>
 
-$router-&gt;get('/example/buddypress', function () {
-    return "Only MyPlugin and BuddyPress plugins are loaded"; 
-})-&gt;depends(['my-plugin', 'buddypress']);</code></pre>
+<span class="x">$router-&gt;get(&#39;/example/buddypress&#39;, function () {</span>
+<span class="x">    return &quot;Only MyPlugin and BuddyPress plugins are loaded&quot;; </span>
+<span class="x">})-&gt;depends([&#39;my-plugin&#39;, &#39;buddypress&#39;]);</span>
+</code></pre></div>
 </div>
 <div class="tabbed-block">
-<pre class="highlight"><code class="language-php">// Loads all active plugins
-register_rest_route('native/v1', 'example/all-plugins', [
-    'methods' =&gt; 'GET',
-    (...)
-]);
+<div class="highlight"><pre><span></span><code><span class="x">// Loads all active plugins</span>
+<span class="x">register_rest_route(&#39;native/v1&#39;, &#39;example/all-plugins&#39;, [</span>
+<span class="x">    &#39;methods&#39; =&gt; &#39;GET&#39;,</span>
+<span class="x">    (...)</span>
+<span class="x">]);</span>
 
-// Only MyPlugin and BuddyPress plugins are loaded
-register_rest_route('native/v1', 'example/buddypress', [
-    'methods' =&gt; 'GET',
-    'depends' =&gt; ['my-plugin', 'buddypress'],
-    (...)
-]);</code></pre>
+<span class="x">// Only MyPlugin and BuddyPress plugins are loaded</span>
+<span class="x">register_rest_route(&#39;native/v1&#39;, &#39;example/buddypress&#39;, [</span>
+<span class="x">    &#39;methods&#39; =&gt; &#39;GET&#39;,</span>
+<span class="x">    &#39;depends&#39; =&gt; [&#39;my-plugin&#39;, &#39;buddypress&#39;],</span>
+<span class="x">    (...)</span>
+<span class="x">]);</span>
+</code></pre></div>
 </div>
 </div>
 </div>
@@ -1146,8 +1001,9 @@ router dependencies e.g. <code>$router-&gt;depends(['my-plugin'])</code></p>
 or specific endpoint dependencies.</p>
 <p>One common scenario where router dependencies might be useful is when we want to change the default behaviour
 of loading all active plugins per endpoint.</p>
-<pre class="highlight"><code class="language-php">$router = new \Wp\FastEndpoints\Router('my-api', 'v1');
-$router-&gt;depends(['my-plugin']); // All endpoints and sub-routers would have this dependency</code></pre>
+<div class="highlight"><pre><span></span><code><span class="x">$router = new \Attributes\Wp\FastEndpoints\Router(&#39;my-api&#39;, &#39;v1&#39;);</span>
+<span class="x">$router-&gt;depends([&#39;my-plugin&#39;]); // All endpoints and sub-routers would have this dependency</span>
+</code></pre></div>
 <div class="admonition danger">
 <p class="admonition-title">Danger</p>
 <p>When adding dependencies to endpoints, make sure to at least include the given plugin that holds those endpoints.
@@ -1155,7 +1011,7 @@ For instance, if your endpoints reside inside a plugin with a slug <code>my-plug
 to <code>['my-plugin']</code> otherwise when a request is received for that endpoint <code>my-plugin</code> will not be loaded.</p>
 </div>
 <h3 id="endpoint-dependencies-up-to-date">Endpoint dependencies up-to-date</h3>
-<p>Under the hood, this plugin generates a config file with all the route dependencies (see <a href="https://github.com/matapatos/wp-fastendpoints-depends/blob/main/tests/Data/config.php">example</a>).
+<p>Under the hood, this plugin generates a config file with all the route dependencies (see <a href="https://github.com/Attributes-PHP/wp-fastendpoints-depends/blob/main/tests/Data/config.php">example</a>).
 To have the most up-to-date endpoint dependencies, make sure to either:</p>
 <ul>
 <li>run the <code>wp fastendpoints depends</code> command or </li>
@@ -1185,7 +1041,7 @@ when any plugin is activated</li>
             </div>
           
           
-  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
 
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
@@ -1199,37 +1055,21 @@ when any plugin is activated</li>
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../json-schemas/references/" class="md-footer__link md-footer__link--prev" aria-label="Previous: References">
+          <a href="../middlewares/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Middlewares">
             <div class="md-footer__button md-icon">
               
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
             </div>
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Previous
               </span>
               <div class="md-ellipsis">
-                References
+                Middlewares
               </div>
             </div>
           </a>
         
-        
-          
-          <a href="../../release/" class="md-footer__link md-footer__link--next" aria-label="Next: Release Notes">
-            <div class="md-footer__title">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              <div class="md-ellipsis">
-                Release Notes
-              </div>
-            </div>
-            <div class="md-footer__button md-icon">
-              
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
-            </div>
-          </a>
         
       </nav>
     
@@ -1255,8 +1095,8 @@ when any plugin is activated</li>
       
       
     
-    <a href="https://github.com/matapatos/wp-fastendpoints" target="_blank" rel="noopener" title="github.com" class="md-social__link">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg>
+    <a href="https://github.com/Attributes-PHP/wp-fastendpoints" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M202.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1M496 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2m-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3m-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1"/></svg>
     </a>
   
     
@@ -1267,7 +1107,7 @@ when any plugin is activated</li>
       
     
     <a href="https://www.linkedin.com/in/andre-gil/" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
     </a>
   
 </div>
@@ -1282,14 +1122,12 @@ when any plugin is activated</li>
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["search.suggest", "search.highlight", "content.tabs.link", "navigation.indexes", "content.tooltips", "navigation.path", "content.code.annotate", "content.code.copy", "content.code.select", "navigation.tabs", "navigation.footer"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["search.suggest", "search.highlight", "content.tabs.link", "navigation.indexes", "content.tooltips", "navigation.path", "content.code.annotate", "content.code.copy", "content.code.select", "navigation.tabs", "navigation.footer"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.ebd0bdb7.min.js"></script>
-      
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-      
-        <script src="../../assets/js/initHighlight.js"></script>
+      <script src="../../assets/javascripts/bundle.50899def.min.js"></script>
       
     
   </body>
