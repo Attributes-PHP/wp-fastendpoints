@@ -7,6 +7,7 @@
     <a href="https://packagist.org/packages/Attributes-PHP/wp-fastendpoints"><img alt="Latest Version" src="https://img.shields.io/packagist/v/Attributes-PHP/wp-fastendpoints"></a>
     <a href="https://packagist.org/packages/Attributes-PHP/wp-fastendpoints"><img alt="Supported WordPress Versions" src="https://img.shields.io/badge/6.x-versions?logo=wordpress&label=versions"></a>
     <a href="https://packagist.org/packages/Attributes-PHP/wp-fastendpoints"><img alt="Software License" src="https://img.shields.io/packagist/l/Attributes-PHP/wp-fastendpoints"></a>
+    
 </p>
 
 ------
@@ -26,8 +27,8 @@
 
 - PHP 8.1+
 - WordPress 6.x
-- [Attributes-PHP/validation](https://packagist.org/packages/Attributes-PHP/validation)
-- [Attributes-PHP/serialization](https://packagist.org/packages/Attributes-PHP/serialization)
+- [attributes-php/validation](https://packagist.org/packages/Attributes-PHP/validation)
+- [attributes-php/serialization](https://packagist.org/packages/Attributes-PHP/serialization)
 - [php-di/invoker](https://packagist.org/packages/php-di/invoker)
 
 We aim to support versions that haven't reached their end-of-life.
