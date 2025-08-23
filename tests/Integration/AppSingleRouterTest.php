@@ -10,9 +10,11 @@
 
 declare(strict_types=1);
 
-namespace Tests\Integration;
+namespace Attributes\Wp\FastEndpoints\Tests\Integration;
 
-use Wp\FastEndpoints\Tests\Helpers\Helpers;
+use Attributes\Wp\FastEndpoints\Tests\Helpers\Helpers;
+use WP_REST_Request;
+use WP_REST_Server;
 use Yoast\WPTestUtils\WPIntegration\TestCase;
 
 if (! Helpers::isIntegrationTest()) {
@@ -32,7 +34,7 @@ beforeEach(function () {
     // Set up a REST server instance.
     global $wp_rest_server;
 
-    $this->server = $wp_rest_server = new \WP_REST_Server;
+    $this->server = $wp_rest_server = new WP_REST_Server;
     $router = Helpers::getRouter('PostsRouter.php');
     $router->register();
     do_action('rest_api_init', $this->server);
@@ -61,16 +63,22 @@ test('REST API endpoints registered', function () {
 
 test('Retrieving a post by id', function () {
     $userId = $this::factory()->user->create();
-    $postId = $this::factory()->post->create(['post_author' => $userId]);
+    $postId = $this::factory()->post->create(['post_author' => $userId, 'post_title' => 'My title']);
     wp_set_current_user($userId);
     $response = $this->server->dispatch(
         new \WP_REST_Request('GET', "/my-posts/v1/{$postId}")
     );
-    expect($response->get_status())->toBe(200);
-    $data = $response->get_data();
-    expect($data)
-        ->toHaveProperty('ID', $postId)
-        ->toHaveProperty('post_author', $userId);
+    expect($response->get_status())
+        ->toBe(200)
+        ->and($response->get_data())
+        ->toBeArray()
+        ->toBe([
+            'ID' => $postId,
+            'post_author' => $userId,
+            'post_title' => 'My title',
+            'post_status' => 'publish',
+            'post_type' => 'post',
+        ]);
 })->group('single');
 
 test('Trying to retrieve a post without permissions', function () {
@@ -92,15 +100,25 @@ test('Updating a post', function () {
     $user->add_cap('edit_published_posts');
     $postId = $this::factory()->post->create(['post_author' => $userId]);
     wp_set_current_user($userId);
-    $request = new \WP_REST_Request('POST', "/my-posts/v1/{$postId}");
+    $request = new WP_REST_Request('PUT', "/my-posts/v1/{$postId}");
     $request->set_header('content-type', 'application/json');
-    $request->set_param('post_title', 'My testing message');
+    $request->set_body(json_encode([
+        'post_author' => $userId,
+        'post_title' => 'My title',
+        'post_status' => 'publish',
+    ]));
     $response = $this->server->dispatch($request);
-    expect($response->get_status())->toBe(200);
+    expect($response->get_status())->toBe(204);
     $data = $response->get_data();
     expect($data)
-        ->toHaveProperty('ID', $postId)
-        ->toHaveProperty('post_title', 'My testing message');
+        ->toBeArray()
+        ->toBe([
+            'ID' => $postId,
+            'post_author' => $userId,
+            'post_title' => 'My title',
+            'post_status' => 'publish',
+            'post_type' => 'post',
+        ]);
 })->group('single');
 
 test('Trying to update a post without permissions', function () {
@@ -109,7 +127,7 @@ test('Trying to update a post without permissions', function () {
     $firstUser->add_cap('edit_published_posts');
     $postId = $this::factory()->post->create(['post_author' => $allUserIds[1]]);
     wp_set_current_user($allUserIds[1]);
-    $request = new \WP_REST_Request('POST', "/my-posts/v1/{$postId}");
+    $request = new \WP_REST_Request('PUT', "/my-posts/v1/{$postId}");
     $response = $this->server->dispatch($request);
     expect($response->get_status())->toBe(403);
     $data = (object) $response->get_data();

@@ -10,22 +10,26 @@
 
 declare(strict_types=1);
 
-namespace Wp\FastEndpoints\Tests\Unit\Schemas;
+namespace Attributes\Wp\FastEndpoints\Tests\Unit\Schemas;
 
+use Attributes\Wp\FastEndpoints\Contracts\Middlewares\Middleware;
+use Attributes\Wp\FastEndpoints\DI\Invoker;
+use Attributes\Wp\FastEndpoints\Endpoint;
+use Attributes\Wp\FastEndpoints\Helpers\WpError;
+use Attributes\Wp\FastEndpoints\Middlewares\ResponseMiddleware;
+use Attributes\Wp\FastEndpoints\Tests\Helpers\Helpers;
+use Attributes\Wp\FastEndpoints\Tests\Models\Post;
 use Brain\Monkey;
 use Brain\Monkey\Filters;
 use Brain\Monkey\Functions;
 use Exception;
-use Invoker\Invoker;
+use Invoker\ParameterResolver\DefaultValueResolver;
 use Mockery;
-use Wp\FastEndpoints\Contracts\Middlewares\Middleware;
-use Wp\FastEndpoints\Endpoint;
-use Wp\FastEndpoints\Helpers\WpError;
-use Wp\FastEndpoints\Schemas\ResponseMiddleware;
-use Wp\FastEndpoints\Schemas\SchemaMiddleware;
-use Wp\FastEndpoints\Tests\Helpers\Helpers;
+use WP_REST_Request;
+use WP_REST_Response;
 
 beforeEach(function () {
+    Functions\when('__')->returnArg();
     Monkey\setUp();
 });
 
@@ -48,30 +52,18 @@ test('Creating Endpoint instance', function () {
 
 // Register
 
-test('Registering an endpoint', function (bool $withSchema, bool $withResponseSchema, $permissionCallback) {
+test('Registering an endpoint', function (bool $withResponseSchema, $permissionCallback) {
     $endpoint = new Endpoint('GET', '/my-endpoint', '__return_false', ['my-custom-arg' => true], false);
+    expect($endpoint->getFullRoute())->toBe('/my-endpoint');
     $expectedArgs = [
         'methods' => 'GET',
         'callback' => [$endpoint, 'callback'],
         'permission_callback' => '__return_true',
         'my-custom-arg' => true,
     ];
-    expect($endpoint->schema)->toBeNull()
-        ->and($endpoint->responseSchema)->toBeNull();
-    if ($withSchema) {
-        $mockedSchema = Mockery::mock(SchemaMiddleware::class)
-            ->shouldReceive('appendSchemaDir')
-            ->with(['my-schema-dir'])
-            ->getMock();
-        Helpers::setNonPublicClassProperty($endpoint, 'schema', $mockedSchema);
-        $expectedArgs['schema'] = [$mockedSchema, 'getSchema'];
-    }
     if ($withResponseSchema) {
-        $mockedResponseSchema = Mockery::mock(ResponseMiddleware::class)
-            ->shouldReceive('appendSchemaDir')
-            ->with(['my-schema-dir'])
-            ->getMock();
-        Helpers::setNonPublicClassProperty($endpoint, 'responseSchema', $mockedResponseSchema);
+        $mockedResponseSchema = Mockery::mock(ResponseMiddleware::class);
+        $endpoint->returns($mockedResponseSchema);
     }
     if (! is_null($permissionCallback)) {
         $endpoint->permission($permissionCallback);
@@ -94,8 +86,10 @@ test('Registering an endpoint', function (bool $withSchema, bool $withResponseSc
             return true;
         });
     expect($endpoint->register('my-namespace', 'v1/users'))
-        ->toBeTrue();
-})->with([true, false])->with([true, false])->with([null, '__return_false'])->group('endpoint', 'register');
+        ->toBeTrue()
+        ->and($endpoint->getFullRoute())
+        ->toBe('/my-namespace/v1/users/my-endpoint');
+})->with([true, false])->with([null, '__return_false'])->group('endpoint', 'register');
 
 test('Skipping registering endpoint if no args specified', function () {
     $endpoint = new Endpoint('GET', '/my-endpoint', '__return_false', ['my-custom-arg' => true], false);
@@ -116,7 +110,7 @@ test('User with valid permissions', function (string $capability, ...$args) {
     $endpoint->hasCap($capability, ...$args);
     $permissionHandlers = Helpers::getNonPublicClassProperty($endpoint, 'permissionHandlers');
     expect($permissionHandlers)->toHaveCount(1);
-    $mockedRequest = Mockery::mock(\WP_REST_Request::class);
+    $mockedRequest = Mockery::mock(WP_REST_Request::class);
     $expectedParams = [];
     foreach ($args as $arg) {
         if (! is_string($arg) || ! str_starts_with($arg, '<')) {
@@ -158,13 +152,12 @@ test('User with valid permissions', function (string $capability, ...$args) {
 ])->group('endpoint', 'hasCap');
 
 test('User not having enough permissions', function (string $capability, ...$args) {
-    Functions\when('esc_html__')->returnArg();
     $endpoint = new Endpoint('GET', '/my-endpoint', '__return_false', ['my-custom-arg' => true], false);
     expect(Helpers::getNonPublicClassProperty($endpoint, 'permissionHandlers'))->toBeEmpty();
     $endpoint->hasCap($capability, ...$args);
     $permissionHandlers = Helpers::getNonPublicClassProperty($endpoint, 'permissionHandlers');
     expect($permissionHandlers)->toHaveCount(1);
-    $mockedRequest = Mockery::mock(\WP_REST_Request::class);
+    $mockedRequest = Mockery::mock(WP_REST_Request::class);
     $expectedParams = [];
     foreach ($args as $arg) {
         if (! str_starts_with($arg, '<')) {
@@ -222,44 +215,29 @@ test('Missing capability', function () {
         ->and(Helpers::getNonPublicClassProperty($endpoint, 'permissionHandlers'))->toBeEmpty();
 })->group('endpoint', 'hasCap');
 
-// schema
-
-test('Adding request validation schema', function ($schema) {
-    $endpoint = new Endpoint('GET', '/my-endpoint', '__return_false', ['my-custom-arg' => true], false);
-    expect($endpoint->schema)->toBeNull()
-        ->and($endpoint->schema($schema))->toBe($endpoint)
-        ->and($endpoint->schema)->toBeInstanceOf(SchemaMiddleware::class);
-    $expectedVar = Helpers::getNonPublicClassProperty($endpoint->schema, 'schema');
-    expect($expectedVar)->toBe($schema);
-    $onRequestHandlers = Helpers::getNonPublicClassProperty($endpoint, 'onRequestHandlers');
-    expect($onRequestHandlers)
-        ->toHaveCount(1)
-        ->and($onRequestHandlers[0])->toMatchArray([$endpoint->schema, 'onRequest']);
-})->with([[['my-schema']], 'Basics/Array.json'])->group('endpoint', 'schema');
-
 // returns
 
 test('Adding response validation schema', function ($schema) {
     $endpoint = new Endpoint('GET', '/my-endpoint', '__return_false', ['my-custom-arg' => true], false);
-    expect($endpoint->responseSchema)->toBeNull()
-        ->and($endpoint->returns($schema))->toBe($endpoint)
-        ->and($endpoint->responseSchema)->toBeInstanceOf(ResponseMiddleware::class);
-    $expectedVar = Helpers::getNonPublicClassProperty($endpoint->responseSchema, 'schema');
-    expect($expectedVar)->toBe($schema);
+    expect(Helpers::getNonPublicClassProperty($endpoint, 'onResponseHandlers'))
+        ->toBeEmpty()
+        ->and($endpoint->returns($schema))
+        ->toBe($endpoint);
     $onResponseHandlers = Helpers::getNonPublicClassProperty($endpoint, 'onResponseHandlers');
     expect($onResponseHandlers)
         ->toHaveCount(1)
-        ->and($onResponseHandlers[0])->toMatchArray([$endpoint->responseSchema, 'onResponse']);
-})->with([[['response-schema']], 'Basics/Boolean.json'])->group('endpoint', 'returns');
+        ->and($onResponseHandlers[0])
+        ->toBeCallable();
+})->with([Post::class, new Post])->group('endpoint', 'returns');
 
 // middleware
 
 test('Adding middleware before handling a request', function () {
     class MyRequestMiddleware extends Middleware
     {
-        public function onRequest(\WP_REST_Request $request): ?\WP_Error
+        public function onRequest()
         {
-            return null;
+            return 'onRequest';
         }
     }
     $middleware = new MyRequestMiddleware;
@@ -268,15 +246,18 @@ test('Adding middleware before handling a request', function () {
     $endpoint->middleware($middleware);
     $onRequestHandlers = Helpers::getNonPublicClassProperty($endpoint, 'onRequestHandlers');
     expect($onRequestHandlers)->toHaveCount(1)
-        ->and($onRequestHandlers[0])->toBe([$middleware, 'onRequest']);
+        ->and($onRequestHandlers[0])
+        ->toBeCallable()
+        ->and($onRequestHandlers[0]->call($middleware))
+        ->toBe('onRequest');
 })->group('endpoint', 'middleware');
 
 test('Adding middleware before sending response', function () {
     class MyResponseMiddleware extends Middleware
     {
-        public function onResponse(\WP_REST_Request $request, \WP_REST_Response $response)
+        public function onResponse()
         {
-            return null;
+            return 'onResponse';
         }
     }
     $middleware = new MyResponseMiddleware;
@@ -285,20 +266,23 @@ test('Adding middleware before sending response', function () {
     $endpoint->middleware($middleware);
     $onResponseHandlers = Helpers::getNonPublicClassProperty($endpoint, 'onResponseHandlers');
     expect($onResponseHandlers)->toHaveCount(1)
-        ->and($onResponseHandlers[0])->toBe([$middleware, 'onResponse']);
+        ->and($onResponseHandlers[0])
+        ->toBeCallable()
+        ->and($onResponseHandlers[0]->call($middleware))
+        ->toBe('onResponse');
 })->group('endpoint', 'middleware');
 
 test('Adding middleware to trigger before handling a request and before sending a response', function () {
     class MyMiddleware extends Middleware
     {
-        public function onRequest(\WP_REST_Request $request): ?\WP_Error
+        public function onRequest()
         {
-            return null;
+            return 'onRequest';
         }
 
-        public function onResponse(\WP_REST_Request $request, \WP_REST_Response $response)
+        public function onResponse()
         {
-            return null;
+            return 'onResponse';
         }
     }
     $middleware = new MyMiddleware;
@@ -308,18 +292,24 @@ test('Adding middleware to trigger before handling a request and before sending 
     $endpoint->middleware($middleware);
     $onRequestHandlers = Helpers::getNonPublicClassProperty($endpoint, 'onRequestHandlers');
     expect($onRequestHandlers)->toHaveCount(1)
-        ->and($onRequestHandlers[0])->toBe([$middleware, 'onRequest']);
+        ->and($onRequestHandlers[0])
+        ->toBeCallable()
+        ->and($onRequestHandlers[0]->call($middleware))
+        ->toBe('onRequest');
     $onResponseHandlers = Helpers::getNonPublicClassProperty($endpoint, 'onResponseHandlers');
     expect($onResponseHandlers)->toHaveCount(1)
-        ->and($onResponseHandlers[0])->toBe([$middleware, 'onResponse']);
+        ->and($onResponseHandlers[0])
+        ->toBeCallable()
+        ->and($onResponseHandlers[0]->call($middleware))
+        ->toBe('onResponse');
 })->group('endpoint', 'middleware');
 
 test('Adding middleware with missing methods', function () {
+    Functions\when('esc_html__')->returnArg();
     class InvalidMiddleware extends Middleware
     {
         public function hey(): void {}
     }
-    Functions\when('esc_html__')->returnArg();
     expect(fn () => new InvalidMiddleware)
         ->toThrow(Exception::class, 'At least one method onRequest() or onResponse() must be declared on the class.');
 })->group('endpoint', 'middleware');
@@ -341,14 +331,10 @@ test('Adding permission callable', function () {
 // permissionCallback
 
 test('Running permission handlers in permission callback', function ($returnValue) {
-    Functions\when('esc_html__')->returnArg();
     if (is_string($returnValue)) {
         $returnValue = new $returnValue(123, 'testing-error');
     }
-    $req = Mockery::mock(\WP_REST_Request::class);
-    $req->shouldReceive('get_url_params')
-        ->once()
-        ->andReturn(['hello' => 'my-value']);
+    $req = Mockery::mock(WP_REST_Request::class);
     $mockedEndpoint = Mockery::mock(Endpoint::class)
         ->shouldAllowMockingProtectedMethods()
         ->makePartial();
@@ -368,10 +354,7 @@ test('Endpoint request handler', function (bool $hasRequestHandlers, bool $hasRe
     $endpoint = new Endpoint('GET', '/my-endpoint', function () {
         return 'my-response';
     }, ['my-custom-arg' => true], true);
-    $req = Mockery::mock(\WP_REST_Request::class);
-    $req->shouldReceive('get_url_params')
-        ->once()
-        ->andReturn([]);
+    $req = Mockery::mock(WP_REST_Request::class);
     if ($hasRequestHandlers) {
         $onRequestHandlers = [function () {
             return false;
@@ -385,19 +368,15 @@ test('Endpoint request handler', function (bool $hasRequestHandlers, bool $hasRe
         Helpers::setNonPublicClassProperty($endpoint, 'onResponseHandlers', $onResponseHandlers);
     }
     expect($endpoint->callback($req))
-        ->toBeInstanceOf(\WP_REST_Response::class)
+        ->toBeInstanceOf(WP_REST_Response::class)
         ->toHaveProperty('data', 'my-response');
 })->with([true, false])->with([true, false])->group('endpoint', 'callback');
 
 test('Handling request and a WpError is returned', function ($onRequestReturnVal, $handlerReturnVal, $onResponseReturnVal) {
-    Functions\when('esc_html__')->returnArg();
     $endpoint = new Endpoint('GET', '/my-endpoint', function () use ($handlerReturnVal) {
         return is_string($handlerReturnVal) ? new $handlerReturnVal(123, 'my-error-msg') : $handlerReturnVal;
     }, ['my-custom-arg' => true], true);
-    $req = Mockery::mock(\WP_REST_Request::class);
-    $req->shouldReceive('get_url_params')
-        ->once()
-        ->andReturn([]);
+    $req = Mockery::mock(WP_REST_Request::class);
     $onRequestHandlers = [function () use ($onRequestReturnVal) {
         return is_string($onRequestReturnVal) ? new $onRequestReturnVal(123, 'my-error-msg') : $onRequestReturnVal;
     }];
@@ -416,6 +395,53 @@ test('Handling request and a WpError is returned', function ($onRequestReturnVal
     [true, WpError::class, true],
     [true, true, WpError::class],
 ])->group('endpoint', 'callback');
+
+test('Handling request with an invalid request payload', function () {
+    Filters\expectApplied('fastendpoints_request_error')->once();
+
+    $endpoint = new Endpoint('GET', '/my-endpoint', function (int $missingField, int $postId) {
+        return $missingField + $postId;
+    });
+    $req = Mockery::mock(WP_REST_Request::class);
+    $req->expects()
+        ->get_url_params()
+        ->times(2)
+        ->andReturn(['postId' => 10]);
+    $req->expects()
+        ->get_query_params()
+        ->once()
+        ->andReturn(['another' => 2]);
+
+    expect($endpoint->callback($req))
+        ->toBeInstanceOf(WpError::class)
+        ->toHaveProperty('code', 422)
+        ->toHaveProperty('message', 'Invalid data')
+        ->toHaveProperty('data', [
+            'status' => 422,
+            'errors' => [
+                [
+                    'field' => 'missingField',
+                    'reason' => 'Missing required argument \'missingField\'',
+                ],
+            ]]);
+})->group('endpoint', 'callback');
+
+test('Handling request and invoker is unable to resolve dependencies', function () {
+    Filters\expectApplied('fastendpoints_request_error')->once();
+
+    $endpoint = new Endpoint('GET', '/my-endpoint', function (int $missingField) {
+        return $missingField;
+    });
+    $req = Mockery::mock(WP_REST_Request::class);
+    $invoker = new Invoker(parameterResolver: new DefaultValueResolver);
+    Helpers::setNonPublicClassProperty($endpoint, 'invoker', $invoker);
+
+    expect($endpoint->callback($req))
+        ->toBeInstanceOf(WpError::class)
+        ->toHaveProperty('code', 500)
+        ->toHaveProperty('message', 'Unable to invoke the callable because no value was given for parameter 1 ($missingField)')
+        ->toHaveProperty('data', ['status' => 500]);
+})->group('endpoint', 'callback');
 
 // getRoute
 

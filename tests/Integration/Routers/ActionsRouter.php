@@ -10,13 +10,12 @@
 
 declare(strict_types=1);
 
-use Wp\FastEndpoints\Helpers\WpError;
-use Wp\FastEndpoints\Router;
-use Wp\FastEndpoints\Tests\Integration\Routers\Middlewares\OnRequestErrorActionMiddleware;
-use Wp\FastEndpoints\Tests\Integration\Routers\Middlewares\OnResponseErrorActionMiddleware;
+use Attributes\Wp\FastEndpoints\Helpers\WpError;
+use Attributes\Wp\FastEndpoints\Router;
+use Attributes\Wp\FastEndpoints\Tests\Integration\Routers\Middlewares\OnRequestErrorActionMiddleware;
+use Attributes\Wp\FastEndpoints\Tests\Integration\Routers\Middlewares\OnResponseErrorActionMiddleware;
 
 $router = new Router('my-actions', 'v2');
-$router->appendSchemaDir(\SCHEMAS_DIR, 'https://www.wp-fastendpoints.com');
 
 // Triggers onRequest middleware
 $router->get('/middleware/on-request/(?P<action>\w+)', function (): bool {

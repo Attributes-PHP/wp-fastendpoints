@@ -4,7 +4,7 @@ is added it can negatively impact the performance of our API endpoints, because 
 though those endpoints might not need some of the activated plugins to work properly, they will
 still be loaded.
 
-To address this issue [WP-FastEndpoints Depends](https://github.com/matapatos/wp-fastendpoints-depends)
+To address this issue [WP-FastEndpoints Depends](https://github.com/Attributes-PHP/wp-fastendpoints-depends)
 was created to enable us to treat plugins as REST endpoint dependencies.
 
 ## Adding another plugin?? 😱
@@ -66,7 +66,7 @@ One common scenario where router dependencies might be useful is when we want to
 of loading all active plugins per endpoint.
 
 ```php
-$router = new \Wp\FastEndpoints\Router('my-api', 'v1');
+$router = new \Attributes\Wp\FastEndpoints\Router('my-api', 'v1');
 $router->depends(['my-plugin']); // All endpoints and sub-routers would have this dependency
 ```
 
@@ -77,7 +77,7 @@ $router->depends(['my-plugin']); // All endpoints and sub-routers would have thi
 
 ### Endpoint dependencies up-to-date
 
-Under the hood, this plugin generates a config file with all the route dependencies (see [example](https://github.com/matapatos/wp-fastendpoints-depends/blob/main/tests/Data/config.php)).
+Under the hood, this plugin generates a config file with all the route dependencies (see [example](https://github.com/Attributes-PHP/wp-fastendpoints-depends/blob/main/tests/Data/config.php)).
 To have the most up-to-date endpoint dependencies, make sure to either:
 
 - run the `wp fastendpoints depends` command or 

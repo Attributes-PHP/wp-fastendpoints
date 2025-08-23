@@ -1,6 +1,6 @@
 site_name: WP-FastEndpoints
 site_description: FastEndpoints is an elegant way of writing custom WordPress REST endpoints with a focus on readability and IDE auto completion support
-site_url: https://matapatos.github.io/wp-fastendpoints/
+site_url: https://attributes-php.github.io/wp-fastendpoints/
 watch:
   - data
   - docs
@@ -8,7 +8,8 @@ watch:
 theme:
   name: material
   palette:
-    primary: indigo
+    scheme: slate
+    primary: yellow
   features:
     - search.suggest
     - search.highlight
@@ -24,9 +25,9 @@ theme:
   icon:
     repo: fontawesome/brands/github-alt
   language: en
-repo_name: matapatos/wp-fastendpoints
-repo_url: https://github.com/matapatos/wp-fastendpoints
-edit_uri: https://github.com/matapatos/wp-fastendpoints/tree/main/docs/docs
+repo_name: attributes-php/wp-fastendpoints
+repo_url: https://github.com/Attributes-PHP/wp-fastendpoints
+edit_uri: https://github.com/Attributes-PHP/wp-fastendpoints/tree/main/docs/docs
 plugins:
   search: null
   macros:
@@ -38,42 +39,30 @@ markdown_extensions:
   - pymdownx.snippets
   - pymdownx.superfences
   - pymdownx.highlight:
-      use_pygments: false
+      use_pygments: true
+  - pymdownx.inlinehilite
   - pymdownx.tabbed:
       alternate_style: true
 nav:
   - WP-FastEndpoints: index.md
   - Quick Start:
     - Quick Start: quick-start/index.md
-    - JSON Schemas: quick-start/json-schemas.md
     - Router: quick-start/router.md
     - Service Provider: quick-start/service-provider.md
     - Testing:
       - Testing:  quick-start/tests/index.md
-      - Integration Tests:  quick-start/tests/integration.md
       - Unit Tests:  quick-start/tests/unit.md
+      - Integration Tests:  quick-start/tests/integration.md
   - Advanced User Guide:
     - Advanced User Guide: advanced-user-guide/index.md
     - Request Life Cycle: advanced-user-guide/request-life-cycle.md
     - Dependency Injection: advanced-user-guide/dependency-injection.md
     - Responses: advanced-user-guide/responses.md
     - Middlewares: advanced-user-guide/middlewares.md
-    - JSON Schemas:
-      - Multiple Root Dirs: advanced-user-guide/json-schemas/multiple-root-dirs.md
-      - Validator: advanced-user-guide/json-schemas/validator.md
-      - References: advanced-user-guide/json-schemas/references.md
     - Treat plugins as dependencies: advanced-user-guide/plugins-as-dependencies.md
-  - Release Notes: release.md
 extra:
   social:
     - icon: fontawesome/brands/github-alt
-      link: https://github.com/matapatos/wp-fastendpoints
+      link: https://github.com/Attributes-PHP/wp-fastendpoints
     - icon: fontawesome/brands/linkedin
       link: https://www.linkedin.com/in/andre-gil/
-extra_css:
-  - https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css
-  - assets/css/highlight.css
-
-extra_javascript:
-  - https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js
-  - assets/js/initHighlight.js

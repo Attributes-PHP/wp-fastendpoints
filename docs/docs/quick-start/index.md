@@ -3,11 +3,10 @@ To better exemplify the benefits of using **FastEndpoints** we are going to buil
 This API will be able to:
 
 * Create
-* Retrieve
-* Update and
+* Retrieve and
 * Delete a blog post
 
-Full source code can be found at **[matapatos/wp-fastendpoints-my-plugin »](https://github.com/matapatos/wp-fastendpoints-my-plugin)**
+Full source code can be found at **[Attributes-PHP/wp-fastendpoints-my-plugin »](https://github.com/Attributes-PHP/wp-fastendpoints-my-plugin)**
 
 ## Plugin code structure 🔨
 
@@ -27,12 +26,8 @@ my-plugin
 │   │   └───Routers
 │   │   │   │   Posts.php  # Holds our custom endpoints
 │   │   │
-│   │   └───Schemas
-│   │       │
-│   │       └───Posts
-│   │           │   CreateOrUpdate.json  # Validates request payload
-│   │           │   Get.json             # Validates responses and discards unwanted fields
-│   │
+│   │   └───Models  # Holds classes to validate data
+│   │       │   Posts.php
 │   │
 │   └───Providers
 │       │   ApiServiceProvider.php       # Registers all routers

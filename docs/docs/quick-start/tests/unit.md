@@ -1,19 +1,22 @@
-As an example of a unit test, we are going add a test to check the 1) request payload schema
-used and 2) the necessary user permissions on the endpoint that allows a user to create a new blog post.
+To allow us unit test our router we would need to update the following line:
 
-We could have separated each assertion in its own unit test but for the sake of simplicity we
-are going to make both of them in the same test.
+```php title="src/Api/Routers/Posts.php" hl_lines="3"
+<?php
 
-```php
+$router = $router ?? new Router('posts');
+```
+
+This change will allow us to pass a mocked router to easily test our endpoints.
+
+## Create a post
+
+As an example we are going to write a unit test to test our endpoint that creates a new blog post.
+
+```php title="tests/Unit/PostsApiTest.php"
+<?php
 test('Creating post endpoint has correct permissions and schema', function () {
     // Create endpoint mock
     $endpoint = Mockery::mock(Endpoint::class);
-    // Assert that the request payload schema passed is correct
-    $endpoint
-        ->shouldReceive('schema')
-        ->once()
-        ->with('Posts/CreateOrUpdate')
-        ->andReturnSelf();
     // Assert that user permissions are correct
     $endpoint
         ->shouldReceive('hasCap')
@@ -37,7 +40,7 @@ test('Creating post endpoint has correct permissions and schema', function () {
 ```
 
 The reason we are able to make the assertions above is
-[due to this line](https://github.com/matapatos/wp-fastendpoints/wiki/Quick-start#the-actual-code---srcapirouterspostsphp).
+[due to this line](https://github.com/Attributes-PHP/wp-fastendpoints/wiki/Quick-start#the-actual-code---srcapirouterspostsphp).
 Specially, regarding this part ```$router ??```. This allows us to replace our original router with our mocked version.
 
 Nothing magical happening here, just pure PHP code! 🪄

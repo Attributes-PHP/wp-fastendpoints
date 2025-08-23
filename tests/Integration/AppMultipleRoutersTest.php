@@ -10,10 +10,12 @@
 
 declare(strict_types=1);
 
-namespace Tests\Integration;
+namespace Attributes\Wp\FastEndpoints\Tests\Integration;
 
-use Wp\FastEndpoints\Router;
-use Wp\FastEndpoints\Tests\Helpers\Helpers;
+use Attributes\Wp\FastEndpoints\Router;
+use Attributes\Wp\FastEndpoints\Tests\Helpers\Helpers;
+use WP_REST_Request;
+use WP_REST_Server;
 use Yoast\WPTestUtils\WPIntegration\TestCase;
 
 if (! Helpers::isIntegrationTest()) {
@@ -33,7 +35,7 @@ beforeEach(function () {
     // Set up a REST server instance.
     global $wp_rest_server;
 
-    $this->server = $wp_rest_server = new \WP_REST_Server;
+    $this->server = $wp_rest_server = new WP_REST_Server;
     $postsRouter = Helpers::getRouter('PostsRouter.php');
     $actionsRouter = Helpers::getRouter('ActionsRouter.php');
     $router = new Router('my-api', 'v1');
@@ -81,7 +83,7 @@ test('Retrieving a post by id', function () {
     $postId = $this::factory()->post->create(['post_author' => $userId]);
     wp_set_current_user($userId);
     $response = $this->server->dispatch(
-        new \WP_REST_Request('GET', "/my-api/v1/my-posts/v1/{$postId}")
+        new WP_REST_Request('GET', "/my-api/v1/my-posts/v1/{$postId}")
     );
     expect($response->get_status())->toBe(200);
 })->group('multiple');
@@ -92,11 +94,15 @@ test('Updating a post', function () {
     $user->add_cap('edit_published_posts');
     $postId = $this::factory()->post->create(['post_author' => $userId]);
     wp_set_current_user($userId);
-    $request = new \WP_REST_Request('POST', "/my-api/v1/my-posts/v1/{$postId}");
+    $request = new WP_REST_Request('PUT', "/my-api/v1/my-posts/v1/{$postId}");
     $request->set_header('content-type', 'application/json');
-    $request->set_param('post_title', 'My testing message');
+    $request->set_body(json_encode([
+        'post_author' => $userId,
+        'post_title' => 'My title',
+        'post_status' => 'publish',
+    ]));
     $response = $this->server->dispatch($request);
-    expect($response->get_status())->toBe(200);
+    expect($response->get_status())->toBe(204);
 })->group('multiple');
 
 test('Deleting a post', function () {
@@ -105,13 +111,13 @@ test('Deleting a post', function () {
     $user->add_cap('delete_published_posts');
     $postId = $this::factory()->post->create(['post_author' => $userId]);
     wp_set_current_user($userId);
-    $request = new \WP_REST_Request('DELETE', "/my-api/v1/my-posts/v1/{$postId}");
+    $request = new WP_REST_Request('DELETE', "/my-api/v1/my-posts/v1/{$postId}");
     $response = $this->server->dispatch($request);
     expect($response->get_status())->toBe(200);
 })->group('multiple');
 
 test('Trigger error in a middleware', function (string $middlewareType, string $errorMessage) {
-    $request = new \WP_REST_Request('GET', "/my-api/v1/my-actions/v2/middleware/{$middlewareType}/error");
+    $request = new WP_REST_Request('GET', "/my-api/v1/my-actions/v2/middleware/{$middlewareType}/error");
     $response = $this->server->dispatch($request);
     expect($response->get_status())->toBe(469)
         ->and((object) $response->get_data())
@@ -123,13 +129,13 @@ test('Trigger error in a middleware', function (string $middlewareType, string $
     ['on-response', 'Triggered error action before sending response']])->group('multiple');
 
 test('Trigger success in a middleware', function (string $middlewareType) {
-    $request = new \WP_REST_Request('GET', "/my-api/v1/my-actions/v2/middleware/{$middlewareType}/success");
+    $request = new WP_REST_Request('GET', "/my-api/v1/my-actions/v2/middleware/{$middlewareType}/success");
     $response = $this->server->dispatch($request);
     expect($response->get_status())->toBe(200);
 })->with(['on-request', 'on-response'])->group('multiple');
 
 test('Trigger no permissions in permission callback', function () {
-    $request = new \WP_REST_Request('GET', '/my-api/v1/my-actions/v2/permission/notAllowed');
+    $request = new WP_REST_Request('GET', '/my-api/v1/my-actions/v2/permission/notAllowed');
     $response = $this->server->dispatch($request);
     expect($response->get_status())->toBe(403)
         ->and((object) $response->get_data())
@@ -139,7 +145,7 @@ test('Trigger no permissions in permission callback', function () {
 })->group('multiple');
 
 test('Trigger has permissions in permission callback', function () {
-    $request = new \WP_REST_Request('GET', '/my-api/v1/my-actions/v2/permission/allowed');
+    $request = new WP_REST_Request('GET', '/my-api/v1/my-actions/v2/permission/allowed');
     $response = $this->server->dispatch($request);
     expect($response->get_status())->toBe(200);
 })->group('multiple');

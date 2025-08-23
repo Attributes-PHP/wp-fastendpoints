@@ -1,28 +1,23 @@
-For testing our **WP-FastEndpoints** router we are going to use [pest/php](https://pestphp.com/).
+To test our router endpoints we are going to use [Pest PHP](https://pestphp.com/). Pest is a testing framework which makes PHP testing
+a breeze. Besides, the creator of Pest is Portuguese and studied at the same university as me which is a bonus 🌟😂
 
-Pest is a testing framework that makes it super easy to test functionality in PHP,
-that's why we are going to use it here. However, if you have a preference for some other testing
-framework, the some principles should apply 😊
-
-Full source code can be found at [**matapatos/wp-fastendpoints-my-plugin »**](https://github.com/matapatos/wp-fastendpoints-my-plugin)
+However, if you have a preference for some other testing framework, the same principles apply
 
 ## Testing dependencies
 
-First, let's add all the necessary testing dependencies:
+To allow us mocking classes and function we will be using [Mockery](https://github.com/mockery/mockery)
 
 ```bash
-composer require mockery/mockery --dev  # For mocking classes/functions
-composer require dingo-d/wp-pest --dev  # Adds Pest support for integration tests
+composer require mockery/mockery --dev
 ```
 
 ## Testing structure
 
-For testing our plugin, we are going to assume the following structure:
+We are going to write unit and integration tests. Our code structure would look like the following:
 
 ```text
 my-plugin
-│   my-plugin.php
-│   composer.json
+│   (...)
 │
 └───src
 │       (...)
@@ -33,8 +28,8 @@ my-plugin
     │   Pest.php        # Pest configuration file
     │
     └───Integration
-    │       PostsApiTest.php
+    │   │    PostsApiTest.php
     │
     └───Unit
-            PostsApiTest.php
+        │    PostsApiTest.php
 ```

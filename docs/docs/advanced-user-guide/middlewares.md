@@ -6,7 +6,7 @@ At this stage, you might be already familiar with both the `schema(...)` and `re
 middlewares. However, you can also create your own.
 
 ```php
-use Wp\FastEndpoints\Contracts\Middleware;
+use Attributes\Wp\FastEndpoints\Contracts\Middleware;
 
 class MyCustomMiddleware extends Middleware
 {

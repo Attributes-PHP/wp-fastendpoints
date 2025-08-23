@@ -10,15 +10,17 @@
 
 declare(strict_types=1);
 
-namespace Wp\FastEndpoints\Tests\Unit\Schemas;
+namespace Attributes\Wp\FastEndpoints\Tests\Unit\Schemas;
 
+use Attributes\Wp\FastEndpoints\Helpers\WpError;
+use Attributes\Wp\FastEndpoints\Tests\Helpers\Helpers;
 use Brain\Monkey;
 use Brain\Monkey\Functions;
 use Mockery;
-use Wp\FastEndpoints\Helpers\WpError;
-use Wp\FastEndpoints\Tests\Helpers\Helpers;
+use WP_Error;
 
 beforeEach(function () {
+    Functions\when('__')->returnArg();
     Monkey\setUp();
 });
 
@@ -30,17 +32,16 @@ afterEach(function () {
 // Constructor
 
 test('Setting correct params', function () {
-    Functions\when('esc_html__')->returnArg();
     $wpError = new WpError(123, 'My error message');
     expect($wpError)
-        ->toBeInstanceOf(\WP_Error::class)
+        ->toBeInstanceOf(WP_Error::class)
         ->toHaveProperty('code', 123)
         ->toHaveProperty('message')
         ->toHaveProperty('data', ['status' => 123]);
 
     $wpError = new WpError(543, ['My error message'], ['custom-field' => 'Testing']);
     expect($wpError)
-        ->toBeInstanceOf(\WP_Error::class)
+        ->toBeInstanceOf(WP_Error::class)
         ->toHaveProperty('code', 543)
         ->toHaveProperty('message')
         ->toHaveProperty('data', ['status' => 543, 'all_messages' => ['My error message'], 'custom-field' => 'Testing']);
