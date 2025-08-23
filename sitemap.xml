@@ -1,55 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://attributes-php.github.io/wp-fastendpoints/</loc>
+         <loc>https://wp-fastendpoints.attributes-php.com/</loc>
          <lastmod>2025-08-23</lastmod>
     </url>
     <url>
-         <loc>https://attributes-php.github.io/wp-fastendpoints/advanced-user-guide/</loc>
+         <loc>https://wp-fastendpoints.attributes-php.com/advanced-user-guide/</loc>
          <lastmod>2025-08-23</lastmod>
     </url>
     <url>
-         <loc>https://attributes-php.github.io/wp-fastendpoints/advanced-user-guide/dependency-injection/</loc>
+         <loc>https://wp-fastendpoints.attributes-php.com/advanced-user-guide/dependency-injection/</loc>
          <lastmod>2025-08-23</lastmod>
     </url>
     <url>
-         <loc>https://attributes-php.github.io/wp-fastendpoints/advanced-user-guide/middlewares/</loc>
+         <loc>https://wp-fastendpoints.attributes-php.com/advanced-user-guide/middlewares/</loc>
          <lastmod>2025-08-23</lastmod>
     </url>
     <url>
-         <loc>https://attributes-php.github.io/wp-fastendpoints/advanced-user-guide/plugins-as-dependencies/</loc>
+         <loc>https://wp-fastendpoints.attributes-php.com/advanced-user-guide/plugins-as-dependencies/</loc>
          <lastmod>2025-08-23</lastmod>
     </url>
     <url>
-         <loc>https://attributes-php.github.io/wp-fastendpoints/advanced-user-guide/request-life-cycle/</loc>
+         <loc>https://wp-fastendpoints.attributes-php.com/advanced-user-guide/request-life-cycle/</loc>
          <lastmod>2025-08-23</lastmod>
     </url>
     <url>
-         <loc>https://attributes-php.github.io/wp-fastendpoints/advanced-user-guide/responses/</loc>
+         <loc>https://wp-fastendpoints.attributes-php.com/advanced-user-guide/responses/</loc>
          <lastmod>2025-08-23</lastmod>
     </url>
     <url>
-         <loc>https://attributes-php.github.io/wp-fastendpoints/quick-start/</loc>
+         <loc>https://wp-fastendpoints.attributes-php.com/quick-start/</loc>
          <lastmod>2025-08-23</lastmod>
     </url>
     <url>
-         <loc>https://attributes-php.github.io/wp-fastendpoints/quick-start/router/</loc>
+         <loc>https://wp-fastendpoints.attributes-php.com/quick-start/router/</loc>
          <lastmod>2025-08-23</lastmod>
     </url>
     <url>
-         <loc>https://attributes-php.github.io/wp-fastendpoints/quick-start/service-provider/</loc>
+         <loc>https://wp-fastendpoints.attributes-php.com/quick-start/service-provider/</loc>
          <lastmod>2025-08-23</lastmod>
     </url>
     <url>
-         <loc>https://attributes-php.github.io/wp-fastendpoints/quick-start/tests/</loc>
+         <loc>https://wp-fastendpoints.attributes-php.com/quick-start/tests/</loc>
          <lastmod>2025-08-23</lastmod>
     </url>
     <url>
-         <loc>https://attributes-php.github.io/wp-fastendpoints/quick-start/tests/integration/</loc>
+         <loc>https://wp-fastendpoints.attributes-php.com/quick-start/tests/integration/</loc>
          <lastmod>2025-08-23</lastmod>
     </url>
     <url>
-         <loc>https://attributes-php.github.io/wp-fastendpoints/quick-start/tests/unit/</loc>
+         <loc>https://wp-fastendpoints.attributes-php.com/quick-start/tests/unit/</loc>
          <lastmod>2025-08-23</lastmod>
     </url>
 </urlset>
