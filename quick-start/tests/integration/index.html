@@ -596,6 +596,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#setup-and-teardown" class="md-nav__link">
+    <span class="md-ellipsis">
+      SetUp and TearDown
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#our-integration-test" class="md-nav__link">
     <span class="md-ellipsis">
       Our integration test 🙃
@@ -865,6 +874,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#setup-and-teardown" class="md-nav__link">
+    <span class="md-ellipsis">
+      SetUp and TearDown
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#our-integration-test" class="md-nav__link">
     <span class="md-ellipsis">
       Our integration test 🙃
@@ -898,19 +916,19 @@
 <p>The following needs to happen in order to successfully run them:</p>
 <ol>
 <li>Load WordPress</li>
-<li>Replace the default <em>TestCase</em> class with another with enhanced WordPress functionalities
+<li>Replace the default <em>TestCase</em> class with another one which eases testing in WordPress
    (e.g. to easily create users or posts)</li>
 <li>Create the REST server and boot it using the <a href="https://developer.wordpress.org/reference/hooks/rest_api_init/"><code>rest_api_init</code></a>
    hook</li>
 </ol>
 <h3 id="wp-pest-to-the-rescue"><em>wp-pest</em> to the rescue 🦸</h3>
 <p>However, thanks to <a href="https://github.com/dingo-d/wp-pest">wp-pest</a> most of this trouble is no longer
-an issue. Via a simple command it does all of that for us! 😎</p>
+an issue. Via a simple command it solves most of the troubles for us! 😎</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># Installs wp-pest</span>
 composer<span class="w"> </span>require<span class="w"> </span>dingo-d/wp-pest<span class="w"> </span>--dev
 
 <span class="c1"># Set&#39;s up WP</span>
-./vendor/bin/wp-pest<span class="w"> </span>setup<span class="w"> </span>plugin<span class="w"> </span>--plugin-slug<span class="w"> </span>my-plugin<span class="w"> </span>--wp-version<span class="w"> </span><span class="m">6</span>.4.4
+./vendor/bin/wp-pest<span class="w"> </span>setup<span class="w"> </span>plugin<span class="w"> </span>--plugin-slug<span class="w"> </span>my-plugin<span class="w"> </span>--wp-version<span class="w"> </span><span class="m">6</span>.8.2
 </code></pre></div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
@@ -947,9 +965,28 @@ need to always specify a group of tests. Those changes include:</p>
 <span class="k">use</span> <span class="nx">MyPlugin\Tests\Helpers</span><span class="p">;</span>
 
 <span class="c1">// Needs to add this check to every Integration test file</span>
-<span class="k">if</span> <span class="p">(</span><span class="o">!</span> <span class="nx">Helpers</span><span class="o">::</span><span class="na">isIntegrationTest</span><span class="p">())</span> <span class="p">{</span>
-    <span class="k">return</span><span class="p">;</span>
+<span class="hll"><span class="k">if</span> <span class="p">(</span><span class="o">!</span> <span class="nx">Helpers</span><span class="o">::</span><span class="na">isIntegrationTest</span><span class="p">())</span> <span class="p">{</span>
+</span>    <span class="k">return</span><span class="p">;</span>
 <span class="p">}</span>
+</code></pre></div>
+<h3 id="setup-and-teardown">SetUp and TearDown</h3>
+<p>The last step before creating our integration tests, is to set up the REST server and trigger the <code>rest_api_init</code> hook.</p>
+<div class="highlight"><span class="filename">tests/Integration/PostsApiTest.php</span><pre><span></span><code><span class="cp">&lt;?php</span>
+<span class="nx">beforeEach</span><span class="p">(</span><span class="k">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="k">parent</span><span class="o">::</span><span class="na">setUp</span><span class="p">();</span>
+
+    <span class="c1">// Set up a REST server instance.</span>
+    <span class="k">global</span> <span class="nv">$wp_rest_server</span><span class="p">;</span>
+<span class="hll">    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">server</span> <span class="o">=</span> <span class="nv">$wp_rest_server</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WP_REST_Server</span><span class="p">;</span>
+</span><span class="hll">    <span class="nx">do_action</span><span class="p">(</span><span class="s1">&#39;rest_api_init&#39;</span><span class="p">,</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">server</span><span class="p">);</span>
+</span><span class="p">});</span>
+
+<span class="nx">afterEach</span><span class="p">(</span><span class="k">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="k">global</span> <span class="nv">$wp_rest_server</span><span class="p">;</span>
+    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">server</span> <span class="o">=</span> <span class="nv">$wp_rest_server</span> <span class="o">=</span> <span class="k">null</span><span class="p">;</span>
+
+    <span class="k">parent</span><span class="o">::</span><span class="na">tearDown</span><span class="p">();</span>
+<span class="p">});</span>
 </code></pre></div>
 <h3 id="our-integration-test">Our integration test 🙃</h3>
 <p>Now that everything is configured we can start creating integration tests:</p>
@@ -965,8 +1002,7 @@ need to always specify a group of tests. Those changes include:</p>
     <span class="nv">$request</span><span class="o">-&gt;</span><span class="na">set_body_params</span><span class="p">([</span>
         <span class="s1">&#39;post_title&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;My testing message&#39;</span><span class="p">,</span>
         <span class="s1">&#39;post_status&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;publish&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;post_type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;post&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;post_content&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;&lt;p&gt;Message body&lt;/p&gt;&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;post_author&#39;</span> <span class="o">=&gt;</span> <span class="nv">$userId</span><span class="p">,</span>
     <span class="p">]);</span>
     <span class="nv">$response</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">server</span><span class="o">-&gt;</span><span class="na">dispatch</span><span class="p">(</span><span class="nv">$request</span><span class="p">);</span>
     <span class="nx">expect</span><span class="p">(</span><span class="nv">$response</span><span class="o">-&gt;</span><span class="na">get_status</span><span class="p">())</span><span class="o">-&gt;</span><span class="na">toBe</span><span class="p">(</span><span class="mi">201</span><span class="p">);</span>
@@ -976,8 +1012,7 @@ need to always specify a group of tests. Those changes include:</p>
         <span class="o">-&gt;</span><span class="na">toBeInstanceOf</span><span class="p">(</span><span class="nx">\WP_Post</span><span class="o">::</span><span class="na">class</span><span class="p">)</span>
         <span class="o">-&gt;</span><span class="na">toHaveProperty</span><span class="p">(</span><span class="s1">&#39;post_title&#39;</span><span class="p">,</span> <span class="s1">&#39;My testing message&#39;</span><span class="p">)</span>
         <span class="o">-&gt;</span><span class="na">toHaveProperty</span><span class="p">(</span><span class="s1">&#39;post_status&#39;</span><span class="p">,</span> <span class="s1">&#39;publish&#39;</span><span class="p">)</span>
-        <span class="o">-&gt;</span><span class="na">toHaveProperty</span><span class="p">(</span><span class="s1">&#39;post_type&#39;</span><span class="p">,</span> <span class="s1">&#39;post&#39;</span><span class="p">)</span>
-        <span class="o">-&gt;</span><span class="na">toHaveProperty</span><span class="p">(</span><span class="s1">&#39;post_content&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;p&gt;Message body&lt;/p&gt;&#39;</span><span class="p">);</span>
+        <span class="o">-&gt;</span><span class="na">toHaveProperty</span><span class="p">(</span><span class="s1">&#39;post_author&#39;</span><span class="p">,</span> <span class="nv">$userId</span><span class="p">);</span>
 <span class="p">})</span><span class="o">-&gt;</span><span class="na">group</span><span class="p">(</span><span class="s1">&#39;api&#39;</span><span class="p">,</span> <span class="s1">&#39;posts&#39;</span><span class="p">);</span>
 </code></pre></div>
 <p>Here, we take advantage of the existent <a href="https://make.wordpress.org/core/handbook/testing/automated-testing/writing-phpunit-tests/#fixtures-and-factories">testing factories</a>
