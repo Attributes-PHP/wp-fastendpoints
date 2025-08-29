@@ -3,7 +3,7 @@ Integration tests, are a bit tricky to set up.
 The following needs to happen in order to successfully run them:
 
 1. Load WordPress
-2. Replace the default _TestCase_ class with another with enhanced WordPress functionalities
+2. Replace the default _TestCase_ class with another one which eases testing in WordPress
    (e.g. to easily create users or posts)
 3. Create the REST server and boot it using the [`rest_api_init`](https://developer.wordpress.org/reference/hooks/rest_api_init/)
    hook
@@ -11,14 +11,14 @@ The following needs to happen in order to successfully run them:
 ### _wp-pest_ to the rescue 🦸
 
 However, thanks to [wp-pest](https://github.com/dingo-d/wp-pest) most of this trouble is no longer
-an issue. Via a simple command it does all of that for us! 😎
+an issue. Via a simple command it solves most of the troubles for us! 😎
 
 ```bash
 # Installs wp-pest
 composer require dingo-d/wp-pest --dev
 
 # Set's up WP
-./vendor/bin/wp-pest setup plugin --plugin-slug my-plugin --wp-version 6.4.4
+./vendor/bin/wp-pest setup plugin --plugin-slug my-plugin --wp-version 6.8.2
 ```
 
 !!! tip
@@ -52,7 +52,7 @@ class Helpers
 }
 ```
 
-```php title="tests/Integration/PostsApiTest.php"
+```php title="tests/Integration/PostsApiTest.php" hl_lines="9"
 <?php
 declare(strict_types=1);
 
@@ -64,6 +64,29 @@ use MyPlugin\Tests\Helpers;
 if (! Helpers::isIntegrationTest()) {
     return;
 }
+```
+
+### SetUp and TearDown
+
+The last step before creating our integration tests, is to set up the REST server and trigger the `rest_api_init` hook.
+
+```php title="tests/Integration/PostsApiTest.php" hl_lines="7-8"
+<?php
+beforeEach(function () {
+    parent::setUp();
+
+    // Set up a REST server instance.
+    global $wp_rest_server;
+    $this->server = $wp_rest_server = new WP_REST_Server;
+    do_action('rest_api_init', $this->server);
+});
+
+afterEach(function () {
+    global $wp_rest_server;
+    $this->server = $wp_rest_server = null;
+
+    parent::tearDown();
+});
 ```
 
 ### Our integration test 🙃
@@ -83,8 +106,7 @@ test('Create a new post', function () {
     $request->set_body_params([
         'post_title' => 'My testing message',
         'post_status' => 'publish',
-        'post_type' => 'post',
-        'post_content' => '<p>Message body</p>',
+        'post_author' => $userId,
     ]);
     $response = $this->server->dispatch($request);
     expect($response->get_status())->toBe(201);
@@ -94,8 +116,7 @@ test('Create a new post', function () {
         ->toBeInstanceOf(\WP_Post::class)
         ->toHaveProperty('post_title', 'My testing message')
         ->toHaveProperty('post_status', 'publish')
-        ->toHaveProperty('post_type', 'post')
-        ->toHaveProperty('post_content', '<p>Message body</p>');
+        ->toHaveProperty('post_author', $userId);
 })->group('api', 'posts');
 ```
 

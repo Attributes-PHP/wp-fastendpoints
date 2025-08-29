@@ -10,9 +10,9 @@
 </p>
 
 ------
-**FastEndpoints** is an elegant way of writing custom WordPress REST endpoints with a focus on simplicity and readability.
+**WP-FastEndpoints** is an elegant way of writing custom WordPress REST endpoints with a focus on simplicity and readability.
 
-- Explore our docs at **[FastEndpoints Docs »](https://attributes-php.github.io/wp-fastendpoints/)**
+- Explore our docs at **[WP-FastEndpoints Docs »](https://attributes-php.github.io/wp-fastendpoints/)**
 
 ## Features
 
@@ -38,4 +38,4 @@ We aim to support versions that haven't reached their end-of-life.
 composer require attributes-php/wp-fastendpoints
 ```
 
-FastEndpoints was created by **[André Gil](https://www.linkedin.com/in/andre-gil/)** and is open-sourced software licensed under the **[MIT license](https://opensource.org/licenses/MIT)**.
+WP FastEndpoints was created by **[André Gil](https://www.linkedin.com/in/andre-gil/)** and is open-sourced software licensed under the **[MIT license](https://opensource.org/licenses/MIT)**.
