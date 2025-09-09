@@ -10,28 +10,28 @@
       
       
       
-        <link rel="canonical" href="https://wp-fastendpoints.attributes-php.com/advanced-user-guide/dependency-injection/">
+        <link rel="canonical" href="https://wp-fastendpoints.attributes-php.com/advanced-user-guide/dependency-injection/injectables/">
       
       
-        <link rel="prev" href="../request-life-cycle/">
+        <link rel="prev" href="../request-payload/">
       
       
-        <link rel="next" href="request-payload/">
+        <link rel="next" href="../../responses/">
       
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.16">
     
     
       
-        <title>Dependency Injection - WP-FastEndpoints</title>
+        <title>Injectables - WP-FastEndpoints</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.7e37652d.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.7e37652d.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -50,7 +50,7 @@
       
     
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -73,6 +73,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#function-names" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -83,7 +88,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="WP-FastEndpoints" class="md-header__button md-logo" aria-label="WP-FastEndpoints" data-md-component="logo">
+    <a href="../../.." title="WP-FastEndpoints" class="md-header__button md-logo" aria-label="WP-FastEndpoints" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -103,7 +108,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Dependency Injection
+              Injectables
             
           </span>
         </div>
@@ -148,7 +153,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../.." class="md-tabs__link">
+      <a href="../../.." class="md-tabs__link">
         
   
   
@@ -169,7 +174,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../quick-start/" class="md-tabs__link">
+        <a href="../../../quick-start/" class="md-tabs__link">
           
   
   
@@ -193,7 +198,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="../" class="md-tabs__link">
+        <a href="../../" class="md-tabs__link">
           
   
   
@@ -229,7 +234,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="WP-FastEndpoints" class="md-nav__button md-logo" aria-label="WP-FastEndpoints" data-md-component="logo">
+    <a href="../../.." title="WP-FastEndpoints" class="md-nav__button md-logo" aria-label="WP-FastEndpoints" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -259,7 +264,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href="../../.." class="md-nav__link">
         
   
   
@@ -308,7 +313,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../quick-start/" class="md-nav__link ">
+            <a href="../../../quick-start/" class="md-nav__link ">
               
   
   
@@ -343,7 +348,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../quick-start/router/" class="md-nav__link">
+      <a href="../../../quick-start/router/" class="md-nav__link">
         
   
   
@@ -366,7 +371,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../quick-start/service-provider/" class="md-nav__link">
+      <a href="../../../quick-start/service-provider/" class="md-nav__link">
         
   
   
@@ -414,7 +419,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../quick-start/tests/" class="md-nav__link ">
+            <a href="../../../quick-start/tests/" class="md-nav__link ">
               
   
   
@@ -449,7 +454,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../quick-start/tests/unit/" class="md-nav__link">
+      <a href="../../../quick-start/tests/unit/" class="md-nav__link">
         
   
   
@@ -472,7 +477,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../quick-start/tests/integration/" class="md-nav__link">
+      <a href="../../../quick-start/tests/integration/" class="md-nav__link">
         
   
   
@@ -546,7 +551,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../" class="md-nav__link ">
+            <a href="../../" class="md-nav__link ">
               
   
   
@@ -581,7 +586,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../request-life-cycle/" class="md-nav__link">
+      <a href="../../request-life-cycle/" class="md-nav__link">
         
   
   
@@ -631,7 +636,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="./" class="md-nav__link md-nav__link--active">
+            <a href="../" class="md-nav__link ">
               
   
   
@@ -644,7 +649,7 @@
             </a>
             
               
-              <label class="md-nav__link md-nav__link--active" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
@@ -666,7 +671,7 @@
   
   
     <li class="md-nav__item">
-      <a href="request-payload/" class="md-nav__link">
+      <a href="../request-payload/" class="md-nav__link">
         
   
   
@@ -686,10 +691,30 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="injectables/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Injectables
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -700,6 +725,42 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#function-names" class="md-nav__link">
+    <span class="md-ellipsis">
+      Function names
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-it-resolves-injectables" class="md-nav__link">
+    <span class="md-ellipsis">
+      How it resolves injectables?
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -720,7 +781,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../responses/" class="md-nav__link">
+      <a href="../../responses/" class="md-nav__link">
         
   
   
@@ -743,7 +804,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../middlewares/" class="md-nav__link">
+      <a href="../../middlewares/" class="md-nav__link">
         
   
   
@@ -766,7 +827,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../plugins-as-dependencies/" class="md-nav__link">
+      <a href="../../plugins-as-dependencies/" class="md-nav__link">
         
   
   
@@ -807,6 +868,32 @@
   
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#function-names" class="md-nav__link">
+    <span class="md-ellipsis">
+      Function names
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-it-resolves-injectables" class="md-nav__link">
+    <span class="md-ellipsis">
+      How it resolves injectables?
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -824,44 +911,58 @@
   
 
 
-  <h1>Dependency Injection</h1>
+  <h1>Injectables</h1>
 
-<p>Each REST endpoint has its unique logic. Same goes with the data that it needs to work.</p>
-<p>For that reason, WP-FastEndpoints provides dependency injection support for all handlers
-e.g. permission handlers, main endpoint handler and middlewares.</p>
-<p>With dependency injection our endpoints do look much cleaner ✨🧹</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">With dependency injection</label><label for="__tabbed_1_2">No dependency injection</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
+<p>A common scenario while creating API's is the need to share resources or logic across multiple endpoints or handlers.
+This is where <em>injectables</em> can be useful.</p>
 <div class="highlight"><pre><span></span><code><span class="cp">&lt;?php</span>
-<span class="c1">// We only need the ID. So we type $ID</span>
-<span class="nv">$router</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s1">&#39;/posts/(?P&lt;ID&gt;[\d]+)&#39;</span><span class="p">,</span> <span class="k">function</span> <span class="p">(</span><span class="nx">int</span> <span class="nv">$ID</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="nx">get_post</span><span class="p">(</span><span class="nv">$ID</span><span class="p">);</span>
+<span class="k">use</span> <span class="nx">Attributes\Validation\Validatable</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Attributes\Wp\FastEndpoints\Options\Inject</span><span class="p">;</span>
+
+<span class="hll"><span class="nv">$router</span><span class="o">-&gt;</span><span class="na">inject</span><span class="p">(</span><span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="k">function</span> <span class="p">()</span><span class="o">:</span> <span class="nx">WP_User</span> <span class="p">{</span>
+</span>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span> <span class="nx">is_user_logged_in</span><span class="p">())</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nx">WpError</span><span class="p">(</span><span class="mi">401</span><span class="p">,</span> <span class="s2">&quot;Ups! You need to login first&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">wp_get_current_user</span><span class="p">();</span>
 <span class="p">});</span>
 
-<span class="c1">// We don&#39;t need anything. So no arguments are defined :D</span>
-<span class="nv">$router</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s1">&#39;/posts/random&#39;</span><span class="p">,</span> <span class="k">function</span> <span class="p">()</span> <span class="p">{</span>
-    <span class="nv">$allPosts</span> <span class="o">=</span> <span class="nx">get_posts</span><span class="p">();</span>
-    <span class="k">return</span> <span class="nv">$allPosts</span> <span class="o">?</span> <span class="nv">$allPosts</span><span class="p">[</span><span class="nb">array_rand</span><span class="p">(</span><span class="nv">$allPosts</span><span class="p">)]</span> <span class="o">:</span> <span class="k">new</span> <span class="nx">WpError</span><span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="s1">&#39;No posts found&#39;</span><span class="p">);</span>
+<span class="hll"><span class="nv">$router</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s1">&#39;/posts&#39;</span><span class="p">,</span> <span class="k">function</span> <span class="p">(#[</span><span class="nd">Inject</span><span class="p">]</span> <span class="nx">WP_User</span> <span class="nv">$user</span><span class="p">)</span> <span class="p">{</span>
+</span>    <span class="c1">// Your logic</span>
+<span class="p">}));</span>
+
+<span class="nv">$router</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s1">&#39;/user&#39;</span><span class="p">,</span> <span class="k">function</span> <span class="p">(#[</span><span class="nd">Inject</span><span class="p">]</span> <span class="nx">WP_User</span> <span class="nv">$user</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Your logic</span>
 <span class="p">});</span>
 </code></pre></div>
-</div>
-<div class="tabbed-block">
+<h4 id="function-names">Function names</h4>
+<p>If an injectable is not found, FastEndpoints will try to look-up for a function with the same property name or specified
+injectable name.</p>
 <div class="highlight"><pre><span></span><code><span class="cp">&lt;?php</span>
-<span class="c1">// Unable to fetch a dynamic parameter. Have to work with the $request argument</span>
-<span class="nv">$router</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s1">&#39;/posts/(?P&lt;ID&gt;[\d]+)&#39;</span><span class="p">,</span> <span class="k">function</span> <span class="p">(</span><span class="nv">$request</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="nx">get_post</span><span class="p">(</span><span class="nv">$request</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s1">&#39;ID&#39;</span><span class="p">));</span>
+<span class="k">function</span> <span class="nf">hello_world</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="s2">&quot;Hello world!&quot;</span><span class="p">;</span> <span class="p">}</span>
+
+<span class="hll"><span class="nv">$router</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s1">&#39;/hello&#39;</span><span class="p">,</span> <span class="k">function</span> <span class="p">(#[</span><span class="nd">Inject</span><span class="p">(</span><span class="s1">&#39;hello_world&#39;</span><span class="p">)]</span> <span class="nx">string</span> <span class="nv">$hello</span><span class="p">)</span> <span class="p">{</span>
+</span>    <span class="k">return</span> <span class="nv">$hello</span><span class="p">;</span>
+<span class="p">}));</span>
+</code></pre></div>
+<h4 id="how-it-resolves-injectables">How it resolves injectables?</h4>
+<p>Each injectable is only resolved once while handling a request. For instance, if the same injectable is used in both
+the permission callback and the endpoint, it will first be resolved during the permission callback and then re-use the
+cached value for subsequent calls.</p>
+<div class="highlight"><pre><span></span><code><span class="cp">&lt;?php</span>
+<span class="nv">$router</span><span class="o">-&gt;</span><span class="na">inject</span><span class="p">(</span><span class="s1">&#39;nextNumber&#39;</span><span class="p">,</span> <span class="k">function</span> <span class="p">()</span><span class="o">:</span> <span class="nx">int</span> <span class="p">{</span>
+    <span class="k">global</span> <span class="nv">$nextNumber</span><span class="p">;</span>
+    <span class="nv">$randomNumber</span> <span class="o">=</span> <span class="p">(</span><span class="nv">$randomNumber</span> <span class="o">?:</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">return</span> <span class="nv">$randomNumber</span><span class="p">;</span>
 <span class="p">});</span>
 
-<span class="c1">// Forced to accept $request even if not used :(</span>
-<span class="nv">$router</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s1">&#39;/posts/random&#39;</span><span class="p">,</span> <span class="k">function</span> <span class="p">(</span><span class="nv">$request</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nv">$allPosts</span> <span class="o">=</span> <span class="nx">get_posts</span><span class="p">();</span>
-    <span class="k">return</span> <span class="nv">$allPosts</span> <span class="o">?</span> <span class="nv">$allPosts</span><span class="p">[</span><span class="nb">array_rand</span><span class="p">(</span><span class="nv">$allPosts</span><span class="p">)]</span> <span class="o">:</span> <span class="k">new</span> <span class="nx">WpError</span><span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="s1">&#39;No posts found&#39;</span><span class="p">);</span>
+<span class="nv">$router</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s1">&#39;/posts&#39;</span><span class="p">,</span> <span class="k">function</span> <span class="p">(#[</span><span class="nd">Inject</span><span class="p">]</span> <span class="nx">int</span> <span class="nv">$nextNumber</span><span class="p">)</span> <span class="p">{</span>
+<span class="hll">    <span class="c1">// $nextNumber will be 1</span>
+</span><span class="p">}))</span>
+<span class="o">-&gt;</span><span class="na">permission</span><span class="p">(</span><span class="k">function</span><span class="p">(#[</span><span class="nd">Inject</span><span class="p">]</span> <span class="nx">int</span> <span class="nv">$nextNumber</span><span class="p">)</span> <span class="p">{</span>
+<span class="hll">    <span class="c1">// $nextNumber will be 1</span>
+</span>    <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
 <span class="p">});</span>
 </code></pre></div>
-</div>
-</div>
-</div>
 
 
 
@@ -893,7 +994,7 @@ e.g. permission handlers, main endpoint handler and middlewares.</p>
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../request-life-cycle/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Request Life Cycle">
+          <a href="../request-payload/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Request payload">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -903,20 +1004,20 @@ e.g. permission handlers, main endpoint handler and middlewares.</p>
                 Previous
               </span>
               <div class="md-ellipsis">
-                Request Life Cycle
+                Request payload
               </div>
             </div>
           </a>
         
         
           
-          <a href="request-payload/" class="md-footer__link md-footer__link--next" aria-label="Next: Request payload">
+          <a href="../../responses/" class="md-footer__link md-footer__link--next" aria-label="Next: Responses">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Request payload
+                Responses
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -978,10 +1079,10 @@ e.g. permission handlers, main endpoint handler and middlewares.</p>
     
     
       
-      <script id="__config" type="application/json">{"base": "../..", "features": ["search.suggest", "search.highlight", "content.tabs.link", "navigation.indexes", "content.tooltips", "navigation.path", "content.code.annotate", "content.code.copy", "content.code.select", "navigation.tabs", "navigation.footer"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"base": "../../..", "features": ["search.suggest", "search.highlight", "content.tabs.link", "navigation.indexes", "content.tooltips", "navigation.path", "content.code.annotate", "content.code.copy", "content.code.select", "navigation.tabs", "navigation.footer"], "search": "../../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.50899def.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.50899def.min.js"></script>
       
     
   </body>

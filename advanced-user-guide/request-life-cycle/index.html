@@ -120,48 +120,6 @@
     
     
     
-      
-      
-        <label class="md-header__button md-icon" for="__search">
-          
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
-        </label>
-        <div class="md-search" data-md-component="search" role="dialog">
-  <label class="md-search__overlay" for="__search"></label>
-  <div class="md-search__inner" role="search">
-    <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
-      <label class="md-search__icon md-icon" for="__search">
-        
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
-        
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
-      </label>
-      <nav class="md-search__options" aria-label="Search">
-        
-        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
-          
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-        </button>
-      </nav>
-      
-        <div class="md-search__suggest" data-md-component="search-suggest"></div>
-      
-    </form>
-    <div class="md-search__output">
-      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
-        <div class="md-search-result" data-md-component="search-result">
-          <div class="md-search-result__meta">
-            Initializing search
-          </div>
-          <ol class="md-search-result__list" role="presentation"></ol>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-      
-    
     
       <div class="md-header__source">
         <a href="https://github.com/attributes-php/wp-fastendpoints" title="Go to repository" class="md-source" data-md-component="source">
@@ -730,9 +688,34 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="../dependency-injection/" class="md-nav__link">
+    
+    
+      
         
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../dependency-injection/" class="md-nav__link ">
+              
   
   
   <span class="md-ellipsis">
@@ -741,7 +724,73 @@
   </span>
   
 
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            Dependency Injection
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dependency-injection/request-payload/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Request payload
+    
+  </span>
+  
+
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dependency-injection/injectables/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Injectables
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -913,33 +962,33 @@
 <p>In WP-FastEndpoints an endpoint can have multiple optional handlers attached to:</p>
 <ol>
 <li>Permission handlers via <code>hasCap(...)</code> or <code>permission(...)</code> - Used to check for user permissions</li>
-<li>Middlewares<ol>
-<li>Request Payload Schema Middleware via <code>schema(...)</code> - Validates the request payload</li>
-<li>Response Schema Middleware via <code>returns(...)</code> - Makes sure that the proper response is sent to the client</li>
-<li>Custom middlewares via <code>middleware(...)</code> - Any other custom logic that you might want to run</li>
+<li>Middlewares via <code>middleware(...)</code><ol>
+<li>Running before the handler being called and/or</li>
+<li>Running after the handler being called</li>
 </ol>
 </li>
 </ol>
 <h2 id="permission-handlers">Permission handlers</h2>
 <p>When a request is received the first handlers to run are the permissions handlers. Permission handlers are called
-by WordPress via <a href="https://developer.wordpress.org/rest-api/extending-the-rest-api/routes-and-endpoints/#callbacks"><code>permission_callback</code></a>.</p>
+by WordPress via <a href="https://developer.wordpress.org/rest-api/extending-the-rest-api/routes-and-endpoints/#callbacks"><em><code>permission_callback</code></em></a>.</p>
 <p>In contrast to WordPress, you can have one or multiple permission handlers attached to the same endpoint.</p>
 <details class="note" open="open">
 <summary>Note</summary>
-<p>In the background all permission handlers are wrapped into one callable which is later on used as
+<p>In the background all permission handlers are wrapped into one callable which is later on used as the
 <code>permission_callback</code> by the endpoint</p>
 </details>
 <p>These handlers will then be called in the same order as they were attached. For instance:</p>
-<div class="highlight"><pre><span></span><code><span class="x">$router-&gt;get(&#39;/test&#39;, function () {return true;})</span>
-<span class="x">-&gt;hasCap(&#39;read&#39;)                # Called first</span>
-<span class="x">-&gt;hasCap(&#39;edit_posts&#39;)          # Called second if the first one was successful</span>
-<span class="x">-&gt;permission(&#39;__return_true&#39;)   # Called last if both the first and second were successful</span>
+<div class="highlight"><pre><span></span><code><span class="cp">&lt;?php</span>
+<span class="nv">$router</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s1">&#39;/test&#39;</span><span class="p">,</span> <span class="k">function</span> <span class="p">()</span> <span class="p">{</span><span class="k">return</span> <span class="k">true</span><span class="p">;})</span>
+    <span class="o">-&gt;</span><span class="na">hasCap</span><span class="p">(</span><span class="s1">&#39;read&#39;</span><span class="p">)</span>              <span class="c1"># Called first</span>
+    <span class="o">-&gt;</span><span class="na">hasCap</span><span class="p">(</span><span class="s1">&#39;edit_posts&#39;</span><span class="p">)</span>        <span class="c1"># Called second if the first one was successful</span>
+    <span class="o">-&gt;</span><span class="na">permission</span><span class="p">(</span><span class="s1">&#39;__return_true&#39;</span><span class="p">)</span> <span class="c1"># Called last if both the first and second were successful</span>
 </code></pre></div>
 <h2 id="middlewares">Middlewares</h2>
 <p>If all the permission handlers are successful the next set of handlers that run are the middlewares which
 implement the <code>onRequest</code> function.</p>
 <p>Remember that a middleware can implement <code>onRequest</code> and/or <code>onResponse</code> functions. The first one, runs before
-the main endpoint handler and the later one should run after the main endpoint handler.</p>
+the main endpoint handler and the later one runs after the main endpoint handler.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Please bear in mind that if either a <a href="https://developer.wordpress.org/reference/classes/wp_error/">WP_Error</a> or
@@ -949,29 +998,33 @@ the main endpoint handler following middlewares will not run. See
 </div>
 <h3 id="onrequest">onRequest</h3>
 <p>Same as with the permission handlers, middlewares are called with the same order that they were attached.</p>
-<div class="highlight"><pre><span></span><code><span class="x">class OnRequestMiddleware extends \Attributes\Wp\FastEndpoints\Contracts\Middleware</span>
-<span class="x">{</span>
-<span class="x">    public function onRequest(/* Type what you need */){</span>
-<span class="x">        return;</span>
-<span class="x">    }</span>
-<span class="x">}</span>
+<div class="highlight"><pre><span></span><code><span class="cp">&lt;?php</span>
+<span class="k">class</span> <span class="nc">OnRequestMiddleware</span> <span class="k">extends</span> <span class="nx">\Attributes\Wp\FastEndpoints\Contracts\Middleware</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">onRequest</span><span class="p">(</span><span class="cm">/* Type what you need */</span><span class="p">){</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-<span class="x">$router-&gt;post(&#39;/test&#39;, function () {return true;})</span>
-<span class="x">-&gt;middleware(OnRequestMiddleware()) # Called first</span>
-<span class="x">-&gt;schema(&#39;Basics/Bool&#39;);            # Called second</span>
+<span class="nv">$router</span><span class="o">-&gt;</span><span class="na">post</span><span class="p">(</span><span class="s1">&#39;/test&#39;</span><span class="p">,</span> <span class="k">function</span> <span class="p">()</span> <span class="p">{</span><span class="k">return</span> <span class="k">true</span><span class="p">;})</span>
+    <span class="o">-&gt;</span><span class="na">middleware</span><span class="p">(</span><span class="nx">OnRequestMiddleware</span><span class="p">())</span>    <span class="c1"># Called first</span>
+    <span class="o">-&gt;</span><span class="na">middleware</span><span class="p">(</span><span class="nx">DoSomethingMiddleware</span><span class="p">());</span> <span class="c1"># Called second</span>
 </code></pre></div>
 <h3 id="onresponse">onResponse</h3>
-<p>Likewise, middlewares implementing onResponse functions will be triggered in the same order as they were attached.</p>
-<div class="highlight"><pre><span></span><code><span class="x">class OnResponseMiddleware extends \Attributes\Wp\FastEndpoints\Contracts\Middleware</span>
-<span class="x">{</span>
-<span class="x">    public function onResponse(/* Type what you need */){</span>
-<span class="x">        return;</span>
-<span class="x">    }</span>
-<span class="x">}</span>
+<p>Likewise, middlewares implementing <code>onResponse</code> functions will be triggered in the same order as they were attached.</p>
+<div class="highlight"><pre><span></span><code><span class="cp">&lt;?php</span>
+<span class="k">use</span> <span class="nx">Attributes\Validation\Types\IntArr</span><span class="p">;</span>
 
-<span class="x">$router-&gt;post(&#39;/test&#39;, function () {return true;})</span>
-<span class="x">-&gt;returns(&#39;Basics/Bool&#39;)                # Called first</span>
-<span class="x">-&gt;middleware(OnResponseMiddleware());   # Called second</span>
+<span class="k">class</span> <span class="nc">OnResponseMiddleware</span> <span class="k">extends</span> <span class="nx">\Attributes\Wp\FastEndpoints\Contracts\Middleware</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">onResponse</span><span class="p">(</span><span class="cm">/* Type what you need */</span><span class="p">){</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nv">$router</span><span class="o">-&gt;</span><span class="na">post</span><span class="p">(</span><span class="s1">&#39;/test&#39;</span><span class="p">,</span> <span class="k">function</span> <span class="p">()</span> <span class="p">{</span><span class="k">return</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">];})</span>
+    <span class="o">-&gt;</span><span class="na">returns</span><span class="p">(</span><span class="nx">IntArr</span><span class="o">::</span><span class="na">class</span><span class="p">)</span>              <span class="c1"># Called first</span>
+    <span class="o">-&gt;</span><span class="na">middleware</span><span class="p">(</span><span class="nx">OnResponseMiddleware</span><span class="p">());</span> <span class="c1"># Called second</span>
 </code></pre></div>
 
 
