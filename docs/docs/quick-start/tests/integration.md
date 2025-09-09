@@ -68,7 +68,7 @@ if (! Helpers::isIntegrationTest()) {
 
 ### SetUp and TearDown
 
-The last step before creating our integration tests, is to set up the REST server and trigger the `rest_api_init` hook.
+The last step before creating our integration tests, is to set up the REST server and trigger the `*rest_api_init*` hook.
 
 ```php title="tests/Integration/PostsApiTest.php" hl_lines="7-8"
 <?php

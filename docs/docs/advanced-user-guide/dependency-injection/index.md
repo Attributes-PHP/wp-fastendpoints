@@ -8,8 +8,9 @@ With dependency injection our endpoints do look much cleaner ✨🧹
 === "With dependency injection"
 
     ```php
+    <?php
     // We only need the ID. So we type $ID
-    $router->get('/posts/(?P<ID>[\d]+)', function ($ID) {
+    $router->get('/posts/(?P<ID>[\d]+)', function (int $ID) {
         return get_post($ID);
     });
 
@@ -23,6 +24,7 @@ With dependency injection our endpoints do look much cleaner ✨🧹
 === "No dependency injection"
 
     ```php
+    <?php
     // Unable to fetch a dynamic parameter. Have to work with the $request argument
     $router->get('/posts/(?P<ID>[\d]+)', function ($request) {
         return get_post($request->get('ID'));

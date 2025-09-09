@@ -12,14 +12,12 @@
 ------
 **WP-FastEndpoints** is an elegant way of writing custom WordPress REST endpoints with a focus on simplicity and readability.
 
-- Explore our docs at **[WP-FastEndpoints Docs »](https://attributes-php.github.io/wp-fastendpoints/)**
-
 ## Features
 
 - Validates data via type-hints
 - Removes unwanted fields from responses
 - Middlewares support
-- No magic router. It uses WordPress [`register_rest_route`](https://developer.wordpress.org/reference/functions/register_rest_route/)
+- No magic router. It uses WordPress [*`register_rest_route`*](https://developer.wordpress.org/reference/functions/register_rest_route/)
 - Able to treat plugins as dependencies via [WP-FastEndpoints Depends](https://github.com/matapatos/wp-fastendpoints-depends)
 
 ## Requirements

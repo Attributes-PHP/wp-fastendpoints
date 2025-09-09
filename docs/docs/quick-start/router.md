@@ -34,12 +34,12 @@ enum Status: string
     case PRIVATE = 'private';
 }
 
-#[AliasGenerator('snake')]
+#[AliasGenerator('snake')] #(1)
 class Post
 {
-    use SerializableTrait;
+    use SerializableTrait; #(2)
 
-    #[Rules\Positive]
+    #[Rules\Positive] #(3)
     public int $ID;
     #[Rules\Positive]
     public int $postAuthor;

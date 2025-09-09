@@ -43,5 +43,5 @@ $router->get('/test', function () {
 ## Responses
 
 If you need you can also take advantage of either WP_Error and WP_REST_Response to send
-a direct response to the client. See [Responses page](/wp-fastendpoints/advanced-user-guide/responses)
+a direct response to the client. See [Responses page](/advanced-user-guide/responses)
 for more info

@@ -1,34 +1,37 @@
-When building an API sometimes we want to return a response directly to the client. For example:
+When building an API sometimes we might want to return a response directly to the client. For example:
 
 ```php
-$router->get('/posts/(?P<ID>[\d]+)', function ($ID) {
+<?php
+$router->get('/posts/(?P<ID>[\d]+)', function (int $ID) {
     return get_post($ID);
 })
-->returns('Posts/Get');  // It will raise a 422 HTTP error when we are unable to find a post
+->returns(Post::class); #(1)
 ```
 
-The code above, will raise a 422 HTTP status code error when ever we are unable to find
-a given post. This is where returning a message directly to the client can be useful.
+1. A 422 HTTP error will be raised if unable to find a post because the data structure retrieved by the `*get_post*`
+   function will not match the expected response structure e.g. *Post::class*.
 
 ## Early return
 
-To trigger those scenarios we can either return a WP_Error or a WP_REST_Response.
+To avoid those scenarios we can either return a WP_Error or a WP_REST_Response.
 
 === "WP_REST_Response"
     ```php
-    $router->get('/posts/(?P<ID>[\d]+)', function ($ID) {
+    <?php
+    $router->get('/posts/(?P<ID>[\d]+)', function (int $ID) {
         $post = get_post($ID);
         return $post ?: new WP_REST_Response("No posts found", 404);
     })
-    ->returns('Posts/Get');  // This will not be triggered if no posts are found
+    ->returns(Post::class);  // This will not be triggered if no posts are found
     ```
 === "WP_Error"
     ```php
-    $router->get('/posts/(?P<ID>[\d]+)', function ($ID) {
+    <?php
+    $router->get('/posts/(?P<ID>[\d]+)', function (int $ID) {
         $post = get_post($ID);
         return $post ?: new WpError(404, "No posts found");
     })
-    ->returns('Posts/Get');  // This will not be triggered if no posts are found
+    ->returns(Post::class);  // This will not be triggered if no posts are found
     ```
 
 ### Difference between returning WP_REST_Response or WP_Error

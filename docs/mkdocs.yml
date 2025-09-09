@@ -29,7 +29,6 @@ repo_name: attributes-php/wp-fastendpoints
 repo_url: https://github.com/attributes-php/wp-fastendpoints
 edit_uri: https://github.com/attributes-php/wp-fastendpoints/tree/main/docs/docs
 plugins:
-  search: null
   macros:
     include_yaml:
       - sponsors: data/sponsors.yml
@@ -56,7 +55,10 @@ nav:
   - Advanced User Guide:
     - Advanced User Guide: advanced-user-guide/index.md
     - Request Life Cycle: advanced-user-guide/request-life-cycle.md
-    - Dependency Injection: advanced-user-guide/dependency-injection.md
+    - Dependency Injection:
+      - Dependency Injection: advanced-user-guide/dependency-injection/index.md
+      - Request payload: advanced-user-guide/dependency-injection/request-payload.md
+      - Injectables: advanced-user-guide/dependency-injection/injectables.md
     - Responses: advanced-user-guide/responses.md
     - Middlewares: advanced-user-guide/middlewares.md
     - Treat plugins as dependencies: advanced-user-guide/plugins-as-dependencies.md
