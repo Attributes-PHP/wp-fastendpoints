@@ -20,7 +20,7 @@
 - Removes unwanted fields from responses 
 - Middlewares support
 - No magic router. It uses WordPress [`register_rest_route`](https://developer.wordpress.org/reference/functions/register_rest_route/)
-- Able to treat plugins as dependencies via [WP-FastEndpoints Depends](https://github.com/matapatos/wp-fastendpoints-depends)
+- Able to treat plugins as dependencies via [WP-FastEndpoints Depends](https://github.com/attributes-php/wp-fastendpoints-depends)
 
 ## Requirements
 
