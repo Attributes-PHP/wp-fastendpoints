@@ -1013,28 +1013,30 @@ which allow us to decide which plugins are necessary for a given REST endpoint b
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">With FastEndpoints</label><label for="__tabbed_1_2">Native WP endpoints</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="x">$router-&gt;get(&#39;/example/all-plugins&#39;, function () {</span>
-<span class="x">    return &quot;Loads all active plugins&quot;;</span>
-<span class="x">});</span>
+<div class="highlight"><pre><span></span><code><span class="cp">&lt;?php</span>
+<span class="nv">$router</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s1">&#39;/example/all-plugins&#39;</span><span class="p">,</span> <span class="k">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="s2">&quot;Loads all active plugins&quot;</span><span class="p">;</span>
+<span class="p">});</span>
 
-<span class="x">$router-&gt;get(&#39;/example/buddypress&#39;, function () {</span>
-<span class="x">    return &quot;Only MyPlugin and BuddyPress plugins are loaded&quot;; </span>
-<span class="x">})-&gt;depends([&#39;my-plugin&#39;, &#39;buddypress&#39;]);</span>
+<span class="nv">$router</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s1">&#39;/example/buddypress&#39;</span><span class="p">,</span> <span class="k">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="s2">&quot;Only MyPlugin and BuddyPress plugins are loaded&quot;</span><span class="p">;</span> 
+<span class="p">})</span><span class="o">-&gt;</span><span class="na">depends</span><span class="p">([</span><span class="s1">&#39;my-plugin&#39;</span><span class="p">,</span> <span class="s1">&#39;buddypress&#39;</span><span class="p">]);</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="x">// Loads all active plugins</span>
-<span class="x">register_rest_route(&#39;native/v1&#39;, &#39;example/all-plugins&#39;, [</span>
-<span class="x">    &#39;methods&#39; =&gt; &#39;GET&#39;,</span>
-<span class="x">    (...)</span>
-<span class="x">]);</span>
+<div class="highlight"><pre><span></span><code><span class="cp">&lt;?php</span>
+<span class="c1">// Loads all active plugins</span>
+<span class="nx">register_rest_route</span><span class="p">(</span><span class="s1">&#39;native/v1&#39;</span><span class="p">,</span> <span class="s1">&#39;example/all-plugins&#39;</span><span class="p">,</span> <span class="p">[</span>
+    <span class="s1">&#39;methods&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;GET&#39;</span><span class="p">,</span>
+    <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="p">]);</span>
 
-<span class="x">// Only MyPlugin and BuddyPress plugins are loaded</span>
-<span class="x">register_rest_route(&#39;native/v1&#39;, &#39;example/buddypress&#39;, [</span>
-<span class="x">    &#39;methods&#39; =&gt; &#39;GET&#39;,</span>
-<span class="x">    &#39;depends&#39; =&gt; [&#39;my-plugin&#39;, &#39;buddypress&#39;],</span>
-<span class="x">    (...)</span>
-<span class="x">]);</span>
+<span class="c1">// Only MyPlugin and BuddyPress plugins are loaded</span>
+<span class="nx">register_rest_route</span><span class="p">(</span><span class="s1">&#39;native/v1&#39;</span><span class="p">,</span> <span class="s1">&#39;example/buddypress&#39;</span><span class="p">,</span> <span class="p">[</span>
+    <span class="s1">&#39;methods&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;GET&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;depends&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;my-plugin&#39;</span><span class="p">,</span> <span class="s1">&#39;buddypress&#39;</span><span class="p">],</span>
+    <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="p">]);</span>
 </code></pre></div>
 </div>
 </div>
@@ -1050,8 +1052,9 @@ router dependencies e.g. <code>$router-&gt;depends(['my-plugin'])</code></p>
 or specific endpoint dependencies.</p>
 <p>One common scenario where router dependencies might be useful is when we want to change the default behaviour
 of loading all active plugins per endpoint.</p>
-<div class="highlight"><pre><span></span><code><span class="x">$router = new \Attributes\Wp\FastEndpoints\Router(&#39;my-api&#39;, &#39;v1&#39;);</span>
-<span class="x">$router-&gt;depends([&#39;my-plugin&#39;]); // All endpoints and sub-routers would have this dependency</span>
+<div class="highlight"><pre><span></span><code><span class="cp">&lt;?php</span>
+<span class="nv">$router</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Attributes\Wp\FastEndpoints\Router</span><span class="p">(</span><span class="s1">&#39;my-api&#39;</span><span class="p">,</span> <span class="s1">&#39;v1&#39;</span><span class="p">);</span>
+<span class="nv">$router</span><span class="o">-&gt;</span><span class="na">depends</span><span class="p">([</span><span class="s1">&#39;my-plugin&#39;</span><span class="p">]);</span> <span class="c1">// All endpoints and sub-routers would have this dependency</span>
 </code></pre></div>
 <div class="admonition danger">
 <p class="admonition-title">Danger</p>

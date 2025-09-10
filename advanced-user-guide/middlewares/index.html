@@ -73,11 +73,6 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
-        
-        <a href="#responses" class="md-skip">
-          Skip to content
-        </a>
-      
     </div>
     <div data-md-component="announce">
       
@@ -753,19 +748,6 @@
       
       
       
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    Middlewares
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -777,32 +759,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#responses" class="md-nav__link">
-    <span class="md-ellipsis">
-      Responses
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
       
     </li>
   
@@ -857,23 +813,6 @@
   
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#responses" class="md-nav__link">
-    <span class="md-ellipsis">
-      Responses
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -895,46 +834,50 @@
 
 <p>Another cool feature of WP-FastEndpoints is the support for middlewares.</p>
 <p>Middlewares are pieces of code that can either run before and/or after a request is handled.</p>
-<p>At this stage, you might be already familiar with both the <code>schema(...)</code> and <code>returns(...)</code>
-middlewares. However, you can also create your own.</p>
-<div class="highlight"><pre><span></span><code><span class="x">use Attributes\Wp\FastEndpoints\Contracts\Middleware;</span>
+<p>At this stage, you might be already familiar with <code>returns(...)</code> which is a middleware.
+However, you can also create your own.</p>
+<div class="highlight"><pre><span></span><code><span class="cp">&lt;?php</span>
+<span class="k">use</span> <span class="nx">Attributes\Wp\FastEndpoints\Contracts\Middleware</span><span class="p">;</span>
 
-<span class="x">class MyCustomMiddleware extends Middleware</span>
-<span class="x">{</span>
-<span class="x">    /**</span>
-<span class="x">    * Create this function if you want that your middleware is</span>
-<span class="x">    * triggered when it receives a request and after checking</span>
-<span class="x">    * the user permissions.</span>
-<span class="x">     */</span>
-<span class="x">    public function onRequest(/* Type what you need */)</span>
-<span class="x">    {</span>
-<span class="x">        return;</span>
-<span class="x">    }</span>
+<span class="k">class</span> <span class="nc">MyCustomMiddleware</span> <span class="k">extends</span> <span class="nx">Middleware</span>
+<span class="p">{</span>
+    <span class="sd">/**</span>
+<span class="sd">    * This function is triggered before the main handler runs</span>
+<span class="sd">    * but after checking the user permissions.</span>
+<span class="sd">    */</span>
+<span class="hll">    <span class="k">public</span> <span class="k">function</span> <span class="nf">onRequest</span><span class="p">(</span><span class="c1">#(1))) {</span>
+</span>        <span class="k">return</span><span class="p">;</span> <span class="c1">#(2)</span>
+    <span class="p">}</span>
 
-<span class="x">    /**</span>
-<span class="x">    * Create this function when you want your middleware to be</span>
-<span class="x">    * triggered before sending a response to the client </span>
-<span class="x">     */</span>
-<span class="x">    public function onResponse(/* Type what you need */) {</span>
-<span class="x">        return;</span>
-<span class="x">    }</span>
-<span class="x">}</span>
+    <span class="sd">/**</span>
+<span class="sd">    * This function is triggered after the main handler,</span>
+<span class="sd">    * before sending a response to the client </span>
+<span class="sd">    */</span>
+<span class="hll">    <span class="k">public</span> <span class="k">function</span> <span class="nf">onResponse</span><span class="p">(</span><span class="c1">#(3)) {</span>
+</span>        <span class="k">return</span><span class="p">;</span> <span class="c1">#(4)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-<span class="x">// Attach middleware to endpoint</span>
-<span class="x">$router-&gt;get(&#39;/test&#39;, function () {</span>
-<span class="x">    return true;</span>
-<span class="x">})</span>
-<span class="x">-&gt;middleware(new MyCustomMiddleware());</span>
-</code></pre></div>
+<span class="nv">$router</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s1">&#39;/test&#39;</span><span class="p">,</span> <span class="k">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+<span class="p">})</span>
+<span class="hll"><span class="o">-&gt;</span><span class="na">middleware</span><span class="p">(</span><span class="k">new</span> <span class="nx">MyCustomMiddleware</span><span class="p">());</span>
+</span></code></pre></div>
+<ol>
+<li>Supports all features that a regular endpoint supports
+   e.g. <a href="/advanced-user-guide/dependency-injection/injectables">injectables</a>,
+   <a href="/advanced-user-guide/dependency-injection/request-payload">typed request data</a></li>
+<li>Early response return is also supported. See <a href="/advanced-user-guide/responses">Responses page</a></li>
+<li>Middlewares supports all features that a regular endpoint supports
+   e.g. <a href="/advanced-user-guide/dependency-injection/injectables">injectables</a>,
+   <a href="/advanced-user-guide/dependency-injection/request-payload">typed request data</a></li>
+<li>Early response return is also supported. See <a href="/advanced-user-guide/responses">Responses page</a></li>
+</ol>
 <details class="tip" open="open">
 <summary>Tip</summary>
 <p>You can create both methods in a middleware: <code>onRequest</code> and <code>onResponse</code>.
 However, to save some CPU cycles only create the one you need [CPU emoji]</p>
 </details>
-<h2 id="responses">Responses</h2>
-<p>If you need you can also take advantage of either WP_Error and WP_REST_Response to send
-a direct response to the client. See <a href="/advanced-user-guide/responses">Responses page</a>
-for more info</p>
 
 
 
