@@ -26,6 +26,7 @@ Currently, we support both native WP endpoints and FastEndpoints 😊
 === "With FastEndpoints"
 
     ```php
+    <?php
     $router->get('/example/all-plugins', function () {
         return "Loads all active plugins";
     });
@@ -38,6 +39,7 @@ Currently, we support both native WP endpoints and FastEndpoints 😊
 === "Native WP endpoints"
 
     ```php
+    <?php
     // Loads all active plugins
     register_rest_route('native/v1', 'example/all-plugins', [
         'methods' => 'GET',
@@ -66,6 +68,7 @@ One common scenario where router dependencies might be useful is when we want to
 of loading all active plugins per endpoint.
 
 ```php
+<?php
 $router = new \Attributes\Wp\FastEndpoints\Router('my-api', 'v1');
 $router->depends(['my-plugin']); // All endpoints and sub-routers would have this dependency
 ```
