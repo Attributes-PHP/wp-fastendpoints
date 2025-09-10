@@ -22,6 +22,7 @@ theme:
     - content.code.select
     - navigation.tabs
     - navigation.footer
+    - optimize
   icon:
     repo: fontawesome/brands/github-alt
   language: en

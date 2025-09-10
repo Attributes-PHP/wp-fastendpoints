@@ -1,3 +1,8 @@
+---
+hide:
+  - navigation
+---
+
 # WP-FastEndpoints
 
 <img src="https://raw.githubusercontent.com/Attributes-PHP/wp-fastendpoints/main/docs/images/wp-fastendpoints-wallpaper.png" alt="WordPress REST endpoints made easy">
