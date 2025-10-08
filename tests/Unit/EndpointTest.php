@@ -342,11 +342,13 @@ test('Running permission handlers in permission callback', function ($returnValu
     Helpers::setNonPublicClassProperty($mockedEndpoint, 'permissionHandlers', ['test-permission-handler']);
     $mockedEndpoint->shouldReceive('runHandlers')
         ->once()
-        ->with(['test-permission-handler'], Mockery::type('array'))
+        ->with(['test-permission-handler'], Mockery::type('array'), true, true)
         ->andReturn($returnValue);
     expect($mockedEndpoint->permissionCallback($req))
         ->toBe($returnValue ?? true);
-})->with([null, WpError::class])->group('endpoint', 'permission', 'permissionCallback');
+})
+    ->with([null, WpError::class, false, true])
+    ->group('endpoint', 'permission', 'permissionCallback');
 
 // callback
 

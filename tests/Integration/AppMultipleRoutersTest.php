@@ -63,6 +63,7 @@ test('REST API endpoints registered', function () {
             '/my-api/v1/my-actions/v2/middleware/on-request/(?P<action>\w+)',
             '/my-api/v1/my-actions/v2/middleware/on-response/(?P<action>\w+)',
             '/my-api/v1/my-actions/v2/permission/(?P<action>\w+)',
+            '/my-api/v1/my-actions/v2/bool/permission/(?P<action>\w+)',
         ])
         ->and($routes['/my-api/v1/my-posts/v1/(?P<ID>[\\d]+)'])
         ->toBeArray()
@@ -74,6 +75,9 @@ test('REST API endpoints registered', function () {
         ->toBeArray()
         ->toHaveCount(1)
         ->and($routes['/my-api/v1/my-actions/v2/permission/(?P<action>\w+)'])
+        ->toBeArray()
+        ->toHaveCount(1)
+        ->and($routes['/my-api/v1/my-actions/v2/bool/permission/(?P<action>\w+)'])
         ->toBeArray()
         ->toHaveCount(1);
 })->group('multiple');
@@ -134,7 +138,7 @@ test('Trigger success in a middleware', function (string $middlewareType) {
     expect($response->get_status())->toBe(200);
 })->with(['on-request', 'on-response'])->group('multiple');
 
-test('Trigger no permissions in permission callback', function () {
+test('Trigger no permissions in permission callback - WP Error', function () {
     $request = new WP_REST_Request('GET', '/my-api/v1/my-actions/v2/permission/notAllowed');
     $response = $this->server->dispatch($request);
     expect($response->get_status())->toBe(403)
@@ -144,8 +148,20 @@ test('Trigger no permissions in permission callback', function () {
         ->toHaveProperty('data', ['status' => 403]);
 })->group('multiple');
 
-test('Trigger has permissions in permission callback', function () {
-    $request = new WP_REST_Request('GET', '/my-api/v1/my-actions/v2/permission/allowed');
+test('Trigger no permissions in permission callback - boolean', function () {
+    $request = new WP_REST_Request('GET', '/my-api/v1/my-actions/v2/bool/permission/notAllowed');
+    $response = $this->server->dispatch($request);
+    expect($response->get_status())->toBe(401)
+        ->and((object) $response->get_data())
+        ->toHaveProperty('code', 'rest_forbidden')
+        ->toHaveProperty('message', 'Sorry, you are not allowed to do that.')
+        ->toHaveProperty('data', ['status' => 401]);
+})->group('multiple');
+
+test('Trigger has permissions in permission callback', function (string $endpoint) {
+    $request = new WP_REST_Request('GET', $endpoint);
     $response = $this->server->dispatch($request);
     expect($response->get_status())->toBe(200);
-})->group('multiple');
+})
+    ->with(['/my-api/v1/my-actions/v2/permission/allowed', '/my-api/v1/my-actions/v2/bool/permission/allowed'])
+    ->group('multiple');

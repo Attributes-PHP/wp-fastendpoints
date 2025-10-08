@@ -312,8 +312,8 @@ class Endpoint implements EndpointInterface
             'endpoint' => $this,
             'request' => $request,
         ];
-        $result = $this->runHandlers($this->permissionHandlers, $dependencies);
-        if (is_wp_error($result)) {
+        $result = $this->runHandlers($this->permissionHandlers, $dependencies, isToReturnResult: true, isPermissionCallback: true);
+        if (is_wp_error($result) || $result === false) {
             return $result;
         }
 
@@ -371,7 +371,7 @@ class Endpoint implements EndpointInterface
      *
      * @throws InvocationException
      */
-    protected function runHandlers(array $allHandlers, array $dependencies, bool $isToReturnResult = false): mixed
+    protected function runHandlers(array $allHandlers, array $dependencies, bool $isToReturnResult = false, bool $isPermissionCallback = false): mixed
     {
         $result = null;
         foreach ($allHandlers as $handler) {
@@ -386,6 +386,10 @@ class Endpoint implements EndpointInterface
             }
 
             if (is_wp_error($result) || $result instanceof WP_REST_Response) {
+                return $result;
+            }
+
+            if ($isPermissionCallback && $result === false) {
                 return $result;
             }
         }

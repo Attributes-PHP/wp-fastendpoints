@@ -43,4 +43,9 @@ $router->get('/permission/(?P<action>\w+)', function (): bool {
 })
     ->permission($triggerPermissionCallback);
 
+$router->get('/bool/permission/(?P<action>\w+)', function (): bool {
+    return true;
+})
+    ->permission(fn (string $action) => $action === 'allowed');
+
 return $router;
