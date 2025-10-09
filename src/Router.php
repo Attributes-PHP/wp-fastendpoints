@@ -88,6 +88,13 @@ class Router implements RouterContract
     protected array $injectables = [];
 
     /**
+     * Set of functions used to handle exceptions
+     *
+     * @var array<string,callable>
+     */
+    protected array $onExceptionHandlers = [];
+
+    /**
      * Creates a new Router instance
      *
      * @param  string  $base  Router base path if this router is the parent router would be used as
@@ -220,6 +227,10 @@ class Router implements RouterContract
                 $router->inject($name, $callable);
             }
 
+            foreach ($this->onExceptionHandlers as $exceptionClass => $handler) {
+                $router->onException($exceptionClass, $handler);
+            }
+
             $router->register();
         }
 
@@ -229,15 +240,43 @@ class Router implements RouterContract
     }
 
     /**
-     * Specifies a set of plugins that are needed by the endpoint
+     * Adds a dependency which can then be injected in endpoints, middlewares or permission handlers.
+     *
+     * This should be useful to share common dependencies across multiple handlers e.g. database connection.
+     * The dependency will be instantiated once, only!
+     *
+     *
+     * @param  string  $name  The dependency name.
+     * @param  callable  $handler  The handler which resolves the dependency.
+     * @param  bool  $override  If set, overrides any existent dependency. Default value: false.
      */
-    public function inject(string $name, callable $callable, bool $override = false): self
+    public function inject(string $name, callable $handler, bool $override = false): self
     {
         if (isset($this->injectables[$name]) && ! $override) {
             return $this;
         }
 
-        $this->injectables[$name] = $callable;
+        $this->injectables[$name] = $handler;
+
+        return $this;
+    }
+
+    /**
+     * Adds a handler for a given exception.
+     *
+     * Handlers will be resolved on the following order: 1) by same exact exception or 2) by a parent class
+     *
+     * @param  string  $exceptionClass  The exception class to add a handler.
+     * @param  callable  $handler  The handler to resolve those types of exceptions.
+     * @param  bool  $override  If set, overrides any existent handlers. Default value: false.
+     */
+    public function onException(string $exceptionClass, callable $handler, bool $override = false): self
+    {
+        if (isset($this->onExceptionHandlers[$exceptionClass]) && ! $override) {
+            return $this;
+        }
+
+        $this->onExceptionHandlers[$exceptionClass] = $handler;
 
         return $this;
     }
@@ -254,6 +293,10 @@ class Router implements RouterContract
         foreach ($this->endpoints as $e) {
             if ($this->plugins !== null) {
                 $e->depends($this->plugins);
+            }
+
+            foreach ($this->onExceptionHandlers as $exceptionClass => $handler) {
+                $e->onException($exceptionClass, $handler);
             }
 
             $e->register($namespace, $restBase);
