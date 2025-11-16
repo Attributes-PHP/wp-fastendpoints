@@ -88,13 +88,6 @@ class Router implements RouterContract
     protected array $injectables = [];
 
     /**
-     * Set of functions used to handle exceptions
-     *
-     * @var array<string,callable>
-     */
-    protected array $onExceptionHandlers = [];
-
-    /**
      * Creates a new Router instance
      *
      * @param  string  $base  Router base path if this router is the parent router would be used as
@@ -227,10 +220,6 @@ class Router implements RouterContract
                 $router->inject($name, $callable);
             }
 
-            foreach ($this->onExceptionHandlers as $exceptionClass => $handler) {
-                $router->onException($exceptionClass, $handler);
-            }
-
             $router->register();
         }
 
@@ -262,26 +251,6 @@ class Router implements RouterContract
     }
 
     /**
-     * Adds a handler for a given exception.
-     *
-     * Handlers will be resolved on the following order: 1) by same exact exception or 2) by a parent class
-     *
-     * @param  string  $exceptionClass  The exception class to add a handler.
-     * @param  callable  $handler  The handler to resolve those types of exceptions.
-     * @param  bool  $override  If set, overrides any existent handlers. Default value: false.
-     */
-    public function onException(string $exceptionClass, callable $handler, bool $override = false): self
-    {
-        if (isset($this->onExceptionHandlers[$exceptionClass]) && ! $override) {
-            return $this;
-        }
-
-        $this->onExceptionHandlers[$exceptionClass] = $handler;
-
-        return $this;
-    }
-
-    /**
      * Registers the current router REST endpoints
      *
      * @internal
@@ -293,10 +262,6 @@ class Router implements RouterContract
         foreach ($this->endpoints as $e) {
             if ($this->plugins !== null) {
                 $e->depends($this->plugins);
-            }
-
-            foreach ($this->onExceptionHandlers as $exceptionClass => $handler) {
-                $e->onException($exceptionClass, $handler);
             }
 
             $e->register($namespace, $restBase);

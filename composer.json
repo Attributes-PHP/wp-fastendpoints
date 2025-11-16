@@ -12,8 +12,11 @@
         "php": "^8.1",
         "attributes-php/validation": "^0.9",
         "php-di/invoker": "^2.0",
-        "attributes-php/wp-fastendpoints-contracts": "^2.1",
+        "attributes-php/wp-fastendpoints-contracts": "^3.0",
         "attributes-php/serialization": "^0.3"
+    },
+    "suggest": {
+        "attributes-php/wp-exceptions": "Allows throwing exceptions instead of returning WP_Error'ss"
     },
     "autoload": {
         "psr-4": {

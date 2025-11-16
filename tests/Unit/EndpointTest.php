@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace Attributes\Wp\FastEndpoints\Tests\Unit\Schemas;
 
-use Attributes\Validation\Exceptions\ValidationException;
 use Attributes\Wp\FastEndpoints\Contracts\Middlewares\Middleware;
 use Attributes\Wp\FastEndpoints\DI\Invoker;
 use Attributes\Wp\FastEndpoints\DI\StaticParameterResolver;
@@ -89,10 +88,7 @@ test('Registering an endpoint', function (bool $withResponseSchema, $permissionC
     expect($endpoint->register('my-namespace', 'v1/users'))
         ->toBeTrue()
         ->and($endpoint->getFullRoute())
-        ->toBe('/my-namespace/v1/users/my-endpoint')
-        ->and(Helpers::getNonPublicClassProperty($endpoint, 'onExceptionHandlers'))
-        ->toHaveKeys([ValidationException::class, Exception::class])
-        ->toHaveCount(2);
+        ->toBe('/my-namespace/v1/users/my-endpoint');
 })->with([true, false])->with([null, '__return_false'])->group('endpoint', 'register');
 
 test('Skipping registering endpoint if no args specified', function () {
@@ -110,8 +106,6 @@ test('Skipping registering endpoint if no args specified', function () {
 
 test('User with valid permissions', function (string $capability, ...$args) {
     $endpoint = new Endpoint('GET', '/my-endpoint', '__return_false', ['my-custom-arg' => true], false);
-    Helpers::invokeNonPublicClassMethod($endpoint, 'registerDefaultExceptionHandlers');
-
     expect(Helpers::getNonPublicClassProperty($endpoint, 'permissionHandlers'))->toBeEmpty();
     $endpoint->hasCap($capability, ...$args);
     $permissionHandlers = Helpers::getNonPublicClassProperty($endpoint, 'permissionHandlers');
@@ -159,8 +153,6 @@ test('User with valid permissions', function (string $capability, ...$args) {
 
 test('User not having enough permissions', function (string $capability, ...$args) {
     $endpoint = new Endpoint('GET', '/my-endpoint', '__return_false', ['my-custom-arg' => true], false);
-    Helpers::invokeNonPublicClassMethod($endpoint, 'registerDefaultExceptionHandlers');
-
     expect(Helpers::getNonPublicClassProperty($endpoint, 'permissionHandlers'))->toBeEmpty();
     $endpoint->hasCap($capability, ...$args);
     $permissionHandlers = Helpers::getNonPublicClassProperty($endpoint, 'permissionHandlers');
@@ -364,8 +356,6 @@ test('Endpoint request handler', function (bool $hasRequestHandlers, bool $hasRe
     $endpoint = new Endpoint('GET', '/my-endpoint', function () {
         return 'my-response';
     }, ['my-custom-arg' => true], true);
-    Helpers::invokeNonPublicClassMethod($endpoint, 'registerDefaultExceptionHandlers');
-
     $req = Mockery::mock(WP_REST_Request::class);
     if ($hasRequestHandlers) {
         $onRequestHandlers = [function () {
@@ -388,8 +378,6 @@ test('Handling request and a WpError is returned', function ($onRequestReturnVal
     $endpoint = new Endpoint('GET', '/my-endpoint', function () use ($handlerReturnVal) {
         return is_string($handlerReturnVal) ? new $handlerReturnVal(123, 'my-error-msg') : $handlerReturnVal;
     }, ['my-custom-arg' => true], true);
-    Helpers::invokeNonPublicClassMethod($endpoint, 'registerDefaultExceptionHandlers');
-
     $req = Mockery::mock(WP_REST_Request::class);
     $onRequestHandlers = [function () use ($onRequestReturnVal) {
         return is_string($onRequestReturnVal) ? new $onRequestReturnVal(123, 'my-error-msg') : $onRequestReturnVal;
@@ -416,8 +404,6 @@ test('Handling request with an invalid request payload', function () {
     $endpoint = new Endpoint('GET', '/my-endpoint', function (int $missingField, int $postId) {
         return $missingField + $postId;
     });
-    Helpers::invokeNonPublicClassMethod($endpoint, 'registerDefaultExceptionHandlers');
-
     $req = Mockery::mock(WP_REST_Request::class);
     $req->expects()
         ->get_url_params()
@@ -448,8 +434,6 @@ test('Handling request and invoker is unable to resolve dependencies', function 
     $endpoint = new Endpoint('GET', '/my-endpoint', function (int $missingField) {
         return $missingField;
     });
-    Helpers::invokeNonPublicClassMethod($endpoint, 'registerDefaultExceptionHandlers');
-
     $req = Mockery::mock(WP_REST_Request::class);
     $invoker = new Invoker(parameterResolver: new StaticParameterResolver);
     Helpers::setNonPublicClassProperty($endpoint, 'invoker', $invoker);

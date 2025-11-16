@@ -104,13 +104,6 @@ class Endpoint implements EndpointInterface
     protected array $onResponseHandlers = [];
 
     /**
-     * Set of functions used to handle exceptions
-     *
-     * @var array<string,callable>
-     */
-    protected array $onExceptionHandlers = [];
-
-    /**
      * Dependency injection
      */
     protected ?DI\Invoker $invoker = null;
@@ -163,9 +156,6 @@ class Endpoint implements EndpointInterface
         if (! $args) {
             return false;
         }
-
-        $this->registerDefaultExceptionHandlers();
-
         $route = $this->getRoute($restBase);
         $this->fullRoute = "/$namespace/$route";
         register_rest_route($namespace, $route, $args, $this->override);
@@ -266,26 +256,6 @@ class Endpoint implements EndpointInterface
     public function permission(callable $permissionCb): self
     {
         $this->permissionHandlers[] = $permissionCb;
-
-        return $this;
-    }
-
-    /**
-     * Adds a handler for a given exception.
-     *
-     * Handlers will be resolved on the following order: 1) by same exact exception or 2) by a parent class
-     *
-     * @internal
-     *
-     * @param  string  $exceptionClass  The exception to look-up for
-     */
-    public function onException(string $exceptionClass, callable $handler, bool $override = false): self
-    {
-        if (isset($this->onExceptionHandlers[$exceptionClass]) && ! $override) {
-            return $this;
-        }
-
-        $this->onExceptionHandlers[$exceptionClass] = $handler;
 
         return $this;
     }
@@ -401,33 +371,18 @@ class Endpoint implements EndpointInterface
      *
      * @throws InvocationException
      */
-    protected function runHandlers(array $allHandlers, array $dependencies, bool $isToReturnResult = false, bool $isPermissionCallback = false, array $handledExceptionHandlers = []): mixed
+    protected function runHandlers(array $allHandlers, array $dependencies, bool $isToReturnResult = false, bool $isPermissionCallback = false): mixed
     {
         $result = null;
         foreach ($allHandlers as $handler) {
             try {
                 $result = $this->getInvoker()->call($handler, $dependencies);
-            } catch (Exception $e) {
-                $result = null;
-                [$exceptionClass, $exceptionHandler] = $this->getExceptionHandler($e);
-                if ($exceptionHandler) {
-                    if (isset($handledExceptionHandlers[$exceptionClass])) {
-                        return new WpError(500, "Bad exception handler for: $exceptionClass");
-                    }
-
-                    $dependencies['exception'] = $e;
-                    $handledExceptionHandlers[$exceptionClass] = true;
-                    $result = $this->runHandlers([$exceptionHandler], $dependencies, true, false, $handledExceptionHandlers);
-                }
-
+            } catch (ValidationException $e) {
+                $result = new WpError(422, $e->getMessage(), ['errors' => $e->getErrors()]);
                 $result = apply_filters('fastendpoints_request_error', $result, $e, $this);
-                if (! is_wp_error($result) && ! ($result instanceof WP_REST_Response)) {
-                    $result = null;
-
-                    continue;
-                }
-
-                return $result;
+            } catch (Exception $e) {
+                $result = new WpError(500, $e->getMessage());
+                $result = apply_filters('fastendpoints_request_error', $result, $e, $this);
             }
 
             if (is_wp_error($result) || $result instanceof WP_REST_Response) {
@@ -440,33 +395,6 @@ class Endpoint implements EndpointInterface
         }
 
         return $isToReturnResult ? $result : null;
-    }
-
-    /**
-     * Retrieves the exception handler for a given exception, if exists.
-     *
-     * @param  Exception  $exception  The exception to be handled.
-     * @return ?callable Returns a callable to handle that exception or null if not found
-     */
-    protected function getExceptionHandler(Exception $exception): array
-    {
-        if (isset($this->onExceptionHandlers[$exception::class])) {
-            return [$exception::class, $this->onExceptionHandlers[$exception::class]];
-        }
-
-        foreach ($this->onExceptionHandlers as $exceptionClass => $handler) {
-            if (is_subclass_of($exception, $exceptionClass)) {
-                return [$exceptionClass, $handler];
-            }
-        }
-
-        return [null, null];
-    }
-
-    protected function registerDefaultExceptionHandlers(): void
-    {
-        $this->onException(ValidationException::class, fn (ValidationException $e) => new WpError(422, $e->getMessage(), ['errors' => $e->getErrors()]));
-        $this->onException(Exception::class, fn (Exception $e) => new WpError(500, $e->getMessage()));
     }
 
     /**

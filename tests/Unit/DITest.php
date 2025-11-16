@@ -45,8 +45,6 @@ test('Inject dependencies', function () {
     $endpoint = new Endpoint('POST', '/inject', function (#[Inject] string $user, #[Inject] Validatable $validator, #[Inject] Serializable $serializer) {
         return $user;
     });
-    Helpers::invokeNonPublicClassMethod($endpoint, 'registerDefaultExceptionHandlers');
-
     $endpoint->getInvoker()->setInjectables([
         'getFirstName' => fn () => 'Andre',
         'getLastName' => fn () => 'Gil',
@@ -63,8 +61,6 @@ test('Only resolves injected dependencies once', function () {
     $endpoint = new Endpoint('POST', '/inject', function (#[Inject] string $user, #[Inject('getFirstName')] string $firstName) {
         return "$firstName $user";
     });
-    Helpers::invokeNonPublicClassMethod($endpoint, 'registerDefaultExceptionHandlers');
-
     $calledTimes = ['firstName' => 0, 'lastName' => 0, 'user' => 0];
     $endpoint->getInvoker()->setInjectables([
         'getFirstName' => function () use (&$calledTimes) {
@@ -101,8 +97,6 @@ test('Unable to find injectable dependency', function () {
     $endpoint = new Endpoint('POST', '/inject', function (#[Inject] string $notFound) {
         return $notFound;
     });
-    Helpers::invokeNonPublicClassMethod($endpoint, 'registerDefaultExceptionHandlers');
-
     $req = Mockery::mock(WP_REST_Request::class);
     expect($endpoint->callback($req))
         ->toBeInstanceOf(WpError::class)
@@ -115,8 +109,6 @@ test('Infinite injectable loop', function () {
     $endpoint = new Endpoint('POST', '/inject', function (#[Inject] string $user) {
         return $user;
     });
-    Helpers::invokeNonPublicClassMethod($endpoint, 'registerDefaultExceptionHandlers');
-
     $endpoint->getInvoker()->setInjectables([
         'user' => fn (#[Inject] string $user) => $user,
     ]);
@@ -157,8 +149,6 @@ test('Validates dependencies', function () {
             'anyValue' => $anyValue,
         ];
     });
-    Helpers::invokeNonPublicClassMethod($endpoint, 'registerDefaultExceptionHandlers');
-
     $req = Mockery::mock(WP_REST_Request::class);
     $req->expects()->get_url_params()->times(2)->andReturn(['id' => 15]);
     $req->expects()->get_query_params()->andReturn(['anyValue' => 'My value']);
@@ -194,8 +184,6 @@ test('Load parameters from respective options', function (int|array $post) {
             'post' => is_int($post) ? $post : $post->serialize(useValidation: true),
         ];
     });
-    Helpers::invokeNonPublicClassMethod($endpoint, 'registerDefaultExceptionHandlers');
-
     $req = Mockery::mock(WP_REST_Request::class);
     $req->expects()->get_headers()->andReturn(['userIds' => '10,20,30']);
     $req->expects()->get_header('userIds')->andReturn('10,20,30');
@@ -216,7 +204,6 @@ test('Unable to find parameter', function () {
     $endpoint = new Endpoint('POST', '/lazyload', function (#[Query] string|int $missing) {
         return $missing;
     });
-    Helpers::invokeNonPublicClassMethod($endpoint, 'registerDefaultExceptionHandlers');
     $req = Mockery::mock(WP_REST_Request::class);
     $req->expects()->get_query_params()->andReturn(['hello' => 10]);
 

@@ -11,7 +11,6 @@ declare(strict_types=1);
 namespace Attributes\Wp\FastEndpoints\DI;
 
 use Attributes\Wp\FastEndpoints\Endpoint;
-use Exception;
 use Invoker\ParameterResolver\ParameterResolver;
 use ReflectionFunctionAbstract;
 use ReflectionNamedType;
@@ -67,9 +66,6 @@ class StaticParameterResolver implements ParameterResolver
                     continue 2;
             }
 
-            if (isset($providedParameters['exception']) && (is_subclass_of($typeName, Exception::class) || $typeName == Exception::class)) {
-                $resolvedParameters[$index] = $providedParameters['exception'];
-            }
         }
 
         return $resolvedParameters;
