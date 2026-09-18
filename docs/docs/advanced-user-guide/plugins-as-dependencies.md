@@ -23,41 +23,54 @@ which allow us to decide which plugins are necessary for a given REST endpoint b
 
 Currently, we support both native WP endpoints and FastEndpoints 😊
 
-=== "With FastEndpoints"
+::: tabs
 
-    ```php
-    <?php
-    $router->get('/example/all-plugins', function () {
-        return "Loads all active plugins";
-    });
+::: tab "With FastEndpoints"
 
-    $router->get('/example/buddypress', function () {
-        return "Only MyPlugin and BuddyPress plugins are loaded"; 
-    })->depends(['my-plugin', 'buddypress']);
-    ```
+```php
+<?php
+$router->get('/example/all-plugins', function () {
+    return "Loads all active plugins";
+});
 
-=== "Native WP endpoints"
+$router->get('/example/buddypress', function () {
+    return "Only MyPlugin and BuddyPress plugins are loaded"; 
+})->depends(['my-plugin', 'buddypress']);
+```
 
-    ```php
-    <?php
-    // Loads all active plugins
-    register_rest_route('native/v1', 'example/all-plugins', [
-        'methods' => 'GET',
-        (...)
-    ]);
+::: /tab
 
-    // Only MyPlugin and BuddyPress plugins are loaded
-    register_rest_route('native/v1', 'example/buddypress', [
-        'methods' => 'GET',
-        'depends' => ['my-plugin', 'buddypress'],
-        (...)
-    ]);
-    ```
+:::
 
-???+ tip
-    By default, if no dependencies are specified in an endpoint it assumes that all active plugins needs
-    to be loaded. This behaviour could be overridden for a given set of WP-FastEndpoint's by setting
-    router dependencies e.g. `$router->depends(['my-plugin'])`
+::: tabs
+
+::: tab "Native WP endpoints"
+
+```php
+<?php
+// Loads all active plugins
+register_rest_route('native/v1', 'example/all-plugins', [
+    'methods' => 'GET',
+    (...)
+]);
+
+// Only MyPlugin and BuddyPress plugins are loaded
+register_rest_route('native/v1', 'example/buddypress', [
+    'methods' => 'GET',
+    'depends' => ['my-plugin', 'buddypress'],
+    (...)
+]);
+```
+
+::: /tab
+
+:::
+
+::: collapsible open "Tip"
+By default, if no dependencies are specified in an endpoint it assumes that all active plugins needs
+to be loaded. This behaviour could be overridden for a given set of WP-FastEndpoint's by setting
+router dependencies e.g. `$router->depends(['my-plugin'])`
+:::
 
 ### Router vs Endpoint dependencies
 
@@ -73,10 +86,11 @@ $router = new \Attributes\Wp\FastEndpoints\Router('my-api', 'v1');
 $router->depends(['my-plugin']); // All endpoints and sub-routers would have this dependency
 ```
 
-!!! danger
-    When adding dependencies to endpoints, make sure to at least include the given plugin that holds those endpoints.
-    For instance, if your endpoints reside inside a plugin with a slug `my-plugin` you have to set the dependencies
-    to `['my-plugin']` otherwise when a request is received for that endpoint `my-plugin` will not be loaded.
+::: callout danger
+When adding dependencies to endpoints, make sure to at least include the given plugin that holds those endpoints.
+For instance, if your endpoints reside inside a plugin with a slug `my-plugin` you have to set the dependencies
+to `['my-plugin']` otherwise when a request is received for that endpoint `my-plugin` will not be loaded.
+:::
 
 ### Endpoint dependencies up-to-date
 

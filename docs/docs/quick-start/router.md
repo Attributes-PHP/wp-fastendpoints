@@ -1,6 +1,6 @@
 The first thing we need to do is to create a Router.
 
-```php title="Api/Routers/Posts.php" hl_lines="4"
+```php "Api/Routers/Posts.php"
 <?php
 use Attributes\Wp\FastEndpoints\Router;
 
@@ -19,7 +19,7 @@ Each endpoint might require different types of data. Thanks to [Attributes-PHP/v
 we can simply create our own PHP classes with the shape of the data we need and use them to validate our request payload
 via type-hinting 🤯
 
-```php title="Api/Models/Posts.php"
+```php "Api/Models/Posts.php"
 <?php
 namespace MyPlugin\Api\Models;
 
@@ -34,12 +34,12 @@ enum Status: string
     case PRIVATE = 'private';
 }
 
-#[AliasGenerator('snake')] #(1)
+#[AliasGenerator('snake')] /* (1) */
 class Post
 {
-    use SerializableTrait; #(2)
+    use SerializableTrait; /* (2) */
 
-    #[Rules\Positive] #(3)
+    #[Rules\Positive] /* (3) */
     public int $ID;
     #[Rules\Positive]
     public int $postAuthor;
@@ -57,11 +57,11 @@ class Post
 
 Let's now create an endpoint which needs this type of data.
 
-```php title="Api/Routers/Posts.php"
+```php "Api/Routers/Posts.php"
 <?php
 use MyPlugin\Api\Models\Post;
 
-$router->post('/', function (Post #(1) $post, WP_REST_Response #(2) $response) {
+$router->post('/', function (Post /* (1) */ $post, WP_REST_Response /* (2) */ $response) {
     $response->set_status(201);
     $payload = $post->serialize();
 
@@ -90,16 +90,16 @@ When a request is received by this endpoint the following happens:
 
 A great thing of dependency injection is that you only type what you need. And if you only need the ID of a post, so be it 😊
 
-```php title="Api/Routers/Posts.php"
+```php "Api/Routers/Posts.php"
 <?php
 use Attributes\Wp\FastEndpoints\Helpers\WpError;
 use Respect\Validation\Rules;
 use MyPlugin\Api\Models\Post;
 
-$router->get('(?P<ID>[\d]+)', function (#[Rules\Positive] #(1) int $ID) {
+$router->get('(?P<ID>[\d]+)', function (#[Rules\Positive] /* (1) */ int $ID) {
     $post = get_post($ID);
 
-    return $post ?: new WpError(404, 'Post not found'); #(2)
+    return $post ?: new WpError(404, 'Post not found'); /* (2) */
 })
     ->returns(Post::class)
     ->hasCap('read');
@@ -124,7 +124,7 @@ When a request is received, the following happens:
 A common scenario while building API's is to ensure that a user has permissions to a particular resource, in this
 case a blog post.
 
-```php title="Api/Routers/Posts.php" hl_lines="10"
+```php "Api/Routers/Posts.php"
 <?php
 use Attributes\Wp\FastEndpoints\Helpers\WpError;
 use Respect\Validation\Rules;
@@ -142,7 +142,7 @@ to successfully trigger this endpoint.
 
 ## Everything together
 
-```php title="Api/Routers/Posts.php"
+```php "Api/Routers/Posts.php"
 <?php
 /* Holds REST endpoints to interact with blog posts */
 

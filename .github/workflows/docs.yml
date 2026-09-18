@@ -1,0 +1,54 @@
+name: Docs
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - "docs/**"
+      - ".github/workflows/docs.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: "docs-deploy"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: docs/package.json
+
+      - name: Install docmd
+        working-directory: docs
+        run: npm install --no-audit --no-fund
+
+      - name: Validate internal links
+        working-directory: docs
+        run: npm run validate
+
+      - name: Build docs
+        working-directory: docs
+        run: npm run build
+
+      - name: Preserve CNAME
+        working-directory: docs
+        run: cp CNAME site/CNAME
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: docs/site
+          force_orphan: true

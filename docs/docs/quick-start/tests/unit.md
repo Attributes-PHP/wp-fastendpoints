@@ -1,6 +1,6 @@
 To allow us unit test our router we would need to update the following line:
 
-```php title="src/Api/Routers/Posts.php" hl_lines="3"
+```php "src/Api/Routers/Posts.php"
 <?php
 
 $router = $router ?? new Router('posts');
@@ -12,7 +12,7 @@ This change will allow us to pass a mocked router to easily test our endpoints.
 
 As an example we are going to create a unit test to ensure that the correct user permissions are set.
 
-```php title="tests/Unit/PostsApiTest.php"
+```php "tests/Unit/PostsApiTest.php"
 <?php
 test('Create post has correct permissions', function () {
     // Create endpoint mock

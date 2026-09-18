@@ -5,6 +5,8 @@ wp-content/
 /tests/coverage
 /coverage.xml
 docs/site/
+docs/node_modules/
+docs/package-lock.json
 
 # Created by https://www.toptal.com/developers/gitignore/api/composer,sublimetext,linux
 # Edit at https://www.toptal.com/developers/gitignore?templates=composer,sublimetext,linux
