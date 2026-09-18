@@ -1,0 +1,122 @@
+{
+  "title": "WP-FastEndpoints",
+  "url": "https://wp-fastendpoints.attributes-php.com",
+  "src": "docs",
+  "out": "site",
+  "theme": {
+    "name": "default",
+    "appearance": "system"
+  },
+  "footer": {
+    "style": "minimal",
+    "copyright": "WP-FastEndpoints is open-sourced software licensed under the MIT license"
+  },
+  "navigation": [
+    {
+      "title": "WP-FastEndpoints",
+      "path": "/"
+    },
+    {
+      "title": "Quick Start",
+      "collapsible": true,
+      "children": [
+        {
+          "title": "Quick Start",
+          "path": "/quick-start/"
+        },
+        {
+          "title": "Router",
+          "path": "/quick-start/router"
+        },
+        {
+          "title": "Service Provider",
+          "path": "/quick-start/service-provider"
+        },
+        {
+          "title": "Testing",
+          "collapsible": true,
+          "children": [
+            {
+              "title": "Testing",
+              "path": "/quick-start/tests/"
+            },
+            {
+              "title": "Unit Tests",
+              "path": "/quick-start/tests/unit"
+            },
+            {
+              "title": "Integration Tests",
+              "path": "/quick-start/tests/integration"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Advanced User Guide",
+      "collapsible": true,
+      "children": [
+        {
+          "title": "Advanced User Guide",
+          "path": "/advanced-user-guide/"
+        },
+        {
+          "title": "Request Life Cycle",
+          "path": "/advanced-user-guide/request-life-cycle"
+        },
+        {
+          "title": "Dependency Injection",
+          "collapsible": true,
+          "children": [
+            {
+              "title": "Dependency Injection",
+              "path": "/advanced-user-guide/dependency-injection/"
+            },
+            {
+              "title": "Request payload",
+              "path": "/advanced-user-guide/dependency-injection/request-payload"
+            },
+            {
+              "title": "Injectables",
+              "path": "/advanced-user-guide/dependency-injection/injectables"
+            }
+          ]
+        },
+        {
+          "title": "Responses",
+          "path": "/advanced-user-guide/responses"
+        },
+        {
+          "title": "Middlewares",
+          "path": "/advanced-user-guide/middlewares"
+        },
+        {
+          "title": "Treat plugins as dependencies",
+          "path": "/advanced-user-guide/plugins-as-dependencies"
+        }
+      ]
+    }
+  ],
+  "plugins": {
+    "git": {
+      "repo": "https://github.com/Attributes-PHP/wp-fastendpoints",
+      "branch": "main",
+      "editLink": true
+    },
+    "seo": {
+      "defaultDescription": "FastEndpoints is an elegant way of writing custom WordPress REST endpoints with a focus on readability and IDE auto completion support"
+    }
+  },
+  "layout": {
+    "menubar": {
+      "enabled": true,
+      "left": [
+        {
+          "text": "GitHub",
+          "url": "https://github.com/Attributes-PHP/wp-fastendpoints"
+        }
+      ],
+      "right": []
+    }
+  }
+}

@@ -1,7 +1,7 @@
 A common scenario while creating API's is the need to share resources or logic across multiple endpoints or handlers.
 This is where *injectables* can be useful.
 
-```php hl_lines="5 12"
+```php
 <?php
 use Attributes\Validation\Validatable;
 use Attributes\Wp\FastEndpoints\Options\Inject;
@@ -27,7 +27,7 @@ $router->get('/user', function (#[Inject] WP_User $user) {
 If an injectable is not found, FastEndpoints will try to look-up for a function with the same property name or specified
 injectable name.
 
-```php hl_lines="4"
+```php
 <?php
 function hello_world() { return "Hello world!"; }
 
@@ -42,7 +42,7 @@ Each injectable is only resolved once while handling a request. For instance, if
 the permission callback and the endpoint, it will first be resolved during the permission callback and then re-use the
 cached value for subsequent calls.
 
-```php hl_lines="9 12"
+```php
 <?php
 $router->inject('nextNumber', function (): int {
     global $nextNumber;

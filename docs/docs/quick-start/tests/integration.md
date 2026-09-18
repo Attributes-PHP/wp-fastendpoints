@@ -21,9 +21,10 @@ composer require dingo-d/wp-pest --dev
 ./vendor/bin/wp-pest setup plugin --plugin-slug my-plugin --wp-version 6.8.2
 ```
 
-!!! tip
-    If you use [attributes-php/wp-fastendpoints-my-plugin](https://github.com/Attributes-PHP/wp-fastendpoints-my-plugin?tab=readme-ov-file#setup-wordpress)
-    you can use the already configured `composer setup:wp:6.x` commands
+::: callout tip
+If you use [attributes-php/wp-fastendpoints-my-plugin](https://github.com/Attributes-PHP/wp-fastendpoints-my-plugin?tab=readme-ov-file#setup-wordpress)
+you can use the already configured `composer setup:wp:6.x` commands
+:::
 
 #### Optional changes
 
@@ -34,7 +35,7 @@ These changes are not mandatory and so, feel free to skip this section ⏩
 The main reason of these differences is to allow us to run tests without the
 need to always specify a group of tests. Those changes include:
 
-```php title="tests/Helpers.php"
+```php "tests/Helpers.php"
 <?php
 declare(strict_types=1);
  
@@ -52,7 +53,7 @@ class Helpers
 }
 ```
 
-```php title="tests/Integration/PostsApiTest.php" hl_lines="9"
+```php "tests/Integration/PostsApiTest.php"
 <?php
 declare(strict_types=1);
 
@@ -70,7 +71,7 @@ if (! Helpers::isIntegrationTest()) {
 
 The last step before creating our integration tests, is to set up the REST server and trigger the `*rest_api_init*` hook.
 
-```php title="tests/Integration/PostsApiTest.php" hl_lines="7-8"
+```php "tests/Integration/PostsApiTest.php"
 <?php
 beforeEach(function () {
     parent::setUp();
@@ -93,7 +94,7 @@ afterEach(function () {
 
 Now that everything is configured we can start creating integration tests:
 
-```php title="tests/Integration/PostsApiTest.php"
+```php "tests/Integration/PostsApiTest.php"
 <?php
 test('Create a new post', function () {
     // Create user with correct permissions
