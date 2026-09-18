@@ -1,0 +1,1211 @@
+<!--
+  ---------------------------------------------------------------
+  docmd : the zero-config documentation engine.
+  @website https://docmd.io
+  [docmd-source] - Please do not remove this header.
+  ---------------------------------------------------------------
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="generator" content="docmd v0.9.5">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <script>
+      var root = "../../../";
+      if (root && !root.endsWith('/')) root += '/';
+      if (root === '') root = './';
+      window.DOCMD_ROOT = root;
+
+      window.DOCMD_SITE_ROOT = "/";
+
+      window.DOCMD_APPEARANCE = "system";
+      window.DOCMD_VERSION_ROOT = "/";
+      window.DOCMD_BASE = "/";
+      window.DOCMD_LOCALE = "";
+      window.DOCMD_DEFAULT_LOCALE = "";
+    </script>
+    <script>/**
+ * --------------------------------------------------------------------
+ * docmd : the zero-config documentation engine.
+ *
+ * @package     @docmd/core (and ecosystem)
+ * @website     https://docmd.io
+ * @repository  https://github.com/docmd-io/docmd
+ * @license     MIT
+ * @copyright   Copyright (c) 2025-present docmd.io
+ *
+ * [docmd-source] - Please do not remove this header.
+ * --------------------------------------------------------------------
+ */
+
+(function () {
+  try {
+    // 1. Determine Theme
+    //
+    // Resolve from three sources, in priority order:
+    //   1. localStorage explicit user choice (light / dark)
+    //   2. window.DOCMD_APPEARANCE  (current canonical name, set by EJS templates)
+    //   3. window.DOCMD_DEFAULT_MODE (legacy alias kept for pre-0.8.7 outputs)
+    //   4. 'light' as the final fallback
+    //
+    // Note: localStorage is only honoured when it holds an explicit
+    // 'light' or 'dark' value. A stored 'system' value (from a prior
+    // session where the user picked "follow system") must NOT win over
+    // a freshly resolved config value — the resolved value will itself
+    // be 'system' in that case and the OS preference check below takes
+    // over, so this is a no-op for the in-session behaviour but keeps
+    // any future storage migration simple.
+    var localValue = localStorage.getItem('docmd-theme');
+    var configValue = window.DOCMD_APPEARANCE
+      || window.DOCMD_DEFAULT_MODE
+      || 'light';
+    var theme = (localValue === 'light' || localValue === 'dark')
+      ? localValue
+      : configValue;
+
+    if (theme === 'system') {
+      theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    // 2. Apply to Root
+    document.documentElement.setAttribute('data-theme', theme);
+
+    // 3. Highlight.js Toggle Strategy
+    var lightLink = document.getElementById('hljs-light');
+    var darkLink = document.getElementById('hljs-dark');
+
+    if (lightLink && darkLink) {
+      if (theme === 'dark') {
+        lightLink.disabled = true;
+        darkLink.disabled = false;
+      } else {
+        lightLink.disabled = false;
+        darkLink.disabled = true;
+      }
+    }
+
+    document.documentElement.style.visibility = "visible";
+  } catch (e) {
+    document.documentElement.style.visibility = "visible";
+    console.error('Theme init failed', e);
+  }
+})();</script>
+    <style>
+      html {
+        visibility: hidden;
+      }
+    </style>
+    <title>
+      Installs wp-pest : WP-FastEndpoints
+    </title>
+    
+    
+
+    <link id="site-favicon" rel="icon" href="../../../assets/favicon.ico?v=mu7iyrf2">
+    <link rel="stylesheet" href="../../../assets/css/docmd-main.css?v=mu7iyrf2">
+    
+    <link rel="stylesheet" href="../../../assets/css/docmd-highlight-light.css?v=mu7iyrf2" id="hljs-light" >
+    <link rel="stylesheet" href="../../../assets/css/docmd-highlight-dark.css?v=mu7iyrf2" id="hljs-dark" disabled>
+    
+    
+<meta name="description" content="FastEndpoints is an elegant way of writing custom WordPress REST endpoints with a focus on readability and IDE auto completion support">
+<link rel="canonical" href="https://wp-fastendpoints.attributes-php.com/quick-start/tests/integration/">
+<meta property="og:title" content="Installs wp-pest - WP-FastEndpoints">
+<meta property="og:description" content="FastEndpoints is an elegant way of writing custom WordPress REST endpoints with a focus on readability and IDE auto completion support">
+<meta property="og:url" content="https://wp-fastendpoints.attributes-php.com/quick-start/tests/integration/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Installs wp-pest - WP-FastEndpoints">
+<meta name="twitter:description" content="FastEndpoints is an elegant way of writing custom WordPress REST endpoints with a focus on readability and IDE auto completion support">
+
+
+
+
+<link rel="stylesheet" href="../../../assets/css/docmd-git.css?v=mu7iyrf2" >
+<link rel="stylesheet" href="../../../assets/css/docmd-openapi.css?v=mu7iyrf2" >
+<link rel="stylesheet" href="../../../assets/css/docmd-ai.css?v=mu7iyrf2" >
+
+    
+    
+  </head>
+  <body
+    class="sidebar-collapsible has-menubar has-menubar-top"
+    data-default-collapsed="false"
+    data-copy-code-enabled="true" data-spa-enabled="true" data-source-file="docs/quick-start/tests/integration.md">
+
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    
+    
+
+    
+      
+
+
+
+<div class="docmd-menubar">
+  <div class="menubar-inner">
+    <div class="menubar-left">
+    
+        
+          
+                <a href="https://github.com/Attributes-PHP/wp-fastendpoints" class="menubar-link" >
+                  
+                  <span>
+                    GitHub
+                  </span>
+                  
+                </a>
+              
+        
+    
+      </div>
+      <div class="menubar-right">
+        
+        
+    </div>
+  </div>
+</div>
+    
+    
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          
+<h1><a href="../../../">
+                WP-FastEndpoints
+              </a></h1>
+          
+          <span class="mobile-view sidebar-menu-button float-right">
+            
+<svg class="lucide-icon icon-menu " width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-menu"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M4 5h16" />
+  <path d="M4 12h16" />
+  <path d="M4 19h16" />
+</svg>
+
+          </span>
+        </div>
+        <div class="sidebar-top-group">
+          
+          
+          
+          
+        </div>
+        
+
+<nav class="sidebar-nav" aria-label="Main Navigation">
+  <ul>
+    
+      <li class="" >
+      
+        <a href="../../../" class=" "
+          >
+          
+          <span class="nav-item-title">
+            WP-FastEndpoints
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="active-parent collapsible expanded nav-group"  aria-expanded="true" >
+      
+        <span class="nav-label nav-group">
+          
+          <span class="nav-item-title">
+            Quick Start
+          </span>
+          
+            <span class="collapse-icon-wrapper">
+<svg class="lucide-icon icon-chevron-right collapse-icon" width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-chevron-right"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="m9 18 6-6-6-6" />
+</svg>
+</span>
+          
+        </span>
+        
+
+        
+          <ul class="submenu">
+            
+      <li class="" >
+      
+        <a href="../../../quick-start/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Quick Start
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="" >
+      
+        <a href="../../../quick-start/router/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Router
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="" >
+      
+        <a href="../../../quick-start/service-provider/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Service Provider
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="active-parent collapsible expanded nav-group"  aria-expanded="true" >
+      
+        <span class="nav-label nav-group">
+          
+          <span class="nav-item-title">
+            Testing
+          </span>
+          
+            <span class="collapse-icon-wrapper">
+<svg class="lucide-icon icon-chevron-right collapse-icon" width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-chevron-right"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="m9 18 6-6-6-6" />
+</svg>
+</span>
+          
+        </span>
+        
+
+        
+          <ul class="submenu">
+            
+      <li class="" >
+      
+        <a href="../../../quick-start/tests/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Testing
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="" >
+      
+        <a href="../../../quick-start/tests/unit/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Unit Tests
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="active" >
+      
+        <a href="../../../quick-start/tests/integration/" class="active "
+          >
+          
+          <span class="nav-item-title">
+            Integration Tests
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+          </ul>
+        
+      </li>
+    
+          </ul>
+        
+      </li>
+    
+      <li class="collapsible nav-group"  aria-expanded="false" >
+      
+        <span class="nav-label nav-group">
+          
+          <span class="nav-item-title">
+            Advanced User Guide
+          </span>
+          
+            <span class="collapse-icon-wrapper">
+<svg class="lucide-icon icon-chevron-right collapse-icon" width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-chevron-right"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="m9 18 6-6-6-6" />
+</svg>
+</span>
+          
+        </span>
+        
+
+        
+          <ul class="submenu">
+            
+      <li class="" >
+      
+        <a href="../../../advanced-user-guide/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Advanced User Guide
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="" >
+      
+        <a href="../../../advanced-user-guide/request-life-cycle/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Request Life Cycle
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="collapsible nav-group"  aria-expanded="false" >
+      
+        <span class="nav-label nav-group">
+          
+          <span class="nav-item-title">
+            Dependency Injection
+          </span>
+          
+            <span class="collapse-icon-wrapper">
+<svg class="lucide-icon icon-chevron-right collapse-icon" width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-chevron-right"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="m9 18 6-6-6-6" />
+</svg>
+</span>
+          
+        </span>
+        
+
+        
+          <ul class="submenu">
+            
+      <li class="" >
+      
+        <a href="../../../advanced-user-guide/dependency-injection/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Dependency Injection
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="" >
+      
+        <a href="../../../advanced-user-guide/dependency-injection/request-payload/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Request payload
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="" >
+      
+        <a href="../../../advanced-user-guide/dependency-injection/injectables/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Injectables
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+          </ul>
+        
+      </li>
+    
+      <li class="" >
+      
+        <a href="../../../advanced-user-guide/responses/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Responses
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="" >
+      
+        <a href="../../../advanced-user-guide/middlewares/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Middlewares
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="" >
+      
+        <a href="../../../advanced-user-guide/plugins-as-dependencies/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Treat plugins as dependencies
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+          </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+        <div class="sidebar-bottom-group mt-auto">
+          
+          
+          
+          
+        </div>
+      </aside>
+      
+      <div class="main-content-wrapper">
+        
+        
+        
+          <header class="page-header">
+            <div class="header-left">
+              
+                <button id="sidebar-toggle-button" class="sidebar-toggle-button"
+                  aria-label="Toggle Sidebar">
+                  
+<svg class="lucide-icon icon-chevron-left " width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-chevron-left"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="m15 18-6-6 6-6" />
+</svg>
+
+                </button>
+              
+              <div class="header-titles-wrapper">
+                <span class="header-title">
+                  Installs wp-pest
+                </span>
+              </div>
+            </div>
+            <div class="header-right">
+              
+                
+
+
+<div class="docmd-options-menu">
+    
+    <button class="docmd-search-trigger" aria-label="Search">
+        
+<svg class="lucide-icon icon-search " width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-search"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="m21 21-4.34-4.34" />
+  <circle cx="11" cy="11" r="8" />
+</svg>
+
+        <span class="search-label">Search</span>
+        <span class="search-keys"><kbd class="docmd-kbd">⌘</kbd><kbd class="docmd-kbd">K</kbd></span>
+    </button>
+    
+
+    
+
+    
+
+    
+    <button class="theme-toggle-button" aria-label="Toggle theme">
+        
+<svg class="lucide-icon icon-sun icon-sun" width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-sun"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <circle cx="12" cy="12" r="4" />
+  <path d="M12 2v2" />
+  <path d="M12 20v2" />
+  <path d="m4.93 4.93 1.41 1.41" />
+  <path d="m17.66 17.66 1.41 1.41" />
+  <path d="M2 12h2" />
+  <path d="M20 12h2" />
+  <path d="m6.34 17.66-1.41 1.41" />
+  <path d="m19.07 4.93-1.41 1.41" />
+</svg>
+ 
+<svg class="lucide-icon icon-moon icon-moon" width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-moon"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401" />
+</svg>
+
+    </button>
+    
+
+    
+</div>
+
+              
+            </div>
+          </header>
+        
+        <div class="content-theme-cover">
+          <main class="content-area" id="main-content">
+            <div class="content-layout">
+              <div class="main-content">
+                <div class="docmd-breadcrumbs-row">
+                  <div id="docmd-raw-markdown" data-content="Integration%20tests%2C%20are%20a%20bit%20tricky%20to%20set%20up.%0A%0AThe%20following%20needs%20to%20happen%20in%20order%20to%20successfully%20run%20them%3A%0A%0A1.%20Load%20WordPress%0A2.%20Replace%20the%20default%20_TestCase_%20class%20with%20another%20one%20which%20eases%20testing%20in%20WordPress%0A%20%20%20(e.g.%20to%20easily%20create%20users%20or%20posts)%0A3.%20Create%20the%20REST%20server%20and%20boot%20it%20using%20the%20%5B%60rest_api_init%60%5D(https%3A%2F%2Fdeveloper.wordpress.org%2Freference%2Fhooks%2Frest_api_init%2F)%0A%20%20%20hook%0A%0A%23%23%23%20_wp-pest_%20to%20the%20rescue%20%F0%9F%A6%B8%0A%0AHowever%2C%20thanks%20to%20%5Bwp-pest%5D(https%3A%2F%2Fgithub.com%2Fdingo-d%2Fwp-pest)%20most%20of%20this%20trouble%20is%20no%20longer%0Aan%20issue.%20Via%20a%20simple%20command%20it%20solves%20most%20of%20the%20troubles%20for%20us!%20%F0%9F%98%8E%0A%0A%60%60%60bash%0A%23%20Installs%20wp-pest%0Acomposer%20require%20dingo-d%2Fwp-pest%20--dev%0A%0A%23%20Set&#039;s%20up%20WP%0A.%2Fvendor%2Fbin%2Fwp-pest%20setup%20plugin%20--plugin-slug%20my-plugin%20--wp-version%206.8.2%0A%60%60%60%0A%0A%3A%3A%3A%20callout%20tip%0AIf%20you%20use%20%5Battributes-php%2Fwp-fastendpoints-my-plugin%5D(https%3A%2F%2Fgithub.com%2FAttributes-PHP%2Fwp-fastendpoints-my-plugin%3Ftab%3Dreadme-ov-file%23setup-wordpress)%0Ayou%20can%20use%20the%20already%20configured%20%60composer%20setup%3Awp%3A6.x%60%20commands%0A%3A%3A%3A%0A%0A%23%23%23%23%20Optional%20changes%0A%0AIf%20you%20take%20a%20closer%20look%20at%20the%20resultant%20tests%20structure%20you%20might%20notice%20that%20is%20slightly%0Adifferent%20from%20%5Battributes-php%2Fwp-fastendpoints-my-plugin%5D(https%3A%2F%2Fgithub.com%2FAttributes-PHP%2Fwp-fastendpoints-my-plugin%3Ftab%3Dreadme-ov-file%23setup-wordpress).%0AThese%20changes%20are%20not%20mandatory%20and%20so%2C%20feel%20free%20to%20skip%20this%20section%20%E2%8F%A9%0A%0AThe%20main%20reason%20of%20these%20differences%20is%20to%20allow%20us%20to%20run%20tests%20without%20the%0Aneed%20to%20always%20specify%20a%20group%20of%20tests.%20Those%20changes%20include%3A%0A%0A%60%60%60php%20%22tests%2FHelpers.php%22%0A%3C%3Fphp%0Adeclare(strict_types%3D1)%3B%0A%20%0Anamespace%20MyPlugin%5CTests%3B%0A%0Aclass%20Helpers%0A%7B%0A%20%20%20%20%2F**%0A%20%20%20%20%20*%20Checks%20if%20weather%20we%20want%20to%20run%20integration%20tests%20or%20not%0A%20%20%20%20%20*%2F%0A%20%20%20%20public%20static%20function%20isIntegrationTest()%3A%20bool%0A%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20return%20isset(%24GLOBALS%5B&#039;argv&#039;%5D)%20%26%26%20in_array(&#039;--group%3Dintegration&#039;%2C%20%24GLOBALS%5B&#039;argv&#039;%5D%2C%20true)%3B%0A%20%20%20%20%7D%0A%7D%0A%60%60%60%0A%0A%60%60%60php%20%22tests%2FIntegration%2FPostsApiTest.php%22%0A%3C%3Fphp%0Adeclare(strict_types%3D1)%3B%0A%0Anamespace%20MyPlugin%5CTests%5CIntegration%3B%0A%0Ause%20MyPlugin%5CTests%5CHelpers%3B%0A%0A%2F%2F%20Needs%20to%20add%20this%20check%20to%20every%20Integration%20test%20file%0Aif%20(!%20Helpers%3A%3AisIntegrationTest())%20%7B%0A%20%20%20%20return%3B%0A%7D%0A%60%60%60%0A%0A%23%23%23%20SetUp%20and%20TearDown%0A%0AThe%20last%20step%20before%20creating%20our%20integration%20tests%2C%20is%20to%20set%20up%20the%20REST%20server%20and%20trigger%20the%20%60*rest_api_init*%60%20hook.%0A%0A%60%60%60php%20%22tests%2FIntegration%2FPostsApiTest.php%22%0A%3C%3Fphp%0AbeforeEach(function%20()%20%7B%0A%20%20%20%20parent%3A%3AsetUp()%3B%0A%0A%20%20%20%20%2F%2F%20Set%20up%20a%20REST%20server%20instance.%0A%20%20%20%20global%20%24wp_rest_server%3B%0A%20%20%20%20%24this-%3Eserver%20%3D%20%24wp_rest_server%20%3D%20new%20WP_REST_Server%3B%0A%20%20%20%20do_action(&#039;rest_api_init&#039;%2C%20%24this-%3Eserver)%3B%0A%7D)%3B%0A%0AafterEach(function%20()%20%7B%0A%20%20%20%20global%20%24wp_rest_server%3B%0A%20%20%20%20%24this-%3Eserver%20%3D%20%24wp_rest_server%20%3D%20null%3B%0A%0A%20%20%20%20parent%3A%3AtearDown()%3B%0A%7D)%3B%0A%60%60%60%0A%0A%23%23%23%20Our%20integration%20test%20%F0%9F%99%83%0A%0ANow%20that%20everything%20is%20configured%20we%20can%20start%20creating%20integration%20tests%3A%0A%0A%60%60%60php%20%22tests%2FIntegration%2FPostsApiTest.php%22%0A%3C%3Fphp%0Atest(&#039;Create%20a%20new%20post&#039;%2C%20function%20()%20%7B%0A%20%20%20%20%2F%2F%20Create%20user%20with%20correct%20permissions%0A%20%20%20%20%24userId%20%3D%20%24this%3A%3Afactory()-%3Euser-%3Ecreate()%3B%0A%20%20%20%20%24user%20%3D%20get_user_by(&#039;id&#039;%2C%20%24userId)%3B%0A%20%20%20%20%24user-%3Eadd_cap(&#039;publish_posts&#039;)%3B%0A%20%20%20%20%2F%2F%20Make%20request%20as%20that%20user%0A%20%20%20%20wp_set_current_user(%24userId)%3B%0A%20%20%20%20%24request%20%3D%20new%20%5CWP_REST_Request(&#039;POST&#039;%2C%20&#039;%2Fmy-plugin%2Fv1%2Fposts&#039;)%3B%0A%20%20%20%20%24request-%3Eset_body_params(%5B%0A%20%20%20%20%20%20%20%20&#039;post_title&#039;%20%3D%3E%20&#039;My%20testing%20message&#039;%2C%0A%20%20%20%20%20%20%20%20&#039;post_status&#039;%20%3D%3E%20&#039;publish&#039;%2C%0A%20%20%20%20%20%20%20%20&#039;post_author&#039;%20%3D%3E%20%24userId%2C%0A%20%20%20%20%5D)%3B%0A%20%20%20%20%24response%20%3D%20%24this-%3Eserver-%3Edispatch(%24request)%3B%0A%20%20%20%20expect(%24response-%3Eget_status())-%3EtoBe(201)%3B%0A%20%20%20%20%24postId%20%3D%20%24response-%3Eget_data()%3B%0A%20%20%20%20%2F%2F%20Check%20that%20the%20post%20details%20are%20correct%0A%20%20%20%20expect(get_post(%24postId))%0A%20%20%20%20%20%20%20%20-%3EtoBeInstanceOf(%5CWP_Post%3A%3Aclass)%0A%20%20%20%20%20%20%20%20-%3EtoHaveProperty(&#039;post_title&#039;%2C%20&#039;My%20testing%20message&#039;)%0A%20%20%20%20%20%20%20%20-%3EtoHaveProperty(&#039;post_status&#039;%2C%20&#039;publish&#039;)%0A%20%20%20%20%20%20%20%20-%3EtoHaveProperty(&#039;post_author&#039;%2C%20%24userId)%3B%0A%7D)-%3Egroup(&#039;api&#039;%2C%20&#039;posts&#039;)%3B%0A%60%60%60%0A%0AHere%2C%20we%20take%20advantage%20of%20the%20existent%20%5Btesting%20factories%5D(https%3A%2F%2Fmake.wordpress.org%2Fcore%2Fhandbook%2Ftesting%2Fautomated-testing%2Fwriting-phpunit-tests%2F%23fixtures-and-factories)%0Ato%20create%20a%20single%20user%20with%20the%20necessary%20capability%20to%20publish%20posts.%0AThen%2C%20we%20mimic%20a%20REST%20request%20from%20that%20given%20user%2C%20and%20lastly%2C%20we%20check%20if%20that%0Ablog%20post%20was%20created.%0A" style="display: none;"></div>
+                  
+                    <nav aria-label="breadcrumb" class="docmd-breadcrumbs">
+                      <ol>
+                        
+                        
+                          <li class="breadcrumb-item " >
+                            
+                              <span>Quick Start</span>
+                            
+                            
+                              <span class="breadcrumb-separator">
+<svg class="lucide-icon icon-chevron-right " width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-chevron-right"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="m9 18 6-6-6-6" />
+</svg>
+</span>
+                            
+                          </li>
+                        
+                          <li class="breadcrumb-item " >
+                            
+                              <span>Testing</span>
+                            
+                            
+                              <span class="breadcrumb-separator">
+<svg class="lucide-icon icon-chevron-right " width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-chevron-right"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="m9 18 6-6-6-6" />
+</svg>
+</span>
+                            
+                          </li>
+                        
+                          <li class="breadcrumb-item active" aria-current=&quot;page&quot;>
+                            
+                              <span>Integration Tests</span>
+                            
+                            
+                          </li>
+                        
+                      </ol>
+                    </nav>
+                  
+
+                  
+                    <div class="docmd-copy-widgets">
+                      
+                        <button class="docmd-copy-btn docmd-copy-raw-btn" data-copied="Copied!" title="Copy Markdown" aria-label="Copy Markdown">
+                          <span class="docmd-btn-icon">
+<svg class="lucide-icon icon-copy " width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-copy"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+  <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+</svg>
+</span>
+                        </button>
+                      
+                      
+                        <button class="docmd-copy-btn docmd-copy-context-btn" data-copied="Copied!" title="Copy Context">
+                          <span class="docmd-btn-icon">
+<svg class="lucide-icon icon-message-square " width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-message-square"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z" />
+</svg>
+</span>
+                          <span class="docmd-btn-text">Copy Context</span>
+                        </button>
+                      
+                    </div>
+                  
+                </div>
+                
+                <p>Integration tests, are a bit tricky to set up.</p>
+<p>The following needs to happen in order to successfully run them:</p>
+<ol>
+<li>Load WordPress</li>
+<li>Replace the default <em>TestCase</em> class with another one which eases testing in WordPress<br>
+(e.g. to easily create users or posts)</li>
+<li>Create the REST server and boot it using the <a href="https://developer.wordpress.org/reference/hooks/rest_api_init/"><code>rest_api_init</code></a><br>
+hook</li>
+</ol>
+<h3 id="wp-pest-to-the-rescue" class="docmd-heading"><a href="#wp-pest-to-the-rescue" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a><em>wp-pest</em> to the rescue 🦸</h3>
+<p>However, thanks to <a href="https://github.com/dingo-d/wp-pest">wp-pest</a> most of this trouble is no longer<br>
+an issue. Via a simple command it solves most of the troubles for us! 😎</p>
+<pre class="hljs"><code class="language-bash"><span class="hljs-comment"># Installs wp-pest</span>
+composer <span class="hljs-keyword">require</span> dingo<span class="hljs-operator">-</span>d<span class="hljs-operator">/</span>wp<span class="hljs-operator">-</span>pest <span class="hljs-operator">--</span>dev
+
+<span class="hljs-comment"># Set&#039;s up WP</span>
+.<span class="hljs-operator">/</span>vendor<span class="hljs-operator">/</span>bin<span class="hljs-operator">/</span>wp<span class="hljs-operator">-</span>pest setup plugin <span class="hljs-operator">--</span>plugin<span class="hljs-operator">-</span>slug my<span class="hljs-operator">-</span>plugin <span class="hljs-operator">--</span>wp<span class="hljs-operator">-</span>version <span class="hljs-number">6.8</span>.<span class="hljs-number">2</span>
+</code></pre>
+<div class="docmd-container callout callout-tip"><div class="callout-content">
+<p>If you use <a href="https://github.com/Attributes-PHP/wp-fastendpoints-my-plugin?tab=readme-ov-file#setup-wordpress">attributes-php/wp-fastendpoints-my-plugin</a><br>
+you can use the already configured <code>composer setup:wp:6.x</code> commands</p>
+</div></div>
+<h4 id="wp-pest-to-the-rescue-optional-changes" class="docmd-heading"><a href="#wp-pest-to-the-rescue-optional-changes" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Optional changes</h4>
+<p>If you take a closer look at the resultant tests structure you might notice that is slightly<br>
+different from <a href="https://github.com/Attributes-PHP/wp-fastendpoints-my-plugin?tab=readme-ov-file#setup-wordpress">attributes-php/wp-fastendpoints-my-plugin</a>.<br>
+These changes are not mandatory and so, feel free to skip this section ⏩</p>
+<p>The main reason of these differences is to allow us to run tests without the<br>
+need to always specify a group of tests. Those changes include:</p>
+<div class="docmd-code-block-wrapper"><div class="docmd-code-block-header"><span class="docmd-code-block-title">tests/Helpers.php</span></div><pre class="hljs"><code class="language-php"><span class="hljs-operator">&lt;?</span>php
+<span class="hljs-title function_">declare</span>(strict_types<span class="hljs-operator">=</span><span class="hljs-number">1</span>);
+ 
+<span class="hljs-keyword">namespace</span> MyPlugin\Tests;
+
+<span class="hljs-keyword">class</span> Helpers
+{
+    <span class="hljs-comment">/**
+     * Checks if weather we want to run integration tests or not
+     */</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">isIntegrationTest</span>()<span class="hljs-operator">:</span> <span class="hljs-keyword">bool</span>
+    {
+        <span class="hljs-keyword">return</span> <span class="hljs-title function_">isset</span>(<span class="hljs-variable">$GLOBALS</span>[<span class="hljs-string">&#039;argv&#039;</span>]) <span class="hljs-operator">&amp;&amp;</span> <span class="hljs-title function_">in_array</span>(<span class="hljs-string">&#039;--group=integration&#039;</span>, <span class="hljs-variable">$GLOBALS</span>[<span class="hljs-string">&#039;argv&#039;</span>], <span class="hljs-literal">true</span>);
+    }
+}
+</code></pre>
+</div><div class="docmd-code-block-wrapper"><div class="docmd-code-block-header"><span class="docmd-code-block-title">tests/Integration/PostsApiTest.php</span></div><pre class="hljs"><code class="language-php"><span class="hljs-operator">&lt;?</span>php
+<span class="hljs-title function_">declare</span>(strict_types<span class="hljs-operator">=</span><span class="hljs-number">1</span>);
+
+<span class="hljs-keyword">namespace</span> MyPlugin\Tests\Integration;
+
+<span class="hljs-keyword">use</span> MyPlugin\Tests\Helpers;
+
+<span class="hljs-comment">// Needs to add this check to every Integration test file</span>
+<span class="hljs-keyword">if</span> (<span class="hljs-operator">!</span> Helpers<span class="hljs-operator">::</span><span class="hljs-title function_">isIntegrationTest</span>()) {
+    <span class="hljs-keyword">return</span>;
+}
+</code></pre>
+</div><h3 id="setup-and-teardown" class="docmd-heading"><a href="#setup-and-teardown" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>SetUp and TearDown</h3>
+<p>The last step before creating our integration tests, is to set up the REST server and trigger the <code>*rest_api_init*</code> hook.</p>
+<div class="docmd-code-block-wrapper"><div class="docmd-code-block-header"><span class="docmd-code-block-title">tests/Integration/PostsApiTest.php</span></div><pre class="hljs"><code class="language-php"><span class="hljs-operator">&lt;?</span>php
+<span class="hljs-title function_">beforeEach</span>(<span class="hljs-keyword">function</span> () {
+    parent<span class="hljs-operator">::</span><span class="hljs-title function_">setUp</span>();
+
+    <span class="hljs-comment">// Set up a REST server instance.</span>
+    global <span class="hljs-variable">$wp_rest_server</span>;
+    <span class="hljs-variable">$this</span><span class="hljs-operator">-&gt;</span>server <span class="hljs-operator">=</span> <span class="hljs-variable">$wp_rest_server</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> WP_REST_Server;
+    <span class="hljs-title function_">do_action</span>(<span class="hljs-string">&#039;rest_api_init&#039;</span>, <span class="hljs-variable">$this</span><span class="hljs-operator">-&gt;</span>server);
+});
+
+<span class="hljs-title function_">afterEach</span>(<span class="hljs-keyword">function</span> () {
+    global <span class="hljs-variable">$wp_rest_server</span>;
+    <span class="hljs-variable">$this</span><span class="hljs-operator">-&gt;</span>server <span class="hljs-operator">=</span> <span class="hljs-variable">$wp_rest_server</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;
+
+    parent<span class="hljs-operator">::</span><span class="hljs-title function_">tearDown</span>();
+});
+</code></pre>
+</div><h3 id="our-integration-test" class="docmd-heading"><a href="#our-integration-test" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Our integration test 🙃</h3>
+<p>Now that everything is configured we can start creating integration tests:</p>
+<div class="docmd-code-block-wrapper"><div class="docmd-code-block-header"><span class="docmd-code-block-title">tests/Integration/PostsApiTest.php</span></div><pre class="hljs"><code class="language-php"><span class="hljs-operator">&lt;?</span>php
+<span class="hljs-title function_">test</span>(<span class="hljs-string">&#039;Create a new post&#039;</span>, <span class="hljs-keyword">function</span> () {
+    <span class="hljs-comment">// Create user with correct permissions</span>
+    <span class="hljs-variable">$userId</span> <span class="hljs-operator">=</span> <span class="hljs-variable">$this</span><span class="hljs-operator">::</span><span class="hljs-title function_">factory</span>()<span class="hljs-operator">-&gt;</span>user<span class="hljs-operator">-&gt;</span><span class="hljs-title function_">create</span>();
+    <span class="hljs-variable">$user</span> <span class="hljs-operator">=</span> <span class="hljs-title function_">get_user_by</span>(<span class="hljs-string">&#039;id&#039;</span>, <span class="hljs-variable">$userId</span>);
+    <span class="hljs-variable">$user</span><span class="hljs-operator">-&gt;</span><span class="hljs-title function_">add_cap</span>(<span class="hljs-string">&#039;publish_posts&#039;</span>);
+    <span class="hljs-comment">// Make request as that user</span>
+    <span class="hljs-title function_">wp_set_current_user</span>(<span class="hljs-variable">$userId</span>);
+    <span class="hljs-variable">$request</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> \<span class="hljs-title function_">WP_REST_Request</span>(<span class="hljs-string">&#039;POST&#039;</span>, <span class="hljs-string">&#039;/my-plugin/v1/posts&#039;</span>);
+    <span class="hljs-variable">$request</span><span class="hljs-operator">-&gt;</span><span class="hljs-title function_">set_body_params</span>([
+        <span class="hljs-string">&#039;post_title&#039;</span> <span class="hljs-operator">=&gt;</span> <span class="hljs-string">&#039;My testing message&#039;</span>,
+        <span class="hljs-string">&#039;post_status&#039;</span> <span class="hljs-operator">=&gt;</span> <span class="hljs-string">&#039;publish&#039;</span>,
+        <span class="hljs-string">&#039;post_author&#039;</span> <span class="hljs-operator">=&gt;</span> <span class="hljs-variable">$userId</span>,
+    ]);
+    <span class="hljs-variable">$response</span> <span class="hljs-operator">=</span> <span class="hljs-variable">$this</span><span class="hljs-operator">-&gt;</span>server<span class="hljs-operator">-&gt;</span><span class="hljs-title function_">dispatch</span>(<span class="hljs-variable">$request</span>);
+    <span class="hljs-title function_">expect</span>(<span class="hljs-variable">$response</span><span class="hljs-operator">-&gt;</span><span class="hljs-title function_">get_status</span>())<span class="hljs-operator">-&gt;</span><span class="hljs-title function_">toBe</span>(<span class="hljs-number">201</span>);
+    <span class="hljs-variable">$postId</span> <span class="hljs-operator">=</span> <span class="hljs-variable">$response</span><span class="hljs-operator">-&gt;</span><span class="hljs-title function_">get_data</span>();
+    <span class="hljs-comment">// Check that the post details are correct</span>
+    <span class="hljs-title function_">expect</span>(<span class="hljs-title function_">get_post</span>(<span class="hljs-variable">$postId</span>))
+        <span class="hljs-operator">-&gt;</span><span class="hljs-title function_">toBeInstanceOf</span>(\WP_Post<span class="hljs-operator">::</span><span class="hljs-keyword">class</span>)
+        <span class="hljs-operator">-&gt;</span><span class="hljs-title function_">toHaveProperty</span>(<span class="hljs-string">&#039;post_title&#039;</span>, <span class="hljs-string">&#039;My testing message&#039;</span>)
+        <span class="hljs-operator">-&gt;</span><span class="hljs-title function_">toHaveProperty</span>(<span class="hljs-string">&#039;post_status&#039;</span>, <span class="hljs-string">&#039;publish&#039;</span>)
+        <span class="hljs-operator">-&gt;</span><span class="hljs-title function_">toHaveProperty</span>(<span class="hljs-string">&#039;post_author&#039;</span>, <span class="hljs-variable">$userId</span>);
+})<span class="hljs-operator">-&gt;</span><span class="hljs-title function_">group</span>(<span class="hljs-string">&#039;api&#039;</span>, <span class="hljs-string">&#039;posts&#039;</span>);
+</code></pre>
+</div><p>Here, we take advantage of the existent <a href="https://make.wordpress.org/core/handbook/testing/automated-testing/writing-phpunit-tests/#fixtures-and-factories">testing factories</a><br>
+to create a single user with the necessary capability to publish posts.<br>
+Then, we mimic a REST request from that given user, and lastly, we check if that<br>
+blog post was created.</p>
+
+                
+                  <div class="page-navigation">
+                    
+                      <a href="../../../quick-start/tests/unit/" class="prev-page">
+                        
+<svg class="lucide-icon icon-arrow-left page-nav-icon" width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-arrow-left"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="m12 19-7-7 7-7" />
+  <path d="M19 12H5" />
+</svg>
+
+                        <span><small>Previous</small><strong>
+                            Unit Tests
+                          </strong></span>
+                      </a>
+                    
+                    
+                      <a href="../../../advanced-user-guide/" class="next-page">
+                        <span><small>Next</small>
+                          <strong>
+                            Advanced User Guide
+                          </strong></span>
+                        
+<svg class="lucide-icon icon-arrow-right page-nav-icon" width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-arrow-right"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M5 12h14" />
+  <path d="m12 5 7 7-7 7" />
+</svg>
+
+                      </a>
+                    
+                  </div>
+                
+              </div>
+              
+              <div class="toc-sidebar">
+                
+
+
+  <div class="toc-container">
+    <h2 class="toc-title">On This Page<span class="mobile-view toc-menu-button float-right">
+<svg class="lucide-icon icon-chevron-down " width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-chevron-down"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="m6 9 6 6 6-6" />
+</svg>
+</span></h2>
+    <ul class="toc-list">
+      
+        <li class="toc-item toc-level-3">
+          <a href="#wp-pest-to-the-rescue" class="toc-link">wp-pest to the rescue 🦸</a>
+        </li>
+      
+        <li class="toc-item toc-level-4">
+          <a href="#wp-pest-to-the-rescue-optional-changes" class="toc-link">Optional changes</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#setup-and-teardown" class="toc-link">SetUp and TearDown</a>
+        </li>
+      
+        <li class="toc-item toc-level-3">
+          <a href="#our-integration-test" class="toc-link">Our integration test 🙃</a>
+        </li>
+      
+    </ul>
+  </div>
+
+              </div>
+              
+            </div>
+            <div class="page-footer-actions">
+              
+              
+                <span class="git-last-updated" data-timestamp="1789770180000">
+                  <svg class="git-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <span class="git-label">Last updated:</span>
+                  <span class="git-time" data-timestamp="1789770180000"></span>
+                  
+                  <div class="git-commit-tooltip" role="tooltip">
+                    <div class="git-tooltip-title">Recent commits</div>
+                    <ul class="git-commit-list">
+                      
+                        <li class="git-commit-item">
+                          <div class="git-commit-avatar" title="André Gil">
+                            
+                              <img src="https://www.gravatar.com/avatar/212befc52c10efa1375e802e98bea7aa?d=mp&amp;s=64" alt="André Gil">
+                            
+                          </div>
+                          <div class="git-commit-details">
+                            <div class="git-commit-message" title="docs: Replace mkdocs with docmd (#17)">docs: Replace mkdocs with docmd (#17)</div>
+                            <div class="git-commit-meta">
+                              <span class="git-commit-author">André Gil</span>
+                              <span class="git-commit-date" data-timestamp="1789770180000"></span>
+                            </div>
+                          </div>
+                        </li>
+                      
+                    </ul>
+                  </div>
+                  
+                </span>
+              
+              <span class="git-spacer"></span>
+              
+                <a href="https://github.com/Attributes-PHP/wp-fastendpoints/edit/main/docs/docs/quick-start/tests/integration.md" target="_blank" rel="noopener noreferrer" class="edit-link">
+                  
+<svg class="lucide-icon icon-pencil " width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-pencil"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
+  <path d="m15 5 4 4" />
+</svg>
+
+                  Edit this page
+                </a>
+              
+            </div>
+          </main>
+          
+
+
+<footer class="page-footer">
+  <div class="footer-content">
+    <div class="user-footer">WP-FastEndpoints is open-sourced software licensed under the MIT license</div>
+    
+      <div class="branding-footer">
+        Built with <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path><path d="M12 5 9.04 7.96a2.17 2.17 0 0 0 0 3.08c.82.82 2.13.85 3 .07l2.07-1.9a2.82 2.82 0 0 1 3.79 0l2.96 2.66"></path><path d="m18 15-2-2"></path><path d="m15 18-2-2"></path></svg> <a href="https://docmd.io" target="_blank" rel="noopener">docmd.</a>
+      </div>
+    
+  </div>
+</footer>
+
+        </div>
+      </div>
+      
+      <script src="../../../assets/js/docmd-main.js?v=mu7iyrf2"></script>
+      
+      <script src="../../../assets/js/docmd-git.js?v=mu7iyrf2"></script>
+      <script src="../../../assets/js/docmd-image-lightbox.js?v=mu7iyrf2" ></script>
+<script src="../../../assets/js/vendor/minisearch.js?v=mu7iyrf2" ></script>
+<script src="../../../assets/js/docmd-search.js?v=mu7iyrf2" ></script>
+<script src="../../../assets/js/docmd-git.js?v=mu7iyrf2" ></script>
+<script src="../../../assets/js/docmd-ai.js?v=mu7iyrf2" ></script>
+
+  <!-- Search Modal (Injected by @docmd/plugin-search) -->
+  <div id="docmd-search-modal" class="docmd-search-modal" style="display: none;" data-show-confidence="false" data-show-filters="true"
+       data-search-placeholder="Search documentation..."
+       data-search-no-results="No results found."
+       data-search-error="Failed to load search index."
+       data-search-offline="Search requires a web server. Open this site via http://localhost instead of file:// to enable search."
+       data-search-offline-build="Search is disabled because these docs were built with the --offline flag. Rebuild the site without the flag to enable search."
+       data-search-initial="Type to start searching..."
+       data-search-navigate="to navigate"
+       data-search-escape="to close">
+      <div class="docmd-search-box">
+          <div class="docmd-search-header">
+              <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon icon-search"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+              <input type="text" id="docmd-search-input" placeholder="Search documentation..." autocomplete="off" spellcheck="false">
+              <button onclick="window.closeDocmdSearch()" class="docmd-search-close" aria-label="Close search">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon icon-x"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+              </button>
+          </div>
+          <div id="docmd-search-results" class="docmd-search-results"></div>
+          <div class="docmd-search-footer">
+              <span><kbd class="docmd-kbd">↑</kbd> <kbd class="docmd-kbd">↓</kbd> to navigate</span>
+              <span><kbd class="docmd-kbd">ESC</kbd> to close</span>
+          </div>
+      </div>
+  </div>
+
+    <script>
+      (function() {
+        var searchDebounceTimer;
+
+        document.addEventListener('click', function(e) {
+          var link = e.target.closest('a');
+          if (!link || !window.gtag) return;
+          
+          var url = link.href;
+          var hostname = window.location.hostname;
+          var isExternal = link.hostname && link.hostname !== hostname;
+          var isDownload = link.hasAttribute('download') || url.match(/\.(pdf|zip|tar|gz|exe|pkg)$/i);
+          
+          if (isExternal) {
+            gtag('event', 'click_external', { 'url': url, 'link_text': link.innerText.trim() });
+          } else if (isDownload) {
+            gtag('event', 'download', { 'file_name': url.split('/').pop(), 'url': url });
+          }
+
+          // TOC tracking
+          if (link.classList.contains('toc-link')) {
+            gtag('event', 'toc_click', { 'target_id': link.getAttribute('href'), 'title': link.innerText.trim() });
+          }
+
+          // Permalink tracking
+          if (link.classList.contains('heading-anchor')) {
+            gtag('event', 'permalink_click', { 'url': url });
+          }
+        });
+
+        
+        // Search Keyword Tracking
+        document.addEventListener('input', function(e) {
+          if (e.target.id === 'docmd-search-input' && window.gtag) {
+            var query = e.target.value.trim();
+            if (query.length < 3) return;
+            
+            clearTimeout(searchDebounceTimer);
+            searchDebounceTimer = setTimeout(function() {
+              gtag('event', 'search', { 'search_term': query });
+            }, 1000);
+          }
+        });
+        
+      })();
+    </script>
+
+<script>window.__git_config={"repo":"https://github.com/Attributes-PHP/wp-fastendpoints","branch":"main","editLink":true,"lastUpdated":true,"commitHistory":true,"maxCommits":5,"dateFormat":"relative"};window.__git_i18n={"lastUpdated":"Last updated","recentCommits":"Recent commits","viewCommitHistory":"View commit history","editOnGitHub":"Edit on GitHub","editOnGitLab":"Edit on GitLab","editOnBitbucket":"Edit on Bitbucket","editThisPage":"Edit this page","justNow":"just now","minutesAgo":"{n}m ago","hoursAgo":"{n}h ago","daysAgo":"{n}d ago"}</script>
+<div id="docmd-ai-root"></div><script>window.__docmd_ai_config={"endpoint":"","cloud":{},"captcha":true,"position":"bottom-center","siteTitle":"WP-FastEndpoints","siteBase":"/","siteUrl":"https://wp-fastendpoints.attributes-php.com","versions":null,"i18n":null,"navigation":[{"title":"WP-FastEndpoints","path":"/"},{"title":"Quick Start","collapsible":true,"children":[{"title":"Quick Start","path":"/quick-start/"},{"title":"Router","path":"/quick-start/router/"},{"title":"Service Provider","path":"/quick-start/service-provider/"},{"title":"Testing","collapsible":true,"children":[{"title":"Testing","path":"/quick-start/tests/"},{"title":"Unit Tests","path":"/quick-start/tests/unit/"},{"title":"Integration Tests","path":"/quick-start/tests/integration/"}]}]},{"title":"Advanced User Guide","collapsible":true,"children":[{"title":"Advanced User Guide","path":"/advanced-user-guide/"},{"title":"Request Life Cycle","path":"/advanced-user-guide/request-life-cycle/"},{"title":"Dependency Injection","collapsible":true,"children":[{"title":"Dependency Injection","path":"/advanced-user-guide/dependency-injection/"},{"title":"Request payload","path":"/advanced-user-guide/dependency-injection/request-payload/"},{"title":"Injectables","path":"/advanced-user-guide/dependency-injection/injectables/"}]},{"title":"Responses","path":"/advanced-user-guide/responses/"},{"title":"Middlewares","path":"/advanced-user-guide/middlewares/"},{"title":"Treat plugins as dependencies","path":"/advanced-user-guide/plugins-as-dependencies/"}]}],"searchCapabilities":{"keyword":true,"semantic":false},"isWorkspace":false,"workspaceProjects":[],"contextLimit":5};</script>
+      
+      
+      
+  </body>
+</html>

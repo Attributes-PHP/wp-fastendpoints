@@ -1,0 +1,45 @@
+---
+type: concept
+source: "https://wp-fastendpoints.attributes-php.com/quick-start/tests/unit/"
+path: /quick-start/tests/unit/
+updated: 2026-09-18
+okf:
+  generated_by: "@docmd/plugin-okf"
+  generated_at: "2026-09-18T22:23:19.096Z"
+---
+To allow us unit test our router we would need to update the following line:
+
+```php "src/Api/Routers/Posts.php"
+<?php
+
+$router = $router ?? new Router('posts');
+```
+
+This change will allow us to pass a mocked router to easily test our endpoints.
+
+## Create a post
+
+As an example we are going to create a unit test to ensure that the correct user permissions are set.
+
+```php "tests/Unit/PostsApiTest.php"
+<?php
+test('Create post has correct permissions', function () {
+    // Create endpoint mock
+    $endpoint = $endpoint ?: Mockery::mock(Endpoint::class);
+    $endpoint
+        ->shouldReceive('hasCap')
+        ->once()
+        ->with('publish_posts');
+    // Create router
+    $router = Mockery::mock(Router::class)
+        ->shouldIgnoreMissing(Mockery::mock(Endpoint::class)->shouldIgnoreMissing(Mockery::self()));
+    $router
+        ->shouldReceive('post')
+        ->once()
+        ->with('/', Mockery::type('callable'))
+        ->andReturn($endpoint);
+    require \ROUTERS_DIR.'/Posts.php';
+})->group('api', 'posts');
+```
+
+Please refer to the **[Attributes-PHP/wp-fastendpoints-my-plugin »](https://github.com/Attributes-PHP/wp-fastendpoints-my-plugin)** for full source code

@@ -1,0 +1,1250 @@
+<!--
+  ---------------------------------------------------------------
+  docmd : the zero-config documentation engine.
+  @website https://docmd.io
+  [docmd-source] - Please do not remove this header.
+  ---------------------------------------------------------------
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="generator" content="docmd v0.9.5">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <script>
+      var root = "../../";
+      if (root && !root.endsWith('/')) root += '/';
+      if (root === '') root = './';
+      window.DOCMD_ROOT = root;
+
+      window.DOCMD_SITE_ROOT = "/";
+
+      window.DOCMD_APPEARANCE = "system";
+      window.DOCMD_VERSION_ROOT = "/";
+      window.DOCMD_BASE = "/";
+      window.DOCMD_LOCALE = "";
+      window.DOCMD_DEFAULT_LOCALE = "";
+    </script>
+    <script>/**
+ * --------------------------------------------------------------------
+ * docmd : the zero-config documentation engine.
+ *
+ * @package     @docmd/core (and ecosystem)
+ * @website     https://docmd.io
+ * @repository  https://github.com/docmd-io/docmd
+ * @license     MIT
+ * @copyright   Copyright (c) 2025-present docmd.io
+ *
+ * [docmd-source] - Please do not remove this header.
+ * --------------------------------------------------------------------
+ */
+
+(function () {
+  try {
+    // 1. Determine Theme
+    //
+    // Resolve from three sources, in priority order:
+    //   1. localStorage explicit user choice (light / dark)
+    //   2. window.DOCMD_APPEARANCE  (current canonical name, set by EJS templates)
+    //   3. window.DOCMD_DEFAULT_MODE (legacy alias kept for pre-0.8.7 outputs)
+    //   4. 'light' as the final fallback
+    //
+    // Note: localStorage is only honoured when it holds an explicit
+    // 'light' or 'dark' value. A stored 'system' value (from a prior
+    // session where the user picked "follow system") must NOT win over
+    // a freshly resolved config value — the resolved value will itself
+    // be 'system' in that case and the OS preference check below takes
+    // over, so this is a no-op for the in-session behaviour but keeps
+    // any future storage migration simple.
+    var localValue = localStorage.getItem('docmd-theme');
+    var configValue = window.DOCMD_APPEARANCE
+      || window.DOCMD_DEFAULT_MODE
+      || 'light';
+    var theme = (localValue === 'light' || localValue === 'dark')
+      ? localValue
+      : configValue;
+
+    if (theme === 'system') {
+      theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    // 2. Apply to Root
+    document.documentElement.setAttribute('data-theme', theme);
+
+    // 3. Highlight.js Toggle Strategy
+    var lightLink = document.getElementById('hljs-light');
+    var darkLink = document.getElementById('hljs-dark');
+
+    if (lightLink && darkLink) {
+      if (theme === 'dark') {
+        lightLink.disabled = true;
+        darkLink.disabled = false;
+      } else {
+        lightLink.disabled = false;
+        darkLink.disabled = true;
+      }
+    }
+
+    document.documentElement.style.visibility = "visible";
+  } catch (e) {
+    document.documentElement.style.visibility = "visible";
+    console.error('Theme init failed', e);
+  }
+})();</script>
+    <style>
+      html {
+        visibility: hidden;
+      }
+    </style>
+    <title>
+       : WP-FastEndpoints
+    </title>
+    
+    
+
+    <link id="site-favicon" rel="icon" href="../../assets/favicon.ico?v=mu7iyrf2">
+    <link rel="stylesheet" href="../../assets/css/docmd-main.css?v=mu7iyrf2">
+    
+    <link rel="stylesheet" href="../../assets/css/docmd-highlight-light.css?v=mu7iyrf2" id="hljs-light" >
+    <link rel="stylesheet" href="../../assets/css/docmd-highlight-dark.css?v=mu7iyrf2" id="hljs-dark" disabled>
+    
+    
+<meta name="description" content="FastEndpoints is an elegant way of writing custom WordPress REST endpoints with a focus on readability and IDE auto completion support">
+<link rel="canonical" href="https://wp-fastendpoints.attributes-php.com/quick-start/router/">
+<meta property="og:title" content="Untitled - WP-FastEndpoints">
+<meta property="og:description" content="FastEndpoints is an elegant way of writing custom WordPress REST endpoints with a focus on readability and IDE auto completion support">
+<meta property="og:url" content="https://wp-fastendpoints.attributes-php.com/quick-start/router/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Untitled - WP-FastEndpoints">
+<meta name="twitter:description" content="FastEndpoints is an elegant way of writing custom WordPress REST endpoints with a focus on readability and IDE auto completion support">
+
+
+
+
+<link rel="stylesheet" href="../../assets/css/docmd-git.css?v=mu7iyrf2" >
+<link rel="stylesheet" href="../../assets/css/docmd-openapi.css?v=mu7iyrf2" >
+<link rel="stylesheet" href="../../assets/css/docmd-ai.css?v=mu7iyrf2" >
+
+    
+    
+  </head>
+  <body
+    class="sidebar-collapsible has-menubar has-menubar-top"
+    data-default-collapsed="false"
+    data-copy-code-enabled="true" data-spa-enabled="true" data-source-file="docs/quick-start/router.md">
+
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    
+    
+
+    
+      
+
+
+
+<div class="docmd-menubar">
+  <div class="menubar-inner">
+    <div class="menubar-left">
+    
+        
+          
+                <a href="https://github.com/Attributes-PHP/wp-fastendpoints" class="menubar-link" >
+                  
+                  <span>
+                    GitHub
+                  </span>
+                  
+                </a>
+              
+        
+    
+      </div>
+      <div class="menubar-right">
+        
+        
+    </div>
+  </div>
+</div>
+    
+    
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          
+<h1><a href="../../">
+                WP-FastEndpoints
+              </a></h1>
+          
+          <span class="mobile-view sidebar-menu-button float-right">
+            
+<svg class="lucide-icon icon-menu " width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-menu"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M4 5h16" />
+  <path d="M4 12h16" />
+  <path d="M4 19h16" />
+</svg>
+
+          </span>
+        </div>
+        <div class="sidebar-top-group">
+          
+          
+          
+          
+        </div>
+        
+
+<nav class="sidebar-nav" aria-label="Main Navigation">
+  <ul>
+    
+      <li class="" >
+      
+        <a href="../../" class=" "
+          >
+          
+          <span class="nav-item-title">
+            WP-FastEndpoints
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="active-parent collapsible expanded nav-group"  aria-expanded="true" >
+      
+        <span class="nav-label nav-group">
+          
+          <span class="nav-item-title">
+            Quick Start
+          </span>
+          
+            <span class="collapse-icon-wrapper">
+<svg class="lucide-icon icon-chevron-right collapse-icon" width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-chevron-right"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="m9 18 6-6-6-6" />
+</svg>
+</span>
+          
+        </span>
+        
+
+        
+          <ul class="submenu">
+            
+      <li class="" >
+      
+        <a href="../../quick-start/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Quick Start
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="active" >
+      
+        <a href="../../quick-start/router/" class="active "
+          >
+          
+          <span class="nav-item-title">
+            Router
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="" >
+      
+        <a href="../../quick-start/service-provider/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Service Provider
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="collapsible nav-group"  aria-expanded="false" >
+      
+        <span class="nav-label nav-group">
+          
+          <span class="nav-item-title">
+            Testing
+          </span>
+          
+            <span class="collapse-icon-wrapper">
+<svg class="lucide-icon icon-chevron-right collapse-icon" width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-chevron-right"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="m9 18 6-6-6-6" />
+</svg>
+</span>
+          
+        </span>
+        
+
+        
+          <ul class="submenu">
+            
+      <li class="" >
+      
+        <a href="../../quick-start/tests/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Testing
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="" >
+      
+        <a href="../../quick-start/tests/unit/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Unit Tests
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="" >
+      
+        <a href="../../quick-start/tests/integration/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Integration Tests
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+          </ul>
+        
+      </li>
+    
+          </ul>
+        
+      </li>
+    
+      <li class="collapsible nav-group"  aria-expanded="false" >
+      
+        <span class="nav-label nav-group">
+          
+          <span class="nav-item-title">
+            Advanced User Guide
+          </span>
+          
+            <span class="collapse-icon-wrapper">
+<svg class="lucide-icon icon-chevron-right collapse-icon" width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-chevron-right"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="m9 18 6-6-6-6" />
+</svg>
+</span>
+          
+        </span>
+        
+
+        
+          <ul class="submenu">
+            
+      <li class="" >
+      
+        <a href="../../advanced-user-guide/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Advanced User Guide
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="" >
+      
+        <a href="../../advanced-user-guide/request-life-cycle/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Request Life Cycle
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="collapsible nav-group"  aria-expanded="false" >
+      
+        <span class="nav-label nav-group">
+          
+          <span class="nav-item-title">
+            Dependency Injection
+          </span>
+          
+            <span class="collapse-icon-wrapper">
+<svg class="lucide-icon icon-chevron-right collapse-icon" width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-chevron-right"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="m9 18 6-6-6-6" />
+</svg>
+</span>
+          
+        </span>
+        
+
+        
+          <ul class="submenu">
+            
+      <li class="" >
+      
+        <a href="../../advanced-user-guide/dependency-injection/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Dependency Injection
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="" >
+      
+        <a href="../../advanced-user-guide/dependency-injection/request-payload/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Request payload
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="" >
+      
+        <a href="../../advanced-user-guide/dependency-injection/injectables/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Injectables
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+          </ul>
+        
+      </li>
+    
+      <li class="" >
+      
+        <a href="../../advanced-user-guide/responses/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Responses
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="" >
+      
+        <a href="../../advanced-user-guide/middlewares/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Middlewares
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="" >
+      
+        <a href="../../advanced-user-guide/plugins-as-dependencies/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Treat plugins as dependencies
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+          </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+        <div class="sidebar-bottom-group mt-auto">
+          
+          
+          
+          
+        </div>
+      </aside>
+      
+      <div class="main-content-wrapper">
+        
+        
+        
+          <header class="page-header">
+            <div class="header-left">
+              
+                <button id="sidebar-toggle-button" class="sidebar-toggle-button"
+                  aria-label="Toggle Sidebar">
+                  
+<svg class="lucide-icon icon-chevron-left " width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-chevron-left"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="m15 18-6-6 6-6" />
+</svg>
+
+                </button>
+              
+              <div class="header-titles-wrapper">
+                <span class="header-title">
+                  
+                </span>
+              </div>
+            </div>
+            <div class="header-right">
+              
+                
+
+
+<div class="docmd-options-menu">
+    
+    <button class="docmd-search-trigger" aria-label="Search">
+        
+<svg class="lucide-icon icon-search " width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-search"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="m21 21-4.34-4.34" />
+  <circle cx="11" cy="11" r="8" />
+</svg>
+
+        <span class="search-label">Search</span>
+        <span class="search-keys"><kbd class="docmd-kbd">⌘</kbd><kbd class="docmd-kbd">K</kbd></span>
+    </button>
+    
+
+    
+
+    
+
+    
+    <button class="theme-toggle-button" aria-label="Toggle theme">
+        
+<svg class="lucide-icon icon-sun icon-sun" width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-sun"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <circle cx="12" cy="12" r="4" />
+  <path d="M12 2v2" />
+  <path d="M12 20v2" />
+  <path d="m4.93 4.93 1.41 1.41" />
+  <path d="m17.66 17.66 1.41 1.41" />
+  <path d="M2 12h2" />
+  <path d="M20 12h2" />
+  <path d="m6.34 17.66-1.41 1.41" />
+  <path d="m19.07 4.93-1.41 1.41" />
+</svg>
+ 
+<svg class="lucide-icon icon-moon icon-moon" width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-moon"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401" />
+</svg>
+
+    </button>
+    
+
+    
+</div>
+
+              
+            </div>
+          </header>
+        
+        <div class="content-theme-cover">
+          <main class="content-area" id="main-content">
+            <div class="content-layout">
+              <div class="main-content">
+                <div class="docmd-breadcrumbs-row">
+                  <div id="docmd-raw-markdown" data-content="The%20first%20thing%20we%20need%20to%20do%20is%20to%20create%20a%20Router.%0A%0A%60%60%60php%20%22Api%2FRouters%2FPosts.php%22%0A%3C%3Fphp%0Ause%20Attributes%5CWp%5CFastEndpoints%5CRouter%3B%0A%0A%24router%20%3D%20new%20Router(&#039;posts&#039;)%3B%0A%60%60%60%0A%0AA%20router%20is%20a%20class%20which%20allow%20us%20to%20attach%20and%20register%20endpoints.%0A%0AAn%20application%20can%20have%20one%20or%20multiple%20routers.%20One%20main%20benefit%20of%20using%20multiple%20routers%20is%20to%20group%20endpoints%0Aby%20same%20namespace%20and%20(optionally)%20same%20version.%20For%20instance%2C%20in%20this%20tutorial%20we%20are%20going%20group%20all%20sub-routers%2C%0Ainto%20another%20router%20with%20a%20namespace%20and%20version%20%60my-plugin%2Fv1%60%0A%0A%23%23%20Define%20the%20shape%20of%20the%20data%0A%0AEach%20endpoint%20might%20require%20different%20types%20of%20data.%20Thanks%20to%20%5BAttributes-PHP%2Fvalidation%5D(https%3A%2F%2Fgithub.com%2FAttributes-PHP%2Fvalidation)%0Awe%20can%20simply%20create%20our%20own%20PHP%20classes%20with%20the%20shape%20of%20the%20data%20we%20need%20and%20use%20them%20to%20validate%20our%20request%20payload%0Avia%20type-hinting%20%F0%9F%A4%AF%0A%0A%60%60%60php%20%22Api%2FModels%2FPosts.php%22%0A%3C%3Fphp%0Anamespace%20MyPlugin%5CApi%5CModels%3B%0A%0Ause%20Attributes%5COptions%5CAliasGenerator%3B%0Ause%20Attributes%5CSerialization%5CSerializableTrait%3B%0Ause%20Respect%5CValidation%5CRules%3B%0A%0Aenum%20Status%3A%20string%0A%7B%0A%20%20%20%20case%20PUBLISH%20%3D%20&#039;publish&#039;%3B%0A%20%20%20%20case%20DRAFT%20%3D%20&#039;draft&#039;%3B%0A%20%20%20%20case%20PRIVATE%20%3D%20&#039;private&#039;%3B%0A%7D%0A%0A%23%5BAliasGenerator(&#039;snake&#039;)%5D%20%2F*%20(1)%20*%2F%0Aclass%20Post%0A%7B%0A%20%20%20%20use%20SerializableTrait%3B%20%2F*%20(2)%20*%2F%0A%0A%20%20%20%20%23%5BRules%5CPositive%5D%20%2F*%20(3)%20*%2F%0A%20%20%20%20public%20int%20%24ID%3B%0A%20%20%20%20%23%5BRules%5CPositive%5D%0A%20%20%20%20public%20int%20%24postAuthor%3B%0A%20%20%20%20public%20string%20%24postTitle%3B%0A%20%20%20%20public%20Status%20%24postStatus%3B%0A%7D%0A%60%60%60%0A%0A1.%20Allows%20looking%20up%20for%20*snake*%20case%20properties%20e.g.%20post_author.%0A%20%20%20More%20options%20at%20%5BAttributes-PHP%2Foptions%20%C2%BB%5D(https%3A%2F%2Fgithub.com%2FAttributes-PHP%2Foptions)%0A2.%20Allow%20us%20to%20convert%20this%20instance%20into%20a%20dictionary%20via%20%60%24instance-%3Eserialize()%60%0A3.%20Supports%20any%20%5BRespect%20Validation%5D(https%3A%2F%2Frespect-validation.readthedocs.io%2Fen%2F2.4%2F)%20rules%0A%0A%23%23%20Create%20a%20post%0A%0ALet&#039;s%20now%20create%20an%20endpoint%20which%20needs%20this%20type%20of%20data.%0A%0A%60%60%60php%20%22Api%2FRouters%2FPosts.php%22%0A%3C%3Fphp%0Ause%20MyPlugin%5CApi%5CModels%5CPost%3B%0A%0A%24router-%3Epost(&#039;%2F&#039;%2C%20function%20(Post%20%2F*%20(1)%20*%2F%20%24post%2C%20WP_REST_Response%20%2F*%20(2)%20*%2F%20%24response)%20%7B%0A%20%20%20%20%24response-%3Eset_status(201)%3B%0A%20%20%20%20%24payload%20%3D%20%24post-%3Eserialize()%3B%0A%0A%20%20%20%20return%20wp_insert_post(%24payload%2C%20true)%3B%0A%7D)%0A%20%20%20%20-%3EhasCap(&#039;publish_posts&#039;)%3B%0A%60%60%60%0A%0A1.%20By%20default%2C%20class-based%20type-hints%20will%20look%20for%20the%20data%20either%20in%20*%5Bget_json_params%5D(https%3A%2F%2Fdeveloper.wordpress.org%2Freference%2Fclasses%2Fwp_rest_request%2Fget_json_params%2F)*%20or%0A%20%20%20*%5Bget_body_params%5D(https%3A%2F%2Fdeveloper.wordpress.org%2Freference%2Fclasses%2Fwp_rest_request%2Fget_body_params%2F)*.%20To%20change%0A%20%20%20this%20behavior%20see%20%5BDependency%20injection%5D()%0A2.%20Custom%20dependencies%20can%20also%20be%20injected%20via%20%60%24router-%3Einject%60.%20See%20%5Binject%20custom%20dependencies%5D()%0A%0AWhen%20a%20request%20is%20received%20by%20this%20endpoint%20the%20following%20happens%3A%0A%0A1.%20First%2C%20the%20user%20permissions%20are%20checked%20-%20ensuring%20that%20only%20users%20with%20the%20%5B*publish_posts*%5D(https%3A%2F%2Fwordpress.org%2Fdocumentation%2Farticle%2Froles-and-capabilities%2F%23publish_posts)%20capability%20are%20%0A%20%20%20able%20to%20trigger%20this%20endpoint%20%0A2.%20Second%2C%20if%20successful%2C%20the%20request%20payload%20is%20validated%20and%20populated%20into%20an%20instance%20of%20the%20%60MyPlugin%5CApi%5CModels%5CPost%60%0A%20%20%20class.%20By%20default%2C%20**for%20classes%20only**%2C%20WP-FastEndpoints%20will%20look%20for%20the%20data%20either%20in%0A%20%20%20%5B*get_json_params*%5D(https%3A%2F%2Fdeveloper.wordpress.org%2Freference%2Fclasses%2Fwp_rest_request%2Fget_json_params%2F)%20or%0A%20%20%20%5B*get_body_params*%5D(https%3A%2F%2Fdeveloper.wordpress.org%2Freference%2Fclasses%2Fwp_rest_request%2Fget_body_params%2F)%2C%20depending%20on%20the%0A%20%20%20type%20of%20request.%20This%20behaviour%20can%20be%20changed%20via%20attributes%20though%2C%20see%20%5Bthis%20page%5D()%20for%20more%20info.%0A3.%20Third%2C%20the%20handler%20is%20called%20and%20creates%20a%20new%20blog%20post.%0A%0A%23%23%20Retrieve%20a%20post%0A%0AA%20great%20thing%20of%20dependency%20injection%20is%20that%20you%20only%20type%20what%20you%20need.%20And%20if%20you%20only%20need%20the%20ID%20of%20a%20post%2C%20so%20be%20it%20%F0%9F%98%8A%0A%0A%60%60%60php%20%22Api%2FRouters%2FPosts.php%22%0A%3C%3Fphp%0Ause%20Attributes%5CWp%5CFastEndpoints%5CHelpers%5CWpError%3B%0Ause%20Respect%5CValidation%5CRules%3B%0Ause%20MyPlugin%5CApi%5CModels%5CPost%3B%0A%0A%24router-%3Eget(&#039;(%3FP%3CID%3E%5B%5Cd%5D%2B)&#039;%2C%20function%20(%23%5BRules%5CPositive%5D%20%2F*%20(1)%20*%2F%20int%20%24ID)%20%7B%0A%20%20%20%20%24post%20%3D%20get_post(%24ID)%3B%0A%0A%20%20%20%20return%20%24post%20%3F%3A%20new%20WpError(404%2C%20&#039;Post%20not%20found&#039;)%3B%20%2F*%20(2)%20*%2F%0A%7D)%0A%20%20%20%20-%3Ereturns(Post%3A%3Aclass)%0A%20%20%20%20-%3EhasCap(&#039;read&#039;)%3B%0A%60%60%60%0A%0A1.%20Yes%2C%20endpoint%20arguments%20do%20support%20any%20%5BRespect%20Validation%5D(https%3A%2F%2Frespect-validation.readthedocs.io%2Fen%2F2.4%2F)%20rules%0A2.%20%5BWpError%5D(https%3A%2F%2Fgithub.com%2FAttributes-PHP%2Fwp-fastendpoints%2Fblob%2Fmain%2Fsrc%2FHelpers%2FWpError.php)%20is%20simply%20a%20subclass%0A%20%20%20of%20WP_Error%20which%20automatically%20set&#039;s%20the%20HTTP%20status%20code%20on%20the%20response%20data%20as%20well%0A%0AWhen%20a%20request%20is%20received%2C%20the%20following%20happens%3A%0A%0A1.%20First%2C%20we%20ensure%20the%20user%20has%20the%20%5B_read_%5D(https%3A%2F%2Fwordpress.org%2Fdocumentation%2Farticle%2Froles-and-capabilities%2F%23read)%20capability%0A2.%20Second%2C%20we%20ensure%20that%20the%20ID%20parameter%20is%20a%20valid%20positive%20integer.%20By%20default%2C%20built-in%20type-hints%20lookup%20for%0A%20%20%20the%20data%20in%20the%20following%20order%3A%201)%20%5B*get_url_params*%5D(https%3A%2F%2Fdeveloper.wordpress.org%2Freference%2Fclasses%2Fwp_rest_request%2Fget_url_params%2F)%0A%20%20%20and%20then%202)%20%5B*get_query_params*%5D(https%3A%2F%2Fdeveloper.wordpress.org%2Freference%2Fclasses%2Fwp_rest_request%2Fget_query_params%2F)%0A3.%20Lastly%2C%20if%20neither%20WP_Error%20or%20WP_REST_Response%20is%20returned%20by%20the%20handler%2C%20the%20%60returns(Post%3A%3Aclass)%60%20will%20ensure%0A%20%20%20that%20the%20response%20sent%20to%20the%20client%20will%20only%20contain%20the%20fields%20specified%20in%20the%20%60MyPlugin%5CApi%5CModels%5CPost%60%20class.%20You%0A%20%20%20could%20also%20ignore%20some%20fields%20via%20%60Attributes%5COptions%5CIgnore%60%20attribute%20from%20%5BAttributes-PHP%2Foptions%5D(https%3A%2F%2Fgithub.com%2FAttributes-PHP%2Foptions)%0A%0A%23%23%20Delete%20a%20post%0A%0AA%20common%20scenario%20while%20building%20API&#039;s%20is%20to%20ensure%20that%20a%20user%20has%20permissions%20to%20a%20particular%20resource%2C%20in%20this%0Acase%20a%20blog%20post.%0A%0A%60%60%60php%20%22Api%2FRouters%2FPosts.php%22%0A%3C%3Fphp%0Ause%20Attributes%5CWp%5CFastEndpoints%5CHelpers%5CWpError%3B%0Ause%20Respect%5CValidation%5CRules%3B%0Ause%20MyPlugin%5CApi%5CModels%5CPost%3B%0A%0A%24router-%3Edelete(&#039;(%3FP%3CID%3E%5B%5Cd%5D%2B)&#039;%2C%20function%20(%23%5BRules%5CPositive%5D%20int%20%24ID)%20%7B%0A%20%20%20%20return%20wp_delete_post(%24ID)%20%3F%3A%20new%20WpError(500%2C%20&#039;Unable%20to%20delete%20post&#039;)%3B%0A%7D)%0A%20%20%20%20-%3Ereturns(Post%3A%3Aclass)%0A%20%20%20%20-%3EhasCap(&#039;delete_post&#039;%2C%20&#039;%3CID%3E&#039;)%3B%0A%60%60%60%0A%0AIn%20this%20scenario%2C%20only%20user&#039;s%20with%20permissions%20to%20delete%20the%20specific%20blog%20post%20with%20the%20provided%20%60%3CID%3E%60%20would%20be%20able%0Ato%20successfully%20trigger%20this%20endpoint.%0A%0A%23%23%20Everything%20together%0A%0A%60%60%60php%20%22Api%2FRouters%2FPosts.php%22%0A%3C%3Fphp%0A%2F*%20Holds%20REST%20endpoints%20to%20interact%20with%20blog%20posts%20*%2F%0A%0Adeclare(strict_types%3D1)%3B%0A%0Ause%20Attributes%5CWp%5CFastEndpoints%5CHelpers%5CWpError%3B%0Ause%20Attributes%5CWp%5CFastEndpoints%5CRouter%3B%0Ause%20MyPlugin%5CApi%5CModels%5CPost%3B%0Ause%20Respect%5CValidation%5CRules%3B%0A%0A%24router%20%3D%20new%20Router(&#039;posts&#039;)%3B%0A%0A%24router-%3Epost(&#039;%2F&#039;%2C%20function%20(Post%20%24post%2C%20WP_REST_Response%20%24response)%20%7B%0A%20%20%20%20%24response-%3Eset_status(201)%3B%0A%20%20%20%20%24payload%20%3D%20%24post-%3Eserialize()%3B%0A%0A%20%20%20%20return%20wp_insert_post(%24payload%2C%20true)%3B%0A%7D)%0A%20%20%20%20-%3EhasCap(&#039;publish_posts&#039;)%3B%0A%0A%24router-%3Eget(&#039;(%3FP%3CID%3E%5B%5Cd%5D%2B)&#039;%2C%20function%20(%23%5BRules%5CPositive%5D%20int%20%24ID)%20%7B%0A%20%20%20%20%24post%20%3D%20get_post(%24ID)%3B%0A%0A%20%20%20%20return%20%24post%20%3F%3A%20new%20WpError(404%2C%20&#039;Post%20not%20found&#039;)%3B%0A%7D)%0A%20%20%20%20-%3Ereturns(Post%3A%3Aclass)%0A%20%20%20%20-%3EhasCap(&#039;read&#039;)%3B%0A%0A%24router-%3Edelete(&#039;(%3FP%3CID%3E%5B%5Cd%5D%2B)&#039;%2C%20function%20(%23%5BRules%5CPositive%5D%20int%20%24ID)%20%7B%0A%20%20%20%20return%20wp_delete_post(%24ID)%20%3F%3A%20new%20WpError(500%2C%20&#039;Unable%20to%20delete%20post&#039;)%3B%0A%7D)%0A%20%20%20%20-%3Ereturns(Post%3A%3Aclass)%0A%20%20%20%20-%3EhasCap(&#039;delete_post&#039;%2C%20&#039;%3CID%3E&#039;)%3B%0A%0A%2F%2F%20IMPORTANT%3A%20If%20no%20service%20provider%20is%20used%20make%20sure%20to%20set%20a%20version%20to%20the%20%24router%20and%20call%0A%2F%2F%20%20%20%20%20%20%20%20%20%20%20%20the%20following%20function%20here%3A%0A%2F%2F%20%24router-%3Eregister()%3B%0A%0A%2F%2F%20Used%20later%20on%20by%20the%20ApiProvider%0Areturn%20%24router%3B%0A%60%60%60" style="display: none;"></div>
+                  
+                    <nav aria-label="breadcrumb" class="docmd-breadcrumbs">
+                      <ol>
+                        
+                        
+                          <li class="breadcrumb-item " >
+                            
+                              <span>Quick Start</span>
+                            
+                            
+                              <span class="breadcrumb-separator">
+<svg class="lucide-icon icon-chevron-right " width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-chevron-right"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="m9 18 6-6-6-6" />
+</svg>
+</span>
+                            
+                          </li>
+                        
+                          <li class="breadcrumb-item active" aria-current=&quot;page&quot;>
+                            
+                              <span>Router</span>
+                            
+                            
+                          </li>
+                        
+                      </ol>
+                    </nav>
+                  
+
+                  
+                    <div class="docmd-copy-widgets">
+                      
+                        <button class="docmd-copy-btn docmd-copy-raw-btn" data-copied="Copied!" title="Copy Markdown" aria-label="Copy Markdown">
+                          <span class="docmd-btn-icon">
+<svg class="lucide-icon icon-copy " width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-copy"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+  <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+</svg>
+</span>
+                        </button>
+                      
+                      
+                        <button class="docmd-copy-btn docmd-copy-context-btn" data-copied="Copied!" title="Copy Context">
+                          <span class="docmd-btn-icon">
+<svg class="lucide-icon icon-message-square " width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-message-square"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z" />
+</svg>
+</span>
+                          <span class="docmd-btn-text">Copy Context</span>
+                        </button>
+                      
+                    </div>
+                  
+                </div>
+                
+                <p>The first thing we need to do is to create a Router.</p>
+<div class="docmd-code-block-wrapper"><div class="docmd-code-block-header"><span class="docmd-code-block-title">Api/Routers/Posts.php</span></div><pre class="hljs"><code class="language-php"><span class="hljs-operator">&lt;?</span>php
+<span class="hljs-keyword">use</span> Attributes\Wp\FastEndpoints\Router;
+
+<span class="hljs-variable">$router</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title function_">Router</span>(<span class="hljs-string">&#039;posts&#039;</span>);
+</code></pre>
+</div><p>A router is a class which allow us to attach and register endpoints.</p>
+<p>An application can have one or multiple routers. One main benefit of using multiple routers is to group endpoints<br>
+by same namespace and (optionally) same version. For instance, in this tutorial we are going group all sub-routers,<br>
+into another router with a namespace and version <code>my-plugin/v1</code></p>
+<h2 id="define-the-shape-of-the-data" class="docmd-heading"><a href="#define-the-shape-of-the-data" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Define the shape of the data</h2>
+<p>Each endpoint might require different types of data. Thanks to <a href="https://github.com/Attributes-PHP/validation">Attributes-PHP/validation</a><br>
+we can simply create our own PHP classes with the shape of the data we need and use them to validate our request payload<br>
+via type-hinting 🤯</p>
+<div class="docmd-code-block-wrapper"><div class="docmd-code-block-header"><span class="docmd-code-block-title">Api/Models/Posts.php</span></div><pre class="hljs"><code class="language-php"><span class="hljs-operator">&lt;?</span>php
+<span class="hljs-keyword">namespace</span> MyPlugin\Api\Models;
+
+<span class="hljs-keyword">use</span> Attributes\Options\AliasGenerator;
+<span class="hljs-keyword">use</span> Attributes\Serialization\SerializableTrait;
+<span class="hljs-keyword">use</span> Respect\Validation\Rules;
+
+<span class="hljs-keyword">enum</span> Status<span class="hljs-operator">:</span> string
+{
+    <span class="hljs-keyword">case</span> PUBLISH <span class="hljs-operator">=</span> <span class="hljs-string">&#039;publish&#039;</span>;
+    <span class="hljs-keyword">case</span> DRAFT <span class="hljs-operator">=</span> <span class="hljs-string">&#039;draft&#039;</span>;
+    <span class="hljs-keyword">case</span> PRIVATE <span class="hljs-operator">=</span> <span class="hljs-string">&#039;private&#039;</span>;
+}
+
+<span class="hljs-comment">#[AliasGenerator(&#039;snake&#039;)] /* (1) */</span>
+<span class="hljs-keyword">class</span> Post
+{
+    <span class="hljs-keyword">use</span> SerializableTrait; <span class="hljs-comment">/* (2) */</span>
+
+    <span class="hljs-comment">#[Rules\Positive] /* (3) */</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-variable">$ID</span>;
+    <span class="hljs-comment">#[Rules\Positive]</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-variable">$postAuthor</span>;
+    <span class="hljs-keyword">public</span> string <span class="hljs-variable">$postTitle</span>;
+    <span class="hljs-keyword">public</span> Status <span class="hljs-variable">$postStatus</span>;
+}
+</code></pre>
+</div><ol>
+<li>Allows looking up for <em>snake</em> case properties e.g. post_author.<br>
+More options at <a href="https://github.com/Attributes-PHP/options">Attributes-PHP/options »</a></li>
+<li>Allow us to convert this instance into a dictionary via <code>$instance-&gt;serialize()</code></li>
+<li>Supports any <a href="https://respect-validation.readthedocs.io/en/2.4/">Respect Validation</a> rules</li>
+</ol>
+<h2 id="create-a-post" class="docmd-heading"><a href="#create-a-post" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Create a post</h2>
+<p>Let’s now create an endpoint which needs this type of data.</p>
+<div class="docmd-code-block-wrapper"><div class="docmd-code-block-header"><span class="docmd-code-block-title">Api/Routers/Posts.php</span></div><pre class="hljs"><code class="language-php"><span class="hljs-operator">&lt;?</span>php
+<span class="hljs-keyword">use</span> MyPlugin\Api\Models\Post;
+
+<span class="hljs-variable">$router</span><span class="hljs-operator">-&gt;</span><span class="hljs-title function_">post</span>(<span class="hljs-string">&#039;/&#039;</span>, <span class="hljs-keyword">function</span> (Post <span class="hljs-comment">/* (1) */</span> <span class="hljs-variable">$post</span>, WP_REST_Response <span class="hljs-comment">/* (2) */</span> <span class="hljs-variable">$response</span>) {
+    <span class="hljs-variable">$response</span><span class="hljs-operator">-&gt;</span><span class="hljs-title function_">set_status</span>(<span class="hljs-number">201</span>);
+    <span class="hljs-variable">$payload</span> <span class="hljs-operator">=</span> <span class="hljs-variable">$post</span><span class="hljs-operator">-&gt;</span><span class="hljs-title function_">serialize</span>();
+
+    <span class="hljs-keyword">return</span> <span class="hljs-title function_">wp_insert_post</span>(<span class="hljs-variable">$payload</span>, <span class="hljs-literal">true</span>);
+})
+    <span class="hljs-operator">-&gt;</span><span class="hljs-title function_">hasCap</span>(<span class="hljs-string">&#039;publish_posts&#039;</span>);
+</code></pre>
+</div><ol>
+<li>By default, class-based type-hints will look for the data either in <em><a href="https://developer.wordpress.org/reference/classes/wp_rest_request/get_json_params/">get_json_params</a></em> or<br>
+<em><a href="https://developer.wordpress.org/reference/classes/wp_rest_request/get_body_params/">get_body_params</a></em>. To change<br>
+this behavior see <a href="">Dependency injection</a></li>
+<li>Custom dependencies can also be injected via <code>$router-&gt;inject</code>. See <a href="">inject custom dependencies</a></li>
+</ol>
+<p>When a request is received by this endpoint the following happens:</p>
+<ol>
+<li>First, the user permissions are checked - ensuring that only users with the <a href="https://wordpress.org/documentation/article/roles-and-capabilities/#publish_posts"><em>publish_posts</em></a> capability are<br>
+able to trigger this endpoint</li>
+<li>Second, if successful, the request payload is validated and populated into an instance of the <code>MyPlugin\Api\Models\Post</code><br>
+class. By default, <strong>for classes only</strong>, WP-FastEndpoints will look for the data either in<br>
+<a href="https://developer.wordpress.org/reference/classes/wp_rest_request/get_json_params/"><em>get_json_params</em></a> or<br>
+<a href="https://developer.wordpress.org/reference/classes/wp_rest_request/get_body_params/"><em>get_body_params</em></a>, depending on the<br>
+type of request. This behaviour can be changed via attributes though, see <a href="">this page</a> for more info.</li>
+<li>Third, the handler is called and creates a new blog post.</li>
+</ol>
+<h2 id="retrieve-a-post" class="docmd-heading"><a href="#retrieve-a-post" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Retrieve a post</h2>
+<p>A great thing of dependency injection is that you only type what you need. And if you only need the ID of a post, so be it 😊</p>
+<div class="docmd-code-block-wrapper"><div class="docmd-code-block-header"><span class="docmd-code-block-title">Api/Routers/Posts.php</span></div><pre class="hljs"><code class="language-php"><span class="hljs-operator">&lt;?</span>php
+<span class="hljs-keyword">use</span> Attributes\Wp\FastEndpoints\Helpers\WpError;
+<span class="hljs-keyword">use</span> Respect\Validation\Rules;
+<span class="hljs-keyword">use</span> MyPlugin\Api\Models\Post;
+
+<span class="hljs-variable">$router</span><span class="hljs-operator">-&gt;</span><span class="hljs-title function_">get</span>(<span class="hljs-string">&#039;(?P&lt;ID&gt;[\d]+)&#039;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-comment">#[Rules\Positive] /* (1) */ int $ID) {</span>
+    <span class="hljs-variable">$post</span> <span class="hljs-operator">=</span> <span class="hljs-title function_">get_post</span>(<span class="hljs-variable">$ID</span>);
+
+    <span class="hljs-keyword">return</span> <span class="hljs-variable">$post</span> <span class="hljs-operator">?:</span> <span class="hljs-keyword">new</span> <span class="hljs-title function_">WpError</span>(<span class="hljs-number">404</span>, <span class="hljs-string">&#039;Post not found&#039;</span>); <span class="hljs-comment">/* (2) */</span>
+})
+    <span class="hljs-operator">-&gt;</span><span class="hljs-title function_">returns</span>(Post<span class="hljs-operator">::</span><span class="hljs-keyword">class</span>)
+    <span class="hljs-operator">-&gt;</span><span class="hljs-title function_">hasCap</span>(<span class="hljs-string">&#039;read&#039;</span>);
+</code></pre>
+</div><ol>
+<li>Yes, endpoint arguments do support any <a href="https://respect-validation.readthedocs.io/en/2.4/">Respect Validation</a> rules</li>
+<li><a href="https://github.com/Attributes-PHP/wp-fastendpoints/blob/main/src/Helpers/WpError.php">WpError</a> is simply a subclass<br>
+of WP_Error which automatically set’s the HTTP status code on the response data as well</li>
+</ol>
+<p>When a request is received, the following happens:</p>
+<ol>
+<li>First, we ensure the user has the <a href="https://wordpress.org/documentation/article/roles-and-capabilities/#read"><em>read</em></a> capability</li>
+<li>Second, we ensure that the ID parameter is a valid positive integer. By default, built-in type-hints lookup for<br>
+the data in the following order: 1) <a href="https://developer.wordpress.org/reference/classes/wp_rest_request/get_url_params/"><em>get_url_params</em></a><br>
+and then 2) <a href="https://developer.wordpress.org/reference/classes/wp_rest_request/get_query_params/"><em>get_query_params</em></a></li>
+<li>Lastly, if neither WP_Error or WP_REST_Response is returned by the handler, the <code>returns(Post::class)</code> will ensure<br>
+that the response sent to the client will only contain the fields specified in the <code>MyPlugin\Api\Models\Post</code> class. You<br>
+could also ignore some fields via <code>Attributes\Options\Ignore</code> attribute from <a href="https://github.com/Attributes-PHP/options">Attributes-PHP/options</a></li>
+</ol>
+<h2 id="delete-a-post" class="docmd-heading"><a href="#delete-a-post" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Delete a post</h2>
+<p>A common scenario while building API’s is to ensure that a user has permissions to a particular resource, in this<br>
+case a blog post.</p>
+<div class="docmd-code-block-wrapper"><div class="docmd-code-block-header"><span class="docmd-code-block-title">Api/Routers/Posts.php</span></div><pre class="hljs"><code class="language-php"><span class="hljs-operator">&lt;?</span>php
+<span class="hljs-keyword">use</span> Attributes\Wp\FastEndpoints\Helpers\WpError;
+<span class="hljs-keyword">use</span> Respect\Validation\Rules;
+<span class="hljs-keyword">use</span> MyPlugin\Api\Models\Post;
+
+<span class="hljs-variable">$router</span><span class="hljs-operator">-&gt;</span><span class="hljs-title function_">delete</span>(<span class="hljs-string">&#039;(?P&lt;ID&gt;[\d]+)&#039;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-comment">#[Rules\Positive] int $ID) {</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-title function_">wp_delete_post</span>(<span class="hljs-variable">$ID</span>) <span class="hljs-operator">?:</span> <span class="hljs-keyword">new</span> <span class="hljs-title function_">WpError</span>(<span class="hljs-number">500</span>, <span class="hljs-string">&#039;Unable to delete post&#039;</span>);
+})
+    <span class="hljs-operator">-&gt;</span><span class="hljs-title function_">returns</span>(Post<span class="hljs-operator">::</span><span class="hljs-keyword">class</span>)
+    <span class="hljs-operator">-&gt;</span><span class="hljs-title function_">hasCap</span>(<span class="hljs-string">&#039;delete_post&#039;</span>, <span class="hljs-string">&#039;&lt;ID&gt;&#039;</span>);
+</code></pre>
+</div><p>In this scenario, only user’s with permissions to delete the specific blog post with the provided <code>&lt;ID&gt;</code> would be able<br>
+to successfully trigger this endpoint.</p>
+<h2 id="everything-together" class="docmd-heading"><a href="#everything-together" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>Everything together</h2>
+<div class="docmd-code-block-wrapper"><div class="docmd-code-block-header"><span class="docmd-code-block-title">Api/Routers/Posts.php</span></div><pre class="hljs"><code class="language-php"><span class="hljs-operator">&lt;?</span>php
+<span class="hljs-comment">/* Holds REST endpoints to interact with blog posts */</span>
+
+<span class="hljs-title function_">declare</span>(strict_types<span class="hljs-operator">=</span><span class="hljs-number">1</span>);
+
+<span class="hljs-keyword">use</span> Attributes\Wp\FastEndpoints\Helpers\WpError;
+<span class="hljs-keyword">use</span> Attributes\Wp\FastEndpoints\Router;
+<span class="hljs-keyword">use</span> MyPlugin\Api\Models\Post;
+<span class="hljs-keyword">use</span> Respect\Validation\Rules;
+
+<span class="hljs-variable">$router</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title function_">Router</span>(<span class="hljs-string">&#039;posts&#039;</span>);
+
+<span class="hljs-variable">$router</span><span class="hljs-operator">-&gt;</span><span class="hljs-title function_">post</span>(<span class="hljs-string">&#039;/&#039;</span>, <span class="hljs-keyword">function</span> (Post <span class="hljs-variable">$post</span>, WP_REST_Response <span class="hljs-variable">$response</span>) {
+    <span class="hljs-variable">$response</span><span class="hljs-operator">-&gt;</span><span class="hljs-title function_">set_status</span>(<span class="hljs-number">201</span>);
+    <span class="hljs-variable">$payload</span> <span class="hljs-operator">=</span> <span class="hljs-variable">$post</span><span class="hljs-operator">-&gt;</span><span class="hljs-title function_">serialize</span>();
+
+    <span class="hljs-keyword">return</span> <span class="hljs-title function_">wp_insert_post</span>(<span class="hljs-variable">$payload</span>, <span class="hljs-literal">true</span>);
+})
+    <span class="hljs-operator">-&gt;</span><span class="hljs-title function_">hasCap</span>(<span class="hljs-string">&#039;publish_posts&#039;</span>);
+
+<span class="hljs-variable">$router</span><span class="hljs-operator">-&gt;</span><span class="hljs-title function_">get</span>(<span class="hljs-string">&#039;(?P&lt;ID&gt;[\d]+)&#039;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-comment">#[Rules\Positive] int $ID) {</span>
+    <span class="hljs-variable">$post</span> <span class="hljs-operator">=</span> <span class="hljs-title function_">get_post</span>(<span class="hljs-variable">$ID</span>);
+
+    <span class="hljs-keyword">return</span> <span class="hljs-variable">$post</span> <span class="hljs-operator">?:</span> <span class="hljs-keyword">new</span> <span class="hljs-title function_">WpError</span>(<span class="hljs-number">404</span>, <span class="hljs-string">&#039;Post not found&#039;</span>);
+})
+    <span class="hljs-operator">-&gt;</span><span class="hljs-title function_">returns</span>(Post<span class="hljs-operator">::</span><span class="hljs-keyword">class</span>)
+    <span class="hljs-operator">-&gt;</span><span class="hljs-title function_">hasCap</span>(<span class="hljs-string">&#039;read&#039;</span>);
+
+<span class="hljs-variable">$router</span><span class="hljs-operator">-&gt;</span><span class="hljs-title function_">delete</span>(<span class="hljs-string">&#039;(?P&lt;ID&gt;[\d]+)&#039;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-comment">#[Rules\Positive] int $ID) {</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-title function_">wp_delete_post</span>(<span class="hljs-variable">$ID</span>) <span class="hljs-operator">?:</span> <span class="hljs-keyword">new</span> <span class="hljs-title function_">WpError</span>(<span class="hljs-number">500</span>, <span class="hljs-string">&#039;Unable to delete post&#039;</span>);
+})
+    <span class="hljs-operator">-&gt;</span><span class="hljs-title function_">returns</span>(Post<span class="hljs-operator">::</span><span class="hljs-keyword">class</span>)
+    <span class="hljs-operator">-&gt;</span><span class="hljs-title function_">hasCap</span>(<span class="hljs-string">&#039;delete_post&#039;</span>, <span class="hljs-string">&#039;&lt;ID&gt;&#039;</span>);
+
+<span class="hljs-comment">// IMPORTANT: If no service provider is used make sure to set a version to the $router and call</span>
+<span class="hljs-comment">//            the following function here:</span>
+<span class="hljs-comment">// $router-&gt;register();</span>
+
+<span class="hljs-comment">// Used later on by the ApiProvider</span>
+<span class="hljs-keyword">return</span> <span class="hljs-variable">$router</span>;
+</code></pre>
+</div>
+                
+                  <div class="page-navigation">
+                    
+                      <a href="../../quick-start/" class="prev-page">
+                        
+<svg class="lucide-icon icon-arrow-left page-nav-icon" width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-arrow-left"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="m12 19-7-7 7-7" />
+  <path d="M19 12H5" />
+</svg>
+
+                        <span><small>Previous</small><strong>
+                            Quick Start
+                          </strong></span>
+                      </a>
+                    
+                    
+                      <a href="../../quick-start/service-provider/" class="next-page">
+                        <span><small>Next</small>
+                          <strong>
+                            Service Provider
+                          </strong></span>
+                        
+<svg class="lucide-icon icon-arrow-right page-nav-icon" width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-arrow-right"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M5 12h14" />
+  <path d="m12 5 7 7-7 7" />
+</svg>
+
+                      </a>
+                    
+                  </div>
+                
+              </div>
+              
+              <div class="toc-sidebar">
+                
+
+
+  <div class="toc-container">
+    <h2 class="toc-title">On This Page<span class="mobile-view toc-menu-button float-right">
+<svg class="lucide-icon icon-chevron-down " width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-chevron-down"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="m6 9 6 6 6-6" />
+</svg>
+</span></h2>
+    <ul class="toc-list">
+      
+        <li class="toc-item toc-level-2">
+          <a href="#define-the-shape-of-the-data" class="toc-link">Define the shape of the data</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#create-a-post" class="toc-link">Create a post</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#retrieve-a-post" class="toc-link">Retrieve a post</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#delete-a-post" class="toc-link">Delete a post</a>
+        </li>
+      
+        <li class="toc-item toc-level-2">
+          <a href="#everything-together" class="toc-link">Everything together</a>
+        </li>
+      
+    </ul>
+  </div>
+
+              </div>
+              
+            </div>
+            <div class="page-footer-actions">
+              
+              
+                <span class="git-last-updated" data-timestamp="1789770180000">
+                  <svg class="git-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <span class="git-label">Last updated:</span>
+                  <span class="git-time" data-timestamp="1789770180000"></span>
+                  
+                  <div class="git-commit-tooltip" role="tooltip">
+                    <div class="git-tooltip-title">Recent commits</div>
+                    <ul class="git-commit-list">
+                      
+                        <li class="git-commit-item">
+                          <div class="git-commit-avatar" title="André Gil">
+                            
+                              <img src="https://www.gravatar.com/avatar/212befc52c10efa1375e802e98bea7aa?d=mp&amp;s=64" alt="André Gil">
+                            
+                          </div>
+                          <div class="git-commit-details">
+                            <div class="git-commit-message" title="docs: Replace mkdocs with docmd (#17)">docs: Replace mkdocs with docmd (#17)</div>
+                            <div class="git-commit-meta">
+                              <span class="git-commit-author">André Gil</span>
+                              <span class="git-commit-date" data-timestamp="1789770180000"></span>
+                            </div>
+                          </div>
+                        </li>
+                      
+                    </ul>
+                  </div>
+                  
+                </span>
+              
+              <span class="git-spacer"></span>
+              
+                <a href="https://github.com/Attributes-PHP/wp-fastendpoints/edit/main/docs/docs/quick-start/router.md" target="_blank" rel="noopener noreferrer" class="edit-link">
+                  
+<svg class="lucide-icon icon-pencil " width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-pencil"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
+  <path d="m15 5 4 4" />
+</svg>
+
+                  Edit this page
+                </a>
+              
+            </div>
+          </main>
+          
+
+
+<footer class="page-footer">
+  <div class="footer-content">
+    <div class="user-footer">WP-FastEndpoints is open-sourced software licensed under the MIT license</div>
+    
+      <div class="branding-footer">
+        Built with <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path><path d="M12 5 9.04 7.96a2.17 2.17 0 0 0 0 3.08c.82.82 2.13.85 3 .07l2.07-1.9a2.82 2.82 0 0 1 3.79 0l2.96 2.66"></path><path d="m18 15-2-2"></path><path d="m15 18-2-2"></path></svg> <a href="https://docmd.io" target="_blank" rel="noopener">docmd.</a>
+      </div>
+    
+  </div>
+</footer>
+
+        </div>
+      </div>
+      
+      <script src="../../assets/js/docmd-main.js?v=mu7iyrf2"></script>
+      
+      <script src="../../assets/js/docmd-git.js?v=mu7iyrf2"></script>
+      <script src="../../assets/js/docmd-image-lightbox.js?v=mu7iyrf2" ></script>
+<script src="../../assets/js/vendor/minisearch.js?v=mu7iyrf2" ></script>
+<script src="../../assets/js/docmd-search.js?v=mu7iyrf2" ></script>
+<script src="../../assets/js/docmd-git.js?v=mu7iyrf2" ></script>
+<script src="../../assets/js/docmd-ai.js?v=mu7iyrf2" ></script>
+
+  <!-- Search Modal (Injected by @docmd/plugin-search) -->
+  <div id="docmd-search-modal" class="docmd-search-modal" style="display: none;" data-show-confidence="false" data-show-filters="true"
+       data-search-placeholder="Search documentation..."
+       data-search-no-results="No results found."
+       data-search-error="Failed to load search index."
+       data-search-offline="Search requires a web server. Open this site via http://localhost instead of file:// to enable search."
+       data-search-offline-build="Search is disabled because these docs were built with the --offline flag. Rebuild the site without the flag to enable search."
+       data-search-initial="Type to start searching..."
+       data-search-navigate="to navigate"
+       data-search-escape="to close">
+      <div class="docmd-search-box">
+          <div class="docmd-search-header">
+              <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon icon-search"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+              <input type="text" id="docmd-search-input" placeholder="Search documentation..." autocomplete="off" spellcheck="false">
+              <button onclick="window.closeDocmdSearch()" class="docmd-search-close" aria-label="Close search">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon icon-x"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+              </button>
+          </div>
+          <div id="docmd-search-results" class="docmd-search-results"></div>
+          <div class="docmd-search-footer">
+              <span><kbd class="docmd-kbd">↑</kbd> <kbd class="docmd-kbd">↓</kbd> to navigate</span>
+              <span><kbd class="docmd-kbd">ESC</kbd> to close</span>
+          </div>
+      </div>
+  </div>
+
+    <script>
+      (function() {
+        var searchDebounceTimer;
+
+        document.addEventListener('click', function(e) {
+          var link = e.target.closest('a');
+          if (!link || !window.gtag) return;
+          
+          var url = link.href;
+          var hostname = window.location.hostname;
+          var isExternal = link.hostname && link.hostname !== hostname;
+          var isDownload = link.hasAttribute('download') || url.match(/\.(pdf|zip|tar|gz|exe|pkg)$/i);
+          
+          if (isExternal) {
+            gtag('event', 'click_external', { 'url': url, 'link_text': link.innerText.trim() });
+          } else if (isDownload) {
+            gtag('event', 'download', { 'file_name': url.split('/').pop(), 'url': url });
+          }
+
+          // TOC tracking
+          if (link.classList.contains('toc-link')) {
+            gtag('event', 'toc_click', { 'target_id': link.getAttribute('href'), 'title': link.innerText.trim() });
+          }
+
+          // Permalink tracking
+          if (link.classList.contains('heading-anchor')) {
+            gtag('event', 'permalink_click', { 'url': url });
+          }
+        });
+
+        
+        // Search Keyword Tracking
+        document.addEventListener('input', function(e) {
+          if (e.target.id === 'docmd-search-input' && window.gtag) {
+            var query = e.target.value.trim();
+            if (query.length < 3) return;
+            
+            clearTimeout(searchDebounceTimer);
+            searchDebounceTimer = setTimeout(function() {
+              gtag('event', 'search', { 'search_term': query });
+            }, 1000);
+          }
+        });
+        
+      })();
+    </script>
+
+<script>window.__git_config={"repo":"https://github.com/Attributes-PHP/wp-fastendpoints","branch":"main","editLink":true,"lastUpdated":true,"commitHistory":true,"maxCommits":5,"dateFormat":"relative"};window.__git_i18n={"lastUpdated":"Last updated","recentCommits":"Recent commits","viewCommitHistory":"View commit history","editOnGitHub":"Edit on GitHub","editOnGitLab":"Edit on GitLab","editOnBitbucket":"Edit on Bitbucket","editThisPage":"Edit this page","justNow":"just now","minutesAgo":"{n}m ago","hoursAgo":"{n}h ago","daysAgo":"{n}d ago"}</script>
+<div id="docmd-ai-root"></div><script>window.__docmd_ai_config={"endpoint":"","cloud":{},"captcha":true,"position":"bottom-center","siteTitle":"WP-FastEndpoints","siteBase":"/","siteUrl":"https://wp-fastendpoints.attributes-php.com","versions":null,"i18n":null,"navigation":[{"title":"WP-FastEndpoints","path":"/"},{"title":"Quick Start","collapsible":true,"children":[{"title":"Quick Start","path":"/quick-start/"},{"title":"Router","path":"/quick-start/router/"},{"title":"Service Provider","path":"/quick-start/service-provider/"},{"title":"Testing","collapsible":true,"children":[{"title":"Testing","path":"/quick-start/tests/"},{"title":"Unit Tests","path":"/quick-start/tests/unit/"},{"title":"Integration Tests","path":"/quick-start/tests/integration/"}]}]},{"title":"Advanced User Guide","collapsible":true,"children":[{"title":"Advanced User Guide","path":"/advanced-user-guide/"},{"title":"Request Life Cycle","path":"/advanced-user-guide/request-life-cycle/"},{"title":"Dependency Injection","collapsible":true,"children":[{"title":"Dependency Injection","path":"/advanced-user-guide/dependency-injection/"},{"title":"Request payload","path":"/advanced-user-guide/dependency-injection/request-payload/"},{"title":"Injectables","path":"/advanced-user-guide/dependency-injection/injectables/"}]},{"title":"Responses","path":"/advanced-user-guide/responses/"},{"title":"Middlewares","path":"/advanced-user-guide/middlewares/"},{"title":"Treat plugins as dependencies","path":"/advanced-user-guide/plugins-as-dependencies/"}]}],"searchCapabilities":{"keyword":true,"semantic":false},"isWorkspace":false,"workspaceProjects":[],"contextLimit":5};</script>
+      
+      
+      
+  </body>
+</html>

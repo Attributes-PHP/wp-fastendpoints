@@ -1,0 +1,96 @@
+{
+  "title": "WP-FastEndpoints",
+  "description": "",
+  "pages": [
+    {
+      "title": "Untitled",
+      "url": "https://wp-fastendpoints.attributes-php.com/advanced-user-guide/dependency-injection/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Untitled",
+      "url": "https://wp-fastendpoints.attributes-php.com/advanced-user-guide/dependency-injection/injectables/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Untitled",
+      "url": "https://wp-fastendpoints.attributes-php.com/advanced-user-guide/dependency-injection/request-payload/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Untitled",
+      "url": "https://wp-fastendpoints.attributes-php.com/advanced-user-guide/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Untitled",
+      "url": "https://wp-fastendpoints.attributes-php.com/advanced-user-guide/middlewares/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Untitled",
+      "url": "https://wp-fastendpoints.attributes-php.com/advanced-user-guide/plugins-as-dependencies/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Untitled",
+      "url": "https://wp-fastendpoints.attributes-php.com/advanced-user-guide/request-life-cycle/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Untitled",
+      "url": "https://wp-fastendpoints.attributes-php.com/advanced-user-guide/responses/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "WP-FastEndpoints",
+      "url": "https://wp-fastendpoints.attributes-php.com/",
+      "description": "",
+      "priority": "high"
+    },
+    {
+      "title": "Untitled",
+      "url": "https://wp-fastendpoints.attributes-php.com/quick-start/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Untitled",
+      "url": "https://wp-fastendpoints.attributes-php.com/quick-start/router/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Untitled",
+      "url": "https://wp-fastendpoints.attributes-php.com/quick-start/service-provider/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Untitled",
+      "url": "https://wp-fastendpoints.attributes-php.com/quick-start/tests/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Installs wp-pest",
+      "url": "https://wp-fastendpoints.attributes-php.com/quick-start/tests/integration/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Untitled",
+      "url": "https://wp-fastendpoints.attributes-php.com/quick-start/tests/unit/",
+      "description": "",
+      "priority": "medium"
+    }
+  ]
+}
