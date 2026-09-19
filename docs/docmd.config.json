@@ -5,7 +5,10 @@
   "out": "site",
   "theme": {
     "name": "default",
-    "appearance": "system"
+    "appearance": "system",
+    "customCss": [
+      "/assets/css/docmd-fixes.css"
+    ]
   },
   "footer": {
     "style": "minimal",
