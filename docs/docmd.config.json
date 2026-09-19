@@ -5,7 +5,10 @@
   "out": "site",
   "theme": {
     "name": "default",
-    "appearance": "system"
+    "appearance": "system",
+    "customCss": [
+      "/assets/css/docmd-fixes.css"
+    ]
   },
   "footer": {
     "style": "minimal",
@@ -98,6 +101,9 @@
     }
   ],
   "plugins": {
+    "ai": {
+      "enabled": false
+    },
     "git": {
       "repo": "https://github.com/Attributes-PHP/wp-fastendpoints",
       "branch": "main",

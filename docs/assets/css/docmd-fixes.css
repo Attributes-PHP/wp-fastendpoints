@@ -1,0 +1,8 @@
+/* docmd 0.9.5 renders the menubar as position:sticky on screens up to 768px
+   wide, but body.has-menubar-top keeps the 44px padding-top meant for the
+   fixed-position desktop menubar, leaving a blank strip above the GitHub link. */
+@media (max-width: 768px) {
+    body.has-menubar-top {
+        padding-top: 0;
+    }
+}
