@@ -1,3 +1,7 @@
+---
+title: "Quick Start"
+---
+
 To better exemplify the benefits of using **FastEndpoints** we are going to build an API for manipulating blog posts.
 
 This API will be able to:

@@ -1,3 +1,7 @@
+---
+title: "Request Life Cycle"
+---
+
 In WP-FastEndpoints an endpoint can have multiple optional handlers attached to:
 
 1. Permission handlers via `hasCap(...)` or `permission(...)` - Used to check for user permissions

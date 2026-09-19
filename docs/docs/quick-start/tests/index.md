@@ -1,3 +1,7 @@
+---
+title: "Testing"
+---
+
 To test our router endpoints we are going to use [Pest PHP](https://pestphp.com/). Pest is a testing framework which makes PHP testing
 a breeze. Besides, the creator of Pest is Portuguese and studied at the same university as me which is a bonus 🌟😂
 

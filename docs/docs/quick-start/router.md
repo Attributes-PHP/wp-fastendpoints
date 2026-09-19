@@ -1,3 +1,7 @@
+---
+title: "Router"
+---
+
 The first thing we need to do is to create a Router.
 
 ```php "Api/Routers/Posts.php"

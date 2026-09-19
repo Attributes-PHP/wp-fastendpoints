@@ -1,3 +1,7 @@
+---
+title: "Dependency Injection"
+---
+
 Each REST endpoint has its unique logic. Same goes with the data that it needs to work.
 
 For that reason, WP-FastEndpoints provides dependency injection support for all handlers

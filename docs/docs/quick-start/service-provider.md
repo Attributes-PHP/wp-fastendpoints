@@ -1,3 +1,7 @@
+---
+title: "Service Provider"
+---
+
 Now that we have our endpoints ready, the last step is to register them. You can register a router individually or
 by grouping all of them into a single *main* router and register only that main router. The latter is what we are going to do. 
 
