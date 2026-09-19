@@ -101,6 +101,9 @@
     }
   ],
   "plugins": {
+    "ai": {
+      "enabled": false
+    },
     "git": {
       "repo": "https://github.com/Attributes-PHP/wp-fastendpoints",
       "branch": "main",
