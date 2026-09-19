@@ -1,3 +1,7 @@
+---
+title: "Request payload"
+---
+
 As you might be already familiar WP-FastEndpoints allows you to fetch request data via function arguments, and optionally
 you can validate that data via type-hinting.
 

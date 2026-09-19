@@ -1,3 +1,7 @@
+---
+title: "Integration Tests"
+---
+
 Integration tests, are a bit tricky to set up.
 
 The following needs to happen in order to successfully run them:

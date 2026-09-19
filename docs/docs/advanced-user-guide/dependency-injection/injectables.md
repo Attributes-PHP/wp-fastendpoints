@@ -1,3 +1,7 @@
+---
+title: "Injectables"
+---
+
 A common scenario while creating API's is the need to share resources or logic across multiple endpoints or handlers.
 This is where *injectables* can be useful.
 

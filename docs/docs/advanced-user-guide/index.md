@@ -1,3 +1,7 @@
+---
+title: "Advanced User Guide"
+---
+
 The [Quick Start](/quick-start/) should be able to get you a feel of the main features of WP-FastEndpoints.
 
 However, it's possible what you are looking for might not be available in the Quick Start guide.

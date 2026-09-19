@@ -1,3 +1,7 @@
+---
+title: "Treat plugins as dependencies"
+---
+
 One of the main strengths of WordPress is the wide range of plugins available
 which allow us to fully customise a website in a short time period. However, every time a plugin
 is added it can negatively impact the performance of our API endpoints, because even

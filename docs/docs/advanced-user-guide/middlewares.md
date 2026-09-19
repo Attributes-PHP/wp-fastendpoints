@@ -1,3 +1,7 @@
+---
+title: "Middlewares"
+---
+
 Another cool feature of WP-FastEndpoints is the support for middlewares.
 
 Middlewares are pieces of code that can either run before and/or after a request is handled.

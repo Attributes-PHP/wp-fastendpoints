@@ -1,3 +1,7 @@
+---
+title: "Responses"
+---
+
 When building an API sometimes we might want to return a response directly to the client. For example:
 
 ```php
