@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Attributes\Wp\FastEndpoints\Tests\Unit\Schemas;
 
+use Attributes\Wp\FastEndpoints\Contracts\Http\Router as RouterContract;
 use Attributes\Wp\FastEndpoints\DI\Invoker;
 use Attributes\Wp\FastEndpoints\Endpoint;
 use Attributes\Wp\FastEndpoints\Router;
@@ -159,18 +160,22 @@ test('Register endpoints', function () {
     $invoker->expects()
         ->setInjectables([])
         ->times(2);
+    $permissionCallable = fn () => true;
     $endpointMock1 = Mockery::mock(Endpoint::class);
     $endpointMock1->expects()->depends(['router-plugin']);
+    $endpointMock1->expects()->inheritPermissionHandlers([$permissionCallable]);
     $endpointMock1->expects()->register('custom-api/v3', '');
     $endpointMock1->expects()->getInvoker()->andReturn($invoker);
 
     $endpointMock2 = Mockery::mock(Endpoint::class);
     $endpointMock2->expects()->depends(['router-plugin']);
+    $endpointMock2->expects()->inheritPermissionHandlers([$permissionCallable]);
     $endpointMock2->expects()->register('custom-api/v3', '');
     $endpointMock2->expects()->getInvoker()->andReturn($invoker);
 
     $router = new Router('custom-api', 'v3');
     $router->depends('router-plugin');
+    $router->permission($permissionCallable);
     Helpers::setNonPublicClassProperty($router, 'endpoints', [$endpointMock1, $endpointMock2]);
     expect(Helpers::getNonPublicClassProperty($router, 'registered'))->toBeFalse();
     $router->registerEndpoints();
@@ -263,14 +268,18 @@ test('Register router with sub-routers mocks', function () {
     $router = new Router('api', 'v1');
 
     $returnNull = fn () => null;
+    $permissionCallable = fn () => true;
     $router->inject('test', $returnNull);
+    $router->permission($permissionCallable);
 
     $subRouter1 = Mockery::mock(Router::class);
     $subRouter1->expects()->inject('test', $returnNull);
+    $subRouter1->expects()->inheritPermissionHandlers([$permissionCallable]);
     $subRouter1->expects()->register();
 
     $subRouter2 = Mockery::mock(Router::class);
     $subRouter2->expects()->inject('test', $returnNull);
+    $subRouter2->expects()->inheritPermissionHandlers([$permissionCallable]);
     $subRouter2->expects()->register();
 
     Helpers::setNonPublicClassProperty($router, 'subRouters', [$subRouter1, $subRouter2]);
@@ -359,6 +368,100 @@ test('Specifying router dependencies multiple times', function (string $firstDep
         ->toBeArray()
         ->toBe([$firstDependency, $secondDependency]);
 })->with([['plugin1', 'plugin2']])->group('router', 'depends');
+
+// permission
+
+test('Specifying router permission callable', function () {
+    $router = new Router('api', 'v1');
+    $permissionCallable = fn () => true;
+    $router->permission($permissionCallable);
+    $permissionHandlers = Helpers::getNonPublicClassProperty($router, 'permissionHandlers');
+    expect($permissionHandlers)
+        ->toHaveCount(1)
+        ->and($permissionHandlers[0])->toBe($permissionCallable);
+})->group('router', 'permission');
+
+test('Prepending router permission callable', function () {
+    $router = new Router('api', 'v1');
+    $permissionCallable = fn () => true;
+    $prependedPermissionCallable = fn () => true;
+    $router->permission($permissionCallable);
+    $router->permission($prependedPermissionCallable, prepend: true);
+    $permissionHandlers = Helpers::getNonPublicClassProperty($router, 'permissionHandlers');
+    expect($permissionHandlers)->toHaveCount(2)
+        ->and($permissionHandlers[0])->toBe($prependedPermissionCallable)
+        ->and($permissionHandlers[1])->toBe($permissionCallable);
+})->group('router', 'permission');
+
+test('Router permission callbacks are inherited by sub-routers before endpoint callbacks', function () {
+    Functions\when('esc_html__')->returnArg();
+    Functions\when('register_rest_route')->justReturn(true);
+
+    $router = new Router('api', 'v1');
+    $parentPermissionCallable = fn () => true;
+    $childPermissionCallable = fn () => true;
+    $endpointPermissionCallable = fn () => true;
+    $router->permission($parentPermissionCallable);
+
+    $subRouter = new Router('sub');
+    $subRouter->permission($childPermissionCallable);
+    $endpoint = $subRouter
+        ->get('test', '__return_true')
+        ->permission($endpointPermissionCallable);
+
+    $router->includeRouter($subRouter);
+    $router->register();
+    $subRouter->registerEndpoints();
+
+    expect(Helpers::getNonPublicClassProperty($subRouter, 'permissionHandlers'))
+        ->toBe([$childPermissionCallable])
+        ->and(Helpers::getNonPublicClassProperty($subRouter, 'inheritedPermissionHandlers'))
+        ->toBe([$parentPermissionCallable])
+        ->and(Helpers::getNonPublicClassProperty($endpoint, 'permissionHandlers'))
+        ->toBe([$endpointPermissionCallable])
+        ->and(Helpers::getNonPublicClassProperty($endpoint, 'inheritedPermissionHandlers'))
+        ->toBe([$parentPermissionCallable, $childPermissionCallable]);
+})->group('router', 'permission');
+
+test('Router permission callbacks are not duplicated when registering endpoints more than once', function () {
+    Functions\when('register_rest_route')->justReturn(true);
+
+    $router = new Router('api', 'v1');
+    $permissionCallable = fn () => true;
+    $endpointPermissionCallable = fn () => true;
+    $endpoint = $router
+        ->get('test', '__return_true')
+        ->permission($endpointPermissionCallable);
+    $router->permission($permissionCallable);
+
+    $router->registerEndpoints();
+    $router->registerEndpoints();
+
+    expect(Helpers::getNonPublicClassProperty($endpoint, 'inheritedPermissionHandlers'))
+        ->toBe([$permissionCallable])
+        ->and(Helpers::getNonPublicClassProperty($endpoint, 'permissionHandlers'))
+        ->toBe([$endpointPermissionCallable]);
+})->group('router', 'permission');
+
+test('Router permissions are only propagated to routers that support them', function () {
+    Actions\expectAdded('rest_api_init')
+        ->with('Wp\FastEndpoints\Router->registerEndpoints()')
+        ->times(1);
+
+    $permissionCallable = fn () => true;
+    $router = new Router('api', 'v1');
+    $router->permission($permissionCallable);
+
+    $subRouter = Mockery::mock(RouterContract::class);
+    $subRouter->shouldReceive('register')->once();
+    $subRouter->shouldReceive('depends')->never();
+    $subRouter->shouldReceive('inject')->never();
+
+    Helpers::setNonPublicClassProperty($router, 'subRouters', [$subRouter]);
+    $router->register();
+
+    expect(true)->toBeTrue();
+})->group('router', 'permission');
 
 // Inject
 

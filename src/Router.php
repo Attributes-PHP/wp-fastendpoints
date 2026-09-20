@@ -17,9 +17,12 @@ use Attributes\Wp\FastEndpoints\Contracts\Http\Router as RouterContract;
 
 use function add_action;
 use function apply_filters;
+use function array_merge;
+use function array_unshift;
 use function do_action;
 use function esc_html__;
 use function has_action;
+use function is_string;
 use function trim;
 use function wp_die;
 
@@ -86,6 +89,20 @@ class Router implements RouterContract
      * @var array<string,callable>
      */
     protected array $injectables = [];
+
+    /**
+     * Set of functions used inside each endpoint permissionCallback.
+     *
+     * @var array<callable>
+     */
+    protected array $permissionHandlers = [];
+
+    /**
+     * Set of inherited parent router permission callbacks.
+     *
+     * @var array<callable>
+     */
+    protected array $inheritedPermissionHandlers = [];
 
     /**
      * Creates a new Router instance
@@ -220,6 +237,11 @@ class Router implements RouterContract
                 $router->inject($name, $callable);
             }
 
+            $permissionHandlers = $this->getPermissionHandlers();
+            if ($permissionHandlers && $router instanceof self) {
+                $router->inheritPermissionHandlers($permissionHandlers);
+            }
+
             $router->register();
         }
 
@@ -262,6 +284,11 @@ class Router implements RouterContract
         foreach ($this->endpoints as $e) {
             if ($this->plugins !== null) {
                 $e->depends($this->plugins);
+            }
+
+            $permissionHandlers = $this->getPermissionHandlers();
+            if ($permissionHandlers && $e instanceof Endpoint) {
+                $e->inheritPermissionHandlers($permissionHandlers);
             }
 
             $e->register($namespace, $restBase);
@@ -369,5 +396,45 @@ class Router implements RouterContract
         $this->plugins = array_merge($this->plugins ?: [], $plugins);
 
         return $this;
+    }
+
+    /**
+     * Registers a permission callback for all endpoints in this router and its sub-routers.
+     *
+     * @param  callable  $permissionCb  Method to be called to check current user permissions.
+     */
+    public function permission(callable $permissionCb, bool $prepend = false): self
+    {
+        if ($prepend) {
+            array_unshift($this->permissionHandlers, $permissionCb);
+        } else {
+            $this->permissionHandlers[] = $permissionCb;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Inherits permission callbacks from a parent router.
+     *
+     * @param  array<callable>  $permissionHandlers
+     *
+     * @internal
+     */
+    public function inheritPermissionHandlers(array $permissionHandlers): self
+    {
+        $this->inheritedPermissionHandlers = $permissionHandlers;
+
+        return $this;
+    }
+
+    /**
+     * Retrieves all permission handlers in the order they should run.
+     *
+     * @return array<callable>
+     */
+    protected function getPermissionHandlers(): array
+    {
+        return array_merge($this->inheritedPermissionHandlers, $this->permissionHandlers);
     }
 }
