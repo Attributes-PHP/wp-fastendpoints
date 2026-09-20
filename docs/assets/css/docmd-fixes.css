@@ -7,6 +7,23 @@
     }
 }
 
+/* docmd 0.9.5 highlights code with lite-hl, a grammar-less tokenizer that
+   wraps every "-" and "/" in bash snippets in hljs-operator spans, so
+   package names and CLI flags render in the theme's operator colour. */
+pre.hljs > code.language-bash .hljs-operator,
+pre.hljs > code.language-sh .hljs-operator,
+pre.hljs > code.language-shell .hljs-operator {
+    color: inherit;
+}
+
+/* The same tokenizer mangles "text" fences, colouring file extensions and
+   "#" lines inside directory trees. Keep plain-text blocks plain. */
+pre.hljs > code.language-text,
+pre.hljs > code.language-text * {
+    color: inherit;
+    font-style: inherit;
+}
+
 /* docmd only ships Lucide icons, which no longer include the GitHub brand
    mark, so it is rendered as a mask here and the link text becomes a
    screen-reader-only label. */
