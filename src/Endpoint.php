@@ -26,6 +26,7 @@ use WP_REST_Response;
 
 use function apply_filters;
 use function array_merge;
+use function array_unshift;
 use function current_user_can;
 use function esc_html__;
 use function is_string;
@@ -90,6 +91,13 @@ class Endpoint implements EndpointInterface
     protected array $permissionHandlers = [];
 
     /**
+     * Set of inherited router permission callbacks.
+     *
+     * @var array<callable>
+     */
+    protected array $inheritedPermissionHandlers = [];
+
+    /**
      * Set of functions used to be called before handling a request e.g. schema validation
      *
      * @var array<callable>
@@ -141,10 +149,11 @@ class Endpoint implements EndpointInterface
      */
     public function register(string $namespace, string $restBase): bool
     {
+        $permissionHandlers = $this->getPermissionHandlers();
         $args = [
             'methods' => $this->method,
             'callback' => [$this, 'callback'],
-            'permission_callback' => $this->permissionHandlers ? [$this, 'permissionCallback'] : '__return_true',
+            'permission_callback' => $permissionHandlers ? [$this, 'permissionCallback'] : '__return_true',
             'depends' => $this->plugins,
         ];
 
@@ -253,9 +262,27 @@ class Endpoint implements EndpointInterface
      *
      * @param  callable  $permissionCb  Method to be called to check current user permissions.
      */
-    public function permission(callable $permissionCb): self
+    public function permission(callable $permissionCb, bool $prepend = false): self
     {
-        $this->permissionHandlers[] = $permissionCb;
+        if ($prepend) {
+            array_unshift($this->permissionHandlers, $permissionCb);
+        } else {
+            $this->permissionHandlers[] = $permissionCb;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Inherits permission callbacks from a router.
+     *
+     * @param  array<callable>  $permissionHandlers
+     *
+     * @internal
+     */
+    public function inheritPermissionHandlers(array $permissionHandlers): self
+    {
+        $this->inheritedPermissionHandlers = $permissionHandlers;
 
         return $this;
     }
@@ -312,7 +339,7 @@ class Endpoint implements EndpointInterface
             'endpoint' => $this,
             'request' => $request,
         ];
-        $result = $this->runHandlers($this->permissionHandlers, $dependencies, isToReturnResult: true, isPermissionCallback: true);
+        $result = $this->runHandlers($this->getPermissionHandlers(), $dependencies, isToReturnResult: true, isPermissionCallback: true);
         if (is_wp_error($result) || $result === false) {
             return $result;
         }
@@ -334,6 +361,16 @@ class Endpoint implements EndpointInterface
         $route .= $this->route;
 
         return apply_filters('fastendpoints_endpoint_route', $route, $this);
+    }
+
+    /**
+     * Retrieves all permission handlers in the order they should run.
+     *
+     * @return array<callable>
+     */
+    protected function getPermissionHandlers(): array
+    {
+        return array_merge($this->inheritedPermissionHandlers, $this->permissionHandlers);
     }
 
     /**

@@ -31,6 +31,17 @@ $router->get('/test', function () {return true;})
     ->permission('__return_true') # Called last if both the first and second were successful
 ```
 
+Permissions can also be attached to a router. Router permission handlers run before endpoint permission handlers,
+and are inherited by sub-routers.
+
+```php
+<?php
+$router->permission('__return_true'); # Called before endpoint permissions
+
+$router->get('/test', function () {return true;})
+    ->hasCap('read');
+```
+
 ## Middlewares
 
 If all the permission handlers are successful the next set of handlers that run are the middlewares which
