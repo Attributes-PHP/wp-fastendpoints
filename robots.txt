@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://wp-fastendpoints.attributes-php.com/sitemap.xml

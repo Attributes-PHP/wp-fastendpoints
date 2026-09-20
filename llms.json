@@ -1,0 +1,96 @@
+{
+  "title": "WP-FastEndpoints",
+  "description": "",
+  "pages": [
+    {
+      "title": "Dependency Injection",
+      "url": "https://wp-fastendpoints.attributes-php.com/advanced-user-guide/dependency-injection/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Injectables",
+      "url": "https://wp-fastendpoints.attributes-php.com/advanced-user-guide/dependency-injection/injectables/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Request payload",
+      "url": "https://wp-fastendpoints.attributes-php.com/advanced-user-guide/dependency-injection/request-payload/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Advanced User Guide",
+      "url": "https://wp-fastendpoints.attributes-php.com/advanced-user-guide/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Middlewares",
+      "url": "https://wp-fastendpoints.attributes-php.com/advanced-user-guide/middlewares/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Treat plugins as dependencies",
+      "url": "https://wp-fastendpoints.attributes-php.com/advanced-user-guide/plugins-as-dependencies/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Request Life Cycle",
+      "url": "https://wp-fastendpoints.attributes-php.com/advanced-user-guide/request-life-cycle/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Responses",
+      "url": "https://wp-fastendpoints.attributes-php.com/advanced-user-guide/responses/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "WP-FastEndpoints",
+      "url": "https://wp-fastendpoints.attributes-php.com/",
+      "description": "",
+      "priority": "high"
+    },
+    {
+      "title": "Quick Start",
+      "url": "https://wp-fastendpoints.attributes-php.com/quick-start/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Router",
+      "url": "https://wp-fastendpoints.attributes-php.com/quick-start/router/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Service Provider",
+      "url": "https://wp-fastendpoints.attributes-php.com/quick-start/service-provider/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Testing",
+      "url": "https://wp-fastendpoints.attributes-php.com/quick-start/tests/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Integration Tests",
+      "url": "https://wp-fastendpoints.attributes-php.com/quick-start/tests/integration/",
+      "description": "",
+      "priority": "medium"
+    },
+    {
+      "title": "Unit Tests",
+      "url": "https://wp-fastendpoints.attributes-php.com/quick-start/tests/unit/",
+      "description": "",
+      "priority": "medium"
+    }
+  ]
+}

@@ -1,0 +1,1073 @@
+<!--
+  ---------------------------------------------------------------
+  docmd : the zero-config documentation engine.
+  @website https://docmd.io
+  [docmd-source] - Please do not remove this header.
+  ---------------------------------------------------------------
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="generator" content="docmd v0.9.5">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <script>
+      var root = "../../";
+      if (root && !root.endsWith('/')) root += '/';
+      if (root === '') root = './';
+      window.DOCMD_ROOT = root;
+
+      window.DOCMD_SITE_ROOT = "/";
+
+      window.DOCMD_APPEARANCE = "system";
+      window.DOCMD_VERSION_ROOT = "/";
+      window.DOCMD_BASE = "/";
+      window.DOCMD_LOCALE = "";
+      window.DOCMD_DEFAULT_LOCALE = "";
+    </script>
+    <script>/**
+ * --------------------------------------------------------------------
+ * docmd : the zero-config documentation engine.
+ *
+ * @package     @docmd/core (and ecosystem)
+ * @website     https://docmd.io
+ * @repository  https://github.com/docmd-io/docmd
+ * @license     MIT
+ * @copyright   Copyright (c) 2025-present docmd.io
+ *
+ * [docmd-source] - Please do not remove this header.
+ * --------------------------------------------------------------------
+ */
+
+(function () {
+  try {
+    // 1. Determine Theme
+    //
+    // Resolve from three sources, in priority order:
+    //   1. localStorage explicit user choice (light / dark)
+    //   2. window.DOCMD_APPEARANCE  (current canonical name, set by EJS templates)
+    //   3. window.DOCMD_DEFAULT_MODE (legacy alias kept for pre-0.8.7 outputs)
+    //   4. 'light' as the final fallback
+    //
+    // Note: localStorage is only honoured when it holds an explicit
+    // 'light' or 'dark' value. A stored 'system' value (from a prior
+    // session where the user picked "follow system") must NOT win over
+    // a freshly resolved config value — the resolved value will itself
+    // be 'system' in that case and the OS preference check below takes
+    // over, so this is a no-op for the in-session behaviour but keeps
+    // any future storage migration simple.
+    var localValue = localStorage.getItem('docmd-theme');
+    var configValue = window.DOCMD_APPEARANCE
+      || window.DOCMD_DEFAULT_MODE
+      || 'light';
+    var theme = (localValue === 'light' || localValue === 'dark')
+      ? localValue
+      : configValue;
+
+    if (theme === 'system') {
+      theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    // 2. Apply to Root
+    document.documentElement.setAttribute('data-theme', theme);
+
+    // 3. Highlight.js Toggle Strategy
+    var lightLink = document.getElementById('hljs-light');
+    var darkLink = document.getElementById('hljs-dark');
+
+    if (lightLink && darkLink) {
+      if (theme === 'dark') {
+        lightLink.disabled = true;
+        darkLink.disabled = false;
+      } else {
+        lightLink.disabled = false;
+        darkLink.disabled = true;
+      }
+    }
+
+    document.documentElement.style.visibility = "visible";
+  } catch (e) {
+    document.documentElement.style.visibility = "visible";
+    console.error('Theme init failed', e);
+  }
+})();</script>
+    <style>
+      html {
+        visibility: hidden;
+      }
+    </style>
+    <title>
+      Service Provider : WP-FastEndpoints
+    </title>
+    
+    
+
+    <link id="site-favicon" rel="icon" href="../../assets/favicon.ico?v=mu9pr66i">
+    <link rel="stylesheet" href="../../assets/css/docmd-main.css?v=mu9pr66i">
+    
+    <link rel="stylesheet" href="../../assets/css/docmd-highlight-light.css?v=mu9pr66i" id="hljs-light" >
+    <link rel="stylesheet" href="../../assets/css/docmd-highlight-dark.css?v=mu9pr66i" id="hljs-dark" disabled>
+    
+    
+<meta name="description" content="FastEndpoints is an elegant way of writing custom WordPress REST endpoints with a focus on readability and IDE auto completion support">
+<link rel="canonical" href="https://wp-fastendpoints.attributes-php.com/quick-start/service-provider/">
+<meta property="og:title" content="Service Provider - WP-FastEndpoints">
+<meta property="og:description" content="FastEndpoints is an elegant way of writing custom WordPress REST endpoints with a focus on readability and IDE auto completion support">
+<meta property="og:url" content="https://wp-fastendpoints.attributes-php.com/quick-start/service-provider/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Service Provider - WP-FastEndpoints">
+<meta name="twitter:description" content="FastEndpoints is an elegant way of writing custom WordPress REST endpoints with a focus on readability and IDE auto completion support">
+
+
+
+<link rel="stylesheet" href="../../assets/css/docmd-git.css?v=mu9pr66i" >
+<link rel="stylesheet" href="../../assets/css/docmd-openapi.css?v=mu9pr66i" >
+
+    
+      <link rel="stylesheet" href="../../assets/css/docmd-fixes.css?v=mu9pr66i">
+    
+    
+  </head>
+  <body
+    class="sidebar-collapsible has-menubar has-menubar-top"
+    data-default-collapsed="false"
+    data-copy-code-enabled="true" data-spa-enabled="true" data-source-file="docs/quick-start/service-provider.md">
+
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    
+    
+
+    
+      
+
+
+
+<div class="docmd-menubar">
+  <div class="menubar-inner">
+    <div class="menubar-left">
+    
+        
+          
+                <a href="https://github.com/Attributes-PHP/wp-fastendpoints" class="menubar-link" >
+                  
+                  <span>
+                    GitHub
+                  </span>
+                  
+                </a>
+              
+        
+    
+      </div>
+      <div class="menubar-right">
+        
+        
+    </div>
+  </div>
+</div>
+    
+    
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          
+<h1><a href="../../">
+                WP-FastEndpoints
+              </a></h1>
+          
+          <span class="mobile-view sidebar-menu-button float-right">
+            
+<svg class="lucide-icon icon-menu " width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-menu"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M4 5h16" />
+  <path d="M4 12h16" />
+  <path d="M4 19h16" />
+</svg>
+
+          </span>
+        </div>
+        <div class="sidebar-top-group">
+          
+          
+          
+          
+        </div>
+        
+
+<nav class="sidebar-nav" aria-label="Main Navigation">
+  <ul>
+    
+      <li class="" >
+      
+        <a href="../../" class=" "
+          >
+          
+          <span class="nav-item-title">
+            WP-FastEndpoints
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="active-parent collapsible expanded nav-group"  aria-expanded="true" >
+      
+        <span class="nav-label nav-group">
+          
+          <span class="nav-item-title">
+            Quick Start
+          </span>
+          
+            <span class="collapse-icon-wrapper">
+<svg class="lucide-icon icon-chevron-right collapse-icon" width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-chevron-right"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="m9 18 6-6-6-6" />
+</svg>
+</span>
+          
+        </span>
+        
+
+        
+          <ul class="submenu">
+            
+      <li class="" >
+      
+        <a href="../../quick-start/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Quick Start
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="" >
+      
+        <a href="../../quick-start/router/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Router
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="active" >
+      
+        <a href="../../quick-start/service-provider/" class="active "
+          >
+          
+          <span class="nav-item-title">
+            Service Provider
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="collapsible nav-group"  aria-expanded="false" >
+      
+        <span class="nav-label nav-group">
+          
+          <span class="nav-item-title">
+            Testing
+          </span>
+          
+            <span class="collapse-icon-wrapper">
+<svg class="lucide-icon icon-chevron-right collapse-icon" width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-chevron-right"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="m9 18 6-6-6-6" />
+</svg>
+</span>
+          
+        </span>
+        
+
+        
+          <ul class="submenu">
+            
+      <li class="" >
+      
+        <a href="../../quick-start/tests/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Testing
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="" >
+      
+        <a href="../../quick-start/tests/unit/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Unit Tests
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="" >
+      
+        <a href="../../quick-start/tests/integration/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Integration Tests
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+          </ul>
+        
+      </li>
+    
+          </ul>
+        
+      </li>
+    
+      <li class="collapsible nav-group"  aria-expanded="false" >
+      
+        <span class="nav-label nav-group">
+          
+          <span class="nav-item-title">
+            Advanced User Guide
+          </span>
+          
+            <span class="collapse-icon-wrapper">
+<svg class="lucide-icon icon-chevron-right collapse-icon" width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-chevron-right"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="m9 18 6-6-6-6" />
+</svg>
+</span>
+          
+        </span>
+        
+
+        
+          <ul class="submenu">
+            
+      <li class="" >
+      
+        <a href="../../advanced-user-guide/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Advanced User Guide
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="" >
+      
+        <a href="../../advanced-user-guide/request-life-cycle/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Request Life Cycle
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="collapsible nav-group"  aria-expanded="false" >
+      
+        <span class="nav-label nav-group">
+          
+          <span class="nav-item-title">
+            Dependency Injection
+          </span>
+          
+            <span class="collapse-icon-wrapper">
+<svg class="lucide-icon icon-chevron-right collapse-icon" width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-chevron-right"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="m9 18 6-6-6-6" />
+</svg>
+</span>
+          
+        </span>
+        
+
+        
+          <ul class="submenu">
+            
+      <li class="" >
+      
+        <a href="../../advanced-user-guide/dependency-injection/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Dependency Injection
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="" >
+      
+        <a href="../../advanced-user-guide/dependency-injection/request-payload/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Request payload
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="" >
+      
+        <a href="../../advanced-user-guide/dependency-injection/injectables/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Injectables
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+          </ul>
+        
+      </li>
+    
+      <li class="" >
+      
+        <a href="../../advanced-user-guide/responses/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Responses
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="" >
+      
+        <a href="../../advanced-user-guide/middlewares/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Middlewares
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+      <li class="" >
+      
+        <a href="../../advanced-user-guide/plugins-as-dependencies/" class=" "
+          >
+          
+          <span class="nav-item-title">
+            Treat plugins as dependencies
+            </span>
+          
+          
+        </a>
+        
+
+        
+      </li>
+    
+          </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+        <div class="sidebar-bottom-group mt-auto">
+          
+          
+          
+          
+        </div>
+      </aside>
+      
+      <div class="main-content-wrapper">
+        
+        
+        
+          <header class="page-header">
+            <div class="header-left">
+              
+                <button id="sidebar-toggle-button" class="sidebar-toggle-button"
+                  aria-label="Toggle Sidebar">
+                  
+<svg class="lucide-icon icon-chevron-left " width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-chevron-left"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="m15 18-6-6 6-6" />
+</svg>
+
+                </button>
+              
+              <div class="header-titles-wrapper">
+                <span class="header-title">
+                  Service Provider
+                </span>
+              </div>
+            </div>
+            <div class="header-right">
+              
+                
+
+
+<div class="docmd-options-menu">
+    
+    <button class="docmd-search-trigger" aria-label="Search">
+        
+<svg class="lucide-icon icon-search " width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-search"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="m21 21-4.34-4.34" />
+  <circle cx="11" cy="11" r="8" />
+</svg>
+
+        <span class="search-label">Search</span>
+        <span class="search-keys"><kbd class="docmd-kbd">⌘</kbd><kbd class="docmd-kbd">K</kbd></span>
+    </button>
+    
+
+    
+
+    
+
+    
+    <button class="theme-toggle-button" aria-label="Toggle theme">
+        
+<svg class="lucide-icon icon-sun icon-sun" width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-sun"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <circle cx="12" cy="12" r="4" />
+  <path d="M12 2v2" />
+  <path d="M12 20v2" />
+  <path d="m4.93 4.93 1.41 1.41" />
+  <path d="m17.66 17.66 1.41 1.41" />
+  <path d="M2 12h2" />
+  <path d="M20 12h2" />
+  <path d="m6.34 17.66-1.41 1.41" />
+  <path d="m19.07 4.93-1.41 1.41" />
+</svg>
+ 
+<svg class="lucide-icon icon-moon icon-moon" width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-moon"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401" />
+</svg>
+
+    </button>
+    
+
+    
+</div>
+
+              
+            </div>
+          </header>
+        
+        <div class="content-theme-cover">
+          <main class="content-area" id="main-content">
+            <div class="content-layout">
+              <div class="main-content">
+                <div class="docmd-breadcrumbs-row">
+                  <div id="docmd-raw-markdown" data-content="---%0Atitle%3A%20%22Service%20Provider%22%0A---%0A%0ANow%20that%20we%20have%20our%20endpoints%20ready%2C%20the%20last%20step%20is%20to%20register%20them.%20You%20can%20register%20a%20router%20individually%20or%0Aby%20grouping%20all%20of%20them%20into%20a%20single%20*main*%20router%20and%20register%20only%20that%20main%20router.%20The%20latter%20is%20what%20we%20are%20going%20to%20do.%20%0A%0A%60%60%60php%20%22Providers%2FApiProvider.php%22%0A%3C%3Fphp%0Adeclare(strict_types%3D1)%3B%0A%0Anamespace%20MyPlugin%5CProviders%3B%0A%0Ause%20Attributes%5CWp%5CFastEndpoints%5CRouter%3B%0A%0Aclass%20ApiProvider%20implements%20ProviderContract%0A%7B%0A%20%20%20%20protected%20Router%20%24appRouter%3B%0A%0A%20%20%20%20public%20function%20register()%3A%20void%0A%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20%24this-%3EappRouter%20%3D%20new%20Router(&#039;my-plugin&#039;%2C%20&#039;v1&#039;)%3B%0A%20%20%20%20%20%20%20%20foreach%20(glob(%5CROUTERS_DIR.&#039;%2F*.php&#039;)%20as%20%24filename)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%24router%20%3D%20require%20%24filename%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%24this-%3EappRouter-%3EincludeRouter(%24router)%3B%20%20%2F*%20(1)%20*%2F%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%24this-%3EappRouter-%3Eregister()%3B%20%2F*%20(2)%20*%2F%0A%20%20%20%20%7D%0A%7D%0A%60%60%60%0A%0A1.%20By%20including%20a%20router%20the%20namespace%20and%20version%20of%20the%20parent%20router%20will%20be%20inherited%20e.g.%20%2Fmy-plugin%2Fv1%2Fposts%2F(%3FP%3CID%3E%5B%5Cd%5D%2B)%0A2.%20Internally%2C%20this%20function%20relies%20on%20the%20%5B*rest_api_init*%5D(https%3A%2F%2Fdeveloper.wordpress.org%2Freference%2Fhooks%2Frest_api_init%2F)%20hook.%0A%0A%23%23%20It&#039;s%20running%0A%0A%F0%9F%8E%89%20Congrats%20you%20just%20created%20your%20first%20set%20of%20WP%20FastEndpoints%0A%0ANow%20let&#039;s%20see%20%5Bhow%20to%20test%20them%5D(https%3A%2F%2Fgithub.com%2FAttributes-PHP%2Fwp-fastendpoints%2Fwiki%2FTesting)!%20%F0%9F%98%84%0A%0AFull%20source%20code%20can%20be%20found%20at%20**%5Battributes-php%2Fwp-fastendpoints-my-plugin%20%C2%BB%5D(https%3A%2F%2Fgithub.com%2FAttributes-PHP%2Fwp-fastendpoints-my-plugin)**" style="display: none;"></div>
+                  
+                    <nav aria-label="breadcrumb" class="docmd-breadcrumbs">
+                      <ol>
+                        
+                        
+                          <li class="breadcrumb-item " >
+                            
+                              <span>Quick Start</span>
+                            
+                            
+                              <span class="breadcrumb-separator">
+<svg class="lucide-icon icon-chevron-right " width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-chevron-right"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="m9 18 6-6-6-6" />
+</svg>
+</span>
+                            
+                          </li>
+                        
+                          <li class="breadcrumb-item active" aria-current=&quot;page&quot;>
+                            
+                              <span>Service Provider</span>
+                            
+                            
+                          </li>
+                        
+                      </ol>
+                    </nav>
+                  
+
+                  
+                    <div class="docmd-copy-widgets">
+                      
+                        <button class="docmd-copy-btn docmd-copy-raw-btn" data-copied="Copied!" title="Copy Markdown" aria-label="Copy Markdown">
+                          <span class="docmd-btn-icon">
+<svg class="lucide-icon icon-copy " width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-copy"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+  <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+</svg>
+</span>
+                        </button>
+                      
+                      
+                        <button class="docmd-copy-btn docmd-copy-context-btn" data-copied="Copied!" title="Copy Context">
+                          <span class="docmd-btn-icon">
+<svg class="lucide-icon icon-message-square " width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-message-square"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z" />
+</svg>
+</span>
+                          <span class="docmd-btn-text">Copy Context</span>
+                        </button>
+                      
+                    </div>
+                  
+                </div>
+                
+                <p>Now that we have our endpoints ready, the last step is to register them. You can register a router individually or<br>
+by grouping all of them into a single <em>main</em> router and register only that main router. The latter is what we are going to do.</p>
+<div class="docmd-code-block-wrapper"><div class="docmd-code-block-header"><span class="docmd-code-block-title">Providers/ApiProvider.php</span></div><pre class="hljs"><code class="language-php"><span class="hljs-operator">&lt;?</span>php
+<span class="hljs-title function_">declare</span>(strict_types<span class="hljs-operator">=</span><span class="hljs-number">1</span>);
+
+<span class="hljs-keyword">namespace</span> MyPlugin\Providers;
+
+<span class="hljs-keyword">use</span> Attributes\Wp\FastEndpoints\Router;
+
+<span class="hljs-keyword">class</span> ApiProvider <span class="hljs-keyword">implements</span> ProviderContract
+{
+    <span class="hljs-keyword">protected</span> Router <span class="hljs-variable">$appRouter</span>;
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">register</span>()<span class="hljs-operator">:</span> <span class="hljs-keyword">void</span>
+    {
+        <span class="hljs-variable">$this</span><span class="hljs-operator">-&gt;</span>appRouter <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title function_">Router</span>(<span class="hljs-string">&#039;my-plugin&#039;</span>, <span class="hljs-string">&#039;v1&#039;</span>);
+        <span class="hljs-title function_">foreach</span> (<span class="hljs-title function_">glob</span>(\ROUTERS_DIR.<span class="hljs-string">&#039;/*.php&#039;</span>) <span class="hljs-keyword">as</span> <span class="hljs-variable">$filename</span>) {
+            <span class="hljs-variable">$router</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">require</span> <span class="hljs-variable">$filename</span>;
+            <span class="hljs-variable">$this</span><span class="hljs-operator">-&gt;</span>appRouter<span class="hljs-operator">-&gt;</span><span class="hljs-title function_">includeRouter</span>(<span class="hljs-variable">$router</span>);  <span class="hljs-comment">/* (1) */</span>
+        }
+        <span class="hljs-variable">$this</span><span class="hljs-operator">-&gt;</span>appRouter<span class="hljs-operator">-&gt;</span><span class="hljs-title function_">register</span>(); <span class="hljs-comment">/* (2) */</span>
+    }
+}
+</code></pre>
+</div><ol>
+<li>By including a router the namespace and version of the parent router will be inherited e.g. /my-plugin/v1/posts/(?P<ID>[\d]+)</li>
+<li>Internally, this function relies on the <a href="https://developer.wordpress.org/reference/hooks/rest_api_init/"><em>rest_api_init</em></a> hook.</li>
+</ol>
+<h2 id="its-running" class="docmd-heading"><a href="#its-running" class="heading-anchor" aria-label="Permalink to this section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2-icon lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2m6 0h2a5 5 0 1 1 0 10h-2m-7-5h8"/></svg></a>It’s running</h2>
+<p>🎉 Congrats you just created your first set of WP FastEndpoints</p>
+<p>Now let’s see <a href="https://github.com/Attributes-PHP/wp-fastendpoints/wiki/Testing">how to test them</a>! 😄</p>
+<p>Full source code can be found at <strong><a href="https://github.com/Attributes-PHP/wp-fastendpoints-my-plugin">attributes-php/wp-fastendpoints-my-plugin »</a></strong></p>
+
+                
+                  <div class="page-navigation">
+                    
+                      <a href="../../quick-start/router/" class="prev-page">
+                        
+<svg class="lucide-icon icon-arrow-left page-nav-icon" width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-arrow-left"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="m12 19-7-7 7-7" />
+  <path d="M19 12H5" />
+</svg>
+
+                        <span><small>Previous</small><strong>
+                            Router
+                          </strong></span>
+                      </a>
+                    
+                    
+                      <a href="../../quick-start/tests/" class="next-page">
+                        <span><small>Next</small>
+                          <strong>
+                            Testing
+                          </strong></span>
+                        
+<svg class="lucide-icon icon-arrow-right page-nav-icon" width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-arrow-right"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M5 12h14" />
+  <path d="m12 5 7 7-7 7" />
+</svg>
+
+                      </a>
+                    
+                  </div>
+                
+              </div>
+              
+              <div class="toc-sidebar">
+                
+
+
+              </div>
+              
+            </div>
+            <div class="page-footer-actions">
+              
+              
+                <span class="git-last-updated" data-timestamp="1789902513000">
+                  <svg class="git-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <span class="git-label">Last updated:</span>
+                  <span class="git-time" data-timestamp="1789902513000"></span>
+                  
+                  <div class="git-commit-tooltip" role="tooltip">
+                    <div class="git-tooltip-title">Recent commits</div>
+                    <ul class="git-commit-list">
+                      
+                        <li class="git-commit-item">
+                          <div class="git-commit-avatar" title="André Gil">
+                            
+                              <img src="https://www.gravatar.com/avatar/212befc52c10efa1375e802e98bea7aa?d=mp&amp;s=64" alt="André Gil">
+                            
+                          </div>
+                          <div class="git-commit-details">
+                            <div class="git-commit-message" title="fix(docs): Neutralise bogus operator highlighting in bash/text code blocks (#22)">fix(docs): Neutralise bogus operator ...</div>
+                            <div class="git-commit-meta">
+                              <span class="git-commit-author">André Gil</span>
+                              <span class="git-commit-date" data-timestamp="1789902513000"></span>
+                            </div>
+                          </div>
+                        </li>
+                      
+                    </ul>
+                  </div>
+                  
+                </span>
+              
+              <span class="git-spacer"></span>
+              
+                <a href="https://github.com/Attributes-PHP/wp-fastendpoints/edit/main/docs/docs/quick-start/service-provider.md" target="_blank" rel="noopener noreferrer" class="edit-link">
+                  
+<svg class="lucide-icon icon-pencil " width="1em" height="1em" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+  class="lucide lucide-pencil"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
+  <path d="m15 5 4 4" />
+</svg>
+
+                  Edit this page
+                </a>
+              
+            </div>
+          </main>
+          
+
+
+<footer class="page-footer">
+  <div class="footer-content">
+    <div class="user-footer">WP-FastEndpoints is open-sourced software licensed under the MIT license</div>
+    
+      <div class="branding-footer">
+        Built with <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path><path d="M12 5 9.04 7.96a2.17 2.17 0 0 0 0 3.08c.82.82 2.13.85 3 .07l2.07-1.9a2.82 2.82 0 0 1 3.79 0l2.96 2.66"></path><path d="m18 15-2-2"></path><path d="m15 18-2-2"></path></svg> <a href="https://docmd.io" target="_blank" rel="noopener">docmd.</a>
+      </div>
+    
+  </div>
+</footer>
+
+        </div>
+      </div>
+      
+      <script src="../../assets/js/docmd-main.js?v=mu9pr66i"></script>
+      
+      <script src="../../assets/js/docmd-git.js?v=mu9pr66i"></script>
+      <script src="../../assets/js/docmd-image-lightbox.js?v=mu9pr66i" ></script>
+<script src="../../assets/js/vendor/minisearch.js?v=mu9pr66i" ></script>
+<script src="../../assets/js/docmd-search.js?v=mu9pr66i" ></script>
+<script src="../../assets/js/docmd-git.js?v=mu9pr66i" ></script>
+
+  <!-- Search Modal (Injected by @docmd/plugin-search) -->
+  <div id="docmd-search-modal" class="docmd-search-modal" style="display: none;" data-show-confidence="false" data-show-filters="true"
+       data-search-placeholder="Search documentation..."
+       data-search-no-results="No results found."
+       data-search-error="Failed to load search index."
+       data-search-offline="Search requires a web server. Open this site via http://localhost instead of file:// to enable search."
+       data-search-offline-build="Search is disabled because these docs were built with the --offline flag. Rebuild the site without the flag to enable search."
+       data-search-initial="Type to start searching..."
+       data-search-navigate="to navigate"
+       data-search-escape="to close">
+      <div class="docmd-search-box">
+          <div class="docmd-search-header">
+              <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon icon-search"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+              <input type="text" id="docmd-search-input" placeholder="Search documentation..." autocomplete="off" spellcheck="false">
+              <button onclick="window.closeDocmdSearch()" class="docmd-search-close" aria-label="Close search">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon icon-x"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+              </button>
+          </div>
+          <div id="docmd-search-results" class="docmd-search-results"></div>
+          <div class="docmd-search-footer">
+              <span><kbd class="docmd-kbd">↑</kbd> <kbd class="docmd-kbd">↓</kbd> to navigate</span>
+              <span><kbd class="docmd-kbd">ESC</kbd> to close</span>
+          </div>
+      </div>
+  </div>
+
+    <script>
+      (function() {
+        var searchDebounceTimer;
+
+        document.addEventListener('click', function(e) {
+          var link = e.target.closest('a');
+          if (!link || !window.gtag) return;
+          
+          var url = link.href;
+          var hostname = window.location.hostname;
+          var isExternal = link.hostname && link.hostname !== hostname;
+          var isDownload = link.hasAttribute('download') || url.match(/\.(pdf|zip|tar|gz|exe|pkg)$/i);
+          
+          if (isExternal) {
+            gtag('event', 'click_external', { 'url': url, 'link_text': link.innerText.trim() });
+          } else if (isDownload) {
+            gtag('event', 'download', { 'file_name': url.split('/').pop(), 'url': url });
+          }
+
+          // TOC tracking
+          if (link.classList.contains('toc-link')) {
+            gtag('event', 'toc_click', { 'target_id': link.getAttribute('href'), 'title': link.innerText.trim() });
+          }
+
+          // Permalink tracking
+          if (link.classList.contains('heading-anchor')) {
+            gtag('event', 'permalink_click', { 'url': url });
+          }
+        });
+
+        
+        // Search Keyword Tracking
+        document.addEventListener('input', function(e) {
+          if (e.target.id === 'docmd-search-input' && window.gtag) {
+            var query = e.target.value.trim();
+            if (query.length < 3) return;
+            
+            clearTimeout(searchDebounceTimer);
+            searchDebounceTimer = setTimeout(function() {
+              gtag('event', 'search', { 'search_term': query });
+            }, 1000);
+          }
+        });
+        
+      })();
+    </script>
+
+<script>window.__git_config={"repo":"https://github.com/Attributes-PHP/wp-fastendpoints","branch":"main","editLink":true,"lastUpdated":true,"commitHistory":true,"maxCommits":5,"dateFormat":"relative"};window.__git_i18n={"lastUpdated":"Last updated","recentCommits":"Recent commits","viewCommitHistory":"View commit history","editOnGitHub":"Edit on GitHub","editOnGitLab":"Edit on GitLab","editOnBitbucket":"Edit on Bitbucket","editThisPage":"Edit this page","justNow":"just now","minutesAgo":"{n}m ago","hoursAgo":"{n}h ago","daysAgo":"{n}d ago"}</script>
+      
+      
+      
+  </body>
+</html>

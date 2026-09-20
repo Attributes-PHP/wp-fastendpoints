@@ -1,0 +1,136 @@
+okf_version: 0.9.5
+bundle:
+  name: wp-fastendpoints
+  title: WP-FastEndpoints
+  description: ""
+  url: "https://wp-fastendpoints.attributes-php.com"
+  generated_by: "@docmd/plugin-okf"
+  generated_at: "2026-09-20T11:08:54.696Z"
+  default_type: concept
+stats:
+  concepts: 15
+  by_type:
+    concept: 15
+  locales: 
+  versions: 
+concepts:
+  - id: advanced-user-guide-dependency-injection
+    type: concept
+    title: "Dependency Injection"
+    path: /advanced-user-guide/dependency-injection/
+    file: concepts/advanced-user-guide-dependency-injection.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: advanced-user-guide-dependency-injection-injectables
+    type: concept
+    title: Injectables
+    path: /advanced-user-guide/dependency-injection/injectables/
+    file: concepts/advanced-user-guide-dependency-injection-injectables.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: advanced-user-guide-dependency-injection-request-payload
+    type: concept
+    title: "Request payload"
+    path: /advanced-user-guide/dependency-injection/request-payload/
+    file: concepts/advanced-user-guide-dependency-injection-request-payload.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: advanced-user-guide
+    type: concept
+    title: "Advanced User Guide"
+    path: /advanced-user-guide/
+    file: concepts/advanced-user-guide.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: advanced-user-guide-middlewares
+    type: concept
+    title: Middlewares
+    path: /advanced-user-guide/middlewares/
+    file: concepts/advanced-user-guide-middlewares.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: advanced-user-guide-plugins-as-dependencies
+    type: concept
+    title: "Treat plugins as dependencies"
+    path: /advanced-user-guide/plugins-as-dependencies/
+    file: concepts/advanced-user-guide-plugins-as-dependencies.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: advanced-user-guide-request-life-cycle
+    type: concept
+    title: "Request Life Cycle"
+    path: /advanced-user-guide/request-life-cycle/
+    file: concepts/advanced-user-guide-request-life-cycle.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: advanced-user-guide-responses
+    type: concept
+    title: Responses
+    path: /advanced-user-guide/responses/
+    file: concepts/advanced-user-guide-responses.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: root
+    type: concept
+    title: WP-FastEndpoints
+    path: /
+    file: concepts/root.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: quick-start
+    type: concept
+    title: "Quick Start"
+    path: /quick-start/
+    file: concepts/quick-start.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: quick-start-router
+    type: concept
+    title: Router
+    path: /quick-start/router/
+    file: concepts/quick-start-router.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: quick-start-service-provider
+    type: concept
+    title: "Service Provider"
+    path: /quick-start/service-provider/
+    file: concepts/quick-start-service-provider.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: quick-start-tests
+    type: concept
+    title: Testing
+    path: /quick-start/tests/
+    file: concepts/quick-start-tests.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: quick-start-tests-integration
+    type: concept
+    title: "Integration Tests"
+    path: /quick-start/tests/integration/
+    file: concepts/quick-start-tests-integration.md
+    locale: ""
+    version: ""
+    tags: 
+  - id: quick-start-tests-unit
+    type: concept
+    title: "Unit Tests"
+    path: /quick-start/tests/unit/
+    file: concepts/quick-start-tests-unit.md
+    locale: ""
+    version: ""
+    tags: 
