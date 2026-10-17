@@ -26,7 +26,6 @@ use WP_REST_Response;
 
 use function apply_filters;
 use function array_merge;
-use function array_unshift;
 use function current_user_can;
 use function esc_html__;
 use function is_string;
@@ -262,13 +261,9 @@ class Endpoint implements EndpointInterface
      *
      * @param  callable  $permissionCb  Method to be called to check current user permissions.
      */
-    public function permission(callable $permissionCb, bool $prepend = false): self
+    public function permission(callable $permissionCb): self
     {
-        if ($prepend) {
-            array_unshift($this->permissionHandlers, $permissionCb);
-        } else {
-            $this->permissionHandlers[] = $permissionCb;
-        }
+        $this->permissionHandlers[] = $permissionCb;
 
         return $this;
     }
@@ -280,7 +275,7 @@ class Endpoint implements EndpointInterface
      *
      * @internal
      */
-    public function inheritPermissionHandlers(array $permissionHandlers): self
+    public function setInheritPermissionHandlers(array $permissionHandlers): self
     {
         $this->inheritedPermissionHandlers = $permissionHandlers;
 

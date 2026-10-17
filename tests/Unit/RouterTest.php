@@ -163,13 +163,13 @@ test('Register endpoints', function () {
     $permissionCallable = fn () => true;
     $endpointMock1 = Mockery::mock(Endpoint::class);
     $endpointMock1->expects()->depends(['router-plugin']);
-    $endpointMock1->expects()->inheritPermissionHandlers([$permissionCallable]);
+    $endpointMock1->expects()->setInheritPermissionHandlers([$permissionCallable]);
     $endpointMock1->expects()->register('custom-api/v3', '');
     $endpointMock1->expects()->getInvoker()->andReturn($invoker);
 
     $endpointMock2 = Mockery::mock(Endpoint::class);
     $endpointMock2->expects()->depends(['router-plugin']);
-    $endpointMock2->expects()->inheritPermissionHandlers([$permissionCallable]);
+    $endpointMock2->expects()->setInheritPermissionHandlers([$permissionCallable]);
     $endpointMock2->expects()->register('custom-api/v3', '');
     $endpointMock2->expects()->getInvoker()->andReturn($invoker);
 
@@ -274,12 +274,12 @@ test('Register router with sub-routers mocks', function () {
 
     $subRouter1 = Mockery::mock(Router::class);
     $subRouter1->expects()->inject('test', $returnNull);
-    $subRouter1->expects()->inheritPermissionHandlers([$permissionCallable]);
+    $subRouter1->expects()->setInheritPermissionHandlers([$permissionCallable]);
     $subRouter1->expects()->register();
 
     $subRouter2 = Mockery::mock(Router::class);
     $subRouter2->expects()->inject('test', $returnNull);
-    $subRouter2->expects()->inheritPermissionHandlers([$permissionCallable]);
+    $subRouter2->expects()->setInheritPermissionHandlers([$permissionCallable]);
     $subRouter2->expects()->register();
 
     Helpers::setNonPublicClassProperty($router, 'subRouters', [$subRouter1, $subRouter2]);
@@ -381,16 +381,16 @@ test('Specifying router permission callable', function () {
         ->and($permissionHandlers[0])->toBe($permissionCallable);
 })->group('router', 'permission');
 
-test('Prepending router permission callable', function () {
+test('Router permission callbacks preserve registration order', function () {
     $router = new Router('api', 'v1');
     $permissionCallable = fn () => true;
-    $prependedPermissionCallable = fn () => true;
+    $secondPermissionCallable = fn () => true;
     $router->permission($permissionCallable);
-    $router->permission($prependedPermissionCallable, prepend: true);
+    $router->permission($secondPermissionCallable);
     $permissionHandlers = Helpers::getNonPublicClassProperty($router, 'permissionHandlers');
     expect($permissionHandlers)->toHaveCount(2)
-        ->and($permissionHandlers[0])->toBe($prependedPermissionCallable)
-        ->and($permissionHandlers[1])->toBe($permissionCallable);
+        ->and($permissionHandlers[0])->toBe($permissionCallable)
+        ->and($permissionHandlers[1])->toBe($secondPermissionCallable);
 })->group('router', 'permission');
 
 test('Router permission callbacks are inherited by sub-routers before endpoint callbacks', function () {
@@ -443,7 +443,7 @@ test('Router permission callbacks are not duplicated when registering endpoints 
         ->toBe([$endpointPermissionCallable]);
 })->group('router', 'permission');
 
-test('Router permissions are only propagated to routers that support them', function () {
+test('Router permissions are propagated through the router contract', function () {
     Actions\expectAdded('rest_api_init')
         ->with('Wp\FastEndpoints\Router->registerEndpoints()')
         ->times(1);
@@ -453,6 +453,7 @@ test('Router permissions are only propagated to routers that support them', func
     $router->permission($permissionCallable);
 
     $subRouter = Mockery::mock(RouterContract::class);
+    $subRouter->expects()->setInheritPermissionHandlers([$permissionCallable]);
     $subRouter->shouldReceive('register')->once();
     $subRouter->shouldReceive('depends')->never();
     $subRouter->shouldReceive('inject')->never();

@@ -328,16 +328,16 @@ test('Adding permission callable', function () {
         ->and($permissionHandlers[0])->toBe($permissionCallable);
 })->group('endpoint', 'permission');
 
-test('Prepending permission callable', function () {
+test('Endpoint permission callbacks preserve registration order', function () {
     $permissionCallable = fn () => true;
-    $prependedPermissionCallable = fn () => true;
+    $secondPermissionCallable = fn () => true;
     $endpoint = new Endpoint('GET', '/my-endpoint', '__return_false', ['my-custom-arg' => true], false);
     $endpoint->permission($permissionCallable);
-    $endpoint->permission($prependedPermissionCallable, prepend: true);
+    $endpoint->permission($secondPermissionCallable);
     $permissionHandlers = Helpers::getNonPublicClassProperty($endpoint, 'permissionHandlers');
     expect($permissionHandlers)->toHaveCount(2)
-        ->and($permissionHandlers[0])->toBe($prependedPermissionCallable)
-        ->and($permissionHandlers[1])->toBe($permissionCallable);
+        ->and($permissionHandlers[0])->toBe($permissionCallable)
+        ->and($permissionHandlers[1])->toBe($secondPermissionCallable);
 })->group('endpoint', 'permission');
 
 // permissionCallback
