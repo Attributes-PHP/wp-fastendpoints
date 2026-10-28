@@ -12,7 +12,7 @@
         "php": "^8.1",
         "attributes-php/validation": "^0.9",
         "php-di/invoker": "^2.0",
-        "attributes-php/wp-fastendpoints-contracts": "^3.0",
+        "attributes-php/wp-fastendpoints-contracts": "^3.1",
         "attributes-php/serialization": "^0.3"
     },
     "suggest": {

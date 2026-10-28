@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "04d69db7df859c06e0d9a1bd57589f79",
+    "content-hash": "040c90183a6e30420ad3c088679d632f",
     "packages": [
         {
             "name": "attributes-php/options",
@@ -142,16 +142,16 @@
         },
         {
             "name": "attributes-php/wp-fastendpoints-contracts",
-            "version": "v3.0.0",
+            "version": "v3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Attributes-PHP/wp-fastendpoints-contracts.git",
-                "reference": "6d56a549d7817fd99eb2dd1cba2f50252b2ae1df"
+                "reference": "a4326e8db6504593ecd396e4ebf2021f043aff43"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Attributes-PHP/wp-fastendpoints-contracts/zipball/6d56a549d7817fd99eb2dd1cba2f50252b2ae1df",
-                "reference": "6d56a549d7817fd99eb2dd1cba2f50252b2ae1df",
+                "url": "https://api.github.com/repos/Attributes-PHP/wp-fastendpoints-contracts/zipball/a4326e8db6504593ecd396e4ebf2021f043aff43",
+                "reference": "a4326e8db6504593ecd396e4ebf2021f043aff43",
                 "shasum": ""
             },
             "require": {
@@ -178,9 +178,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Attributes-PHP/wp-fastendpoints-contracts/issues",
-                "source": "https://github.com/Attributes-PHP/wp-fastendpoints-contracts/tree/v3.0.0"
+                "source": "https://github.com/Attributes-PHP/wp-fastendpoints-contracts/tree/v3.1.0"
             },
-            "time": "2025-11-16T20:38:50+00:00"
+            "time": "2026-10-28T15:05:52+00:00"
         },
         {
             "name": "php-di/invoker",
@@ -9353,5 +9353,5 @@
         "php": "^8.1"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
