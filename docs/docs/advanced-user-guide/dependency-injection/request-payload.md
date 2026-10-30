@@ -11,37 +11,31 @@ By default, when you rely on built-in PHP types, DateTime, DateTimeInterface or 
 WP-FastEndpoints will look for the data in the url or in the query parameters, in this order. However, if desired this
 behaviour can be changed via *#[Attributes]*.
 
-::: tabs
 
-::: tab "Looks-up for URL or query parameter"
+=== "Looks-up for URL or query parameter"
 
-```php
-<?php
-$router->get('/posts', function (int $ID) {
-    // Your logic
-});
-```
+    ```php
+    <?php
+    $router->get('/posts', function (int $ID) {
+        // Your logic
+    });
+    ```
 
-::: /tab
 
-:::
 
-::: tabs
 
-::: tab "Looks-up for a header"
+=== "Looks-up for a header"
 
-```php
-<?php
-use Attributes\Wp\FastEndpoints\Options\Header;
+    ```php
+    <?php
+    use Attributes\Wp\FastEndpoints\Options\Header;
 
-$router->get('/user', function (#[Header('Authorization')] string $token) {
-    // Your logic
-});
-```
+    $router->get('/user', function (#[Header('Authorization')] string $token) {
+        // Your logic
+    });
+    ```
 
-::: /tab
 
-:::
 
 The following is a list of all those type-hints:
 
@@ -70,38 +64,32 @@ class HelloWorld {
 }
 ```
 
-::: tabs
 
-::: tab "Looks-up for JSON or body parameters"
+=== "Looks-up for JSON or body parameters"
 
-```php
-<?php
-$router->post('/hello', function (HelloWorld $hello) {
-    // Your logic
-});
-```
+    ```php
+    <?php
+    $router->post('/hello', function (HelloWorld $hello) {
+        // Your logic
+    });
+    ```
 
-::: /tab
 
-:::
 
-::: tabs
 
-::: tab "Looks-up for URL or query parameters"
+=== "Looks-up for URL or query parameters"
 
-```php
-<?php
-use Attributes\Wp\FastEndpoints\Options\Url;    
-use Attributes\Wp\FastEndpoints\Options\Query;
+    ```php
+    <?php
+    use Attributes\Wp\FastEndpoints\Options\Url;    
+    use Attributes\Wp\FastEndpoints\Options\Query;
 
-$router->post('/hello', function (#[Url, Query] HelloWorld $hello) {
-    // Your logic
-});
-```
+    $router->post('/hello', function (#[Url, Query] HelloWorld $hello) {
+        // Your logic
+    });
+    ```
 
-::: /tab
 
-:::
 
 #### How to type-hint arrays?
 
@@ -125,13 +113,12 @@ $router->get('/say-hello', function (HelloArr $allHellos) {
 });
 ```
 
-::: callout tip
-[attributes-php/validation](https://packagist.org/packages/Attributes-PHP/validation) provides some typed-arrays,
-like: 1) [*BoolArr*](https://github.com/Attributes-PHP/validation/blob/main/src/Types/BoolArr.php),
-2) [*IntArr*](https://github.com/Attributes-PHP/validation/blob/main/src/Types/IntArr.php),
-3) [*StrArr*](https://github.com/Attributes-PHP/validation/blob/main/src/Types/StrArr.php) and
-[others](https://github.com/Attributes-PHP/validation/tree/main/src/Types).
-:::
+!!! tip
+    [attributes-php/validation](https://packagist.org/packages/Attributes-PHP/validation) provides some typed-arrays,
+    like: 1) [*BoolArr*](https://github.com/Attributes-PHP/validation/blob/main/src/Types/BoolArr.php),
+    2) [*IntArr*](https://github.com/Attributes-PHP/validation/blob/main/src/Types/IntArr.php),
+    3) [*StrArr*](https://github.com/Attributes-PHP/validation/blob/main/src/Types/StrArr.php) and
+    [others](https://github.com/Attributes-PHP/validation/tree/main/src/Types).
 
 ### Special classes
 
@@ -146,82 +133,67 @@ there are three special classes which don't follow this pattern:
 - [*Endpoint*](https://github.com/Attributes-PHP/wp-fastendpoints/blob/main/src/Endpoint.php#L44) - The current endpoint
   instance. You shouldn't ever need this one.
 
-::: tabs
 
-::: tab "Get current request"
+=== "Get current request"
 
-```php
-<?php
-$router->get('/request', function (WP_REST_Request $request) {
-    return $request->get_params();
-});
-```
+    ```php
+    <?php
+    $router->get('/request', function (WP_REST_Request $request) {
+        return $request->get_params();
+    });
+    ```
 
-::: /tab
 
-:::
 
-::: tabs
 
-::: tab "Change HTTP status code of a response"
+=== "Change HTTP status code of a response"
 
-```php
-<?php
-$router->get('/response/204', function (WP_REST_Response $response) {
-    $response->set_status(204);
-});
-```
+    ```php
+    <?php
+    $router->get('/response/204', function (WP_REST_Response $response) {
+        $response->set_status(204);
+    });
+    ```
 
-::: /tab
 
-:::
 
 ### Required vs optional properties
 
 Until now, we have seen most how to specify required properties from a request payload. In case your property is optional
 you can rely on default values for that, like the following.
 
-::: tabs
 
-::: tab "Required property"
+=== "Required property"
 
-```php
-<?php
-$router->get('/required', function (int $id) {
-    return $id;
-});
-```
+    ```php
+    <?php
+    $router->get('/required', function (int $id) {
+        return $id;
+    });
+    ```
 
-::: /tab
 
-:::
 
-::: tabs
 
-::: tab "Optional property"
+=== "Optional property"
 
-```php
-<?php
-$router->get('/optional', function (int $id = 0) {
-    return $id;
-});
-```
+    ```php
+    <?php
+    $router->get('/optional', function (int $id = 0) {
+        return $id;
+    });
+    ```
 
-::: /tab
 
-:::
 
-::: tabs
 
-::: tab "Optional payload"
+=== "Optional payload"
 
-```php
-<?php
-$router->get('/payload/optional', function (?HelloWorld $hello = null) {
-    return $hello ? $hello->name : "No payload";
-});
-```
+    ```php
+    <?php
+    $router->get('/payload/optional', function (?HelloWorld $hello = null) {
+        return $hello ? $hello->name : "No payload";
+    });
+    ```
 
-::: /tab
 
-:::

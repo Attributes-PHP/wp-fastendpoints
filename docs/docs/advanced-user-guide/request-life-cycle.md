@@ -16,10 +16,9 @@ by WordPress via [*`permission_callback`*](https://developer.wordpress.org/rest-
 
 In contrast to WordPress, you can have one or multiple permission handlers attached to the same endpoint.
 
-::: collapsible open "Note"
-In the background all permission handlers are wrapped into one callable which is later on used as the
-`permission_callback` by the endpoint
-:::
+???+ note "Note"
+    In the background all permission handlers are wrapped into one callable which is later on used as the
+    `permission_callback` by the endpoint
 
 These handlers will then be called in the same order as they were attached. For instance:
 
@@ -50,12 +49,11 @@ implement the `onRequest` function.
 Remember that a middleware can implement `onRequest` and/or `onResponse` functions. The first one, runs before
 the main endpoint handler and the later one runs after the main endpoint handler.
 
-::: callout warning
-Please bear in mind that if either a [WP_Error](https://developer.wordpress.org/reference/classes/wp_error/) or
-a [WP_REST_Response](https://developer.wordpress.org/reference/classes/wp_rest_response/) is returned by
-the main endpoint handler following middlewares will not run. See
-[Responses page](/advanced-user-guide/responses) for more info.
-:::
+!!! warning
+    Please bear in mind that if either a [WP_Error](https://developer.wordpress.org/reference/classes/wp_error/) or
+    a [WP_REST_Response](https://developer.wordpress.org/reference/classes/wp_rest_response/) is returned by
+    the main endpoint handler following middlewares will not run. See
+    [Responses page](/advanced-user-guide/responses) for more info.
 
 ### onRequest
 

@@ -19,63 +19,55 @@ $router->get('/posts/(?P<ID>[\d]+)', function (int $ID) {
 
 To avoid those scenarios we can either return a WP_Error or a WP_REST_Response.
 
-::: tabs
 
-::: tab "WP_REST_Response"
+=== "WP_REST_Response"
 
-```php
-<?php
-$router->get('/posts/(?P<ID>[\d]+)', function (int $ID) {
-    $post = get_post($ID);
-    return $post ?: new WP_REST_Response("No posts found", 404);
-})
-->returns(Post::class);  // This will not be triggered if no posts are found
-```
+    ```php
+    <?php
+    $router->get('/posts/(?P<ID>[\d]+)', function (int $ID) {
+        $post = get_post($ID);
+        return $post ?: new WP_REST_Response("No posts found", 404);
+    })
+    ->returns(Post::class);  // This will not be triggered if no posts are found
+    ```
 
-::: /tab
 
-::: tab "WP_Error"
+=== "WP_Error"
 
-```php
-<?php
-$router->get('/posts/(?P<ID>[\d]+)', function (int $ID) {
-    $post = get_post($ID);
-    return $post ?: new WpError(404, "No posts found");
-})
-->returns(Post::class);  // This will not be triggered if no posts are found
-```
+    ```php
+    <?php
+    $router->get('/posts/(?P<ID>[\d]+)', function (int $ID) {
+        $post = get_post($ID);
+        return $post ?: new WpError(404, "No posts found");
+    })
+    ->returns(Post::class);  // This will not be triggered if no posts are found
+    ```
 
-::: /tab
 
-:::
 
 ### Difference between returning WP_REST_Response or WP_Error
 
 The main difference between returning a WP_Error or a WP_REST_Response
 is regarding the JSON returned in the body.
 
-::: tabs
 
-::: tab "WP_REST_Response"
+=== "WP_REST_Response"
 
-```json
-"No posts found"
-```
+    ```json
+    "No posts found"
+    ```
 
-::: /tab
 
-::: tab "WP_Error"
+=== "WP_Error"
 
-```json
-{
-    "error": 404,
-    "message": "No posts found",
-    "data": {
-        "status": 404
+    ```json
+    {
+        "error": 404,
+        "message": "No posts found",
+        "data": {
+            "status": 404
+        }
     }
-}
-```
+    ```
 
-::: /tab
 
-:::
