@@ -66,7 +66,7 @@ test('Retrieving a post by id', function () {
     $postId = $this::factory()->post->create(['post_author' => $userId, 'post_title' => 'My title']);
     wp_set_current_user($userId);
     $response = $this->server->dispatch(
-        new \WP_REST_Request('GET', "/my-posts/v1/{$postId}")
+        new WP_REST_Request('GET', "/my-posts/v1/{$postId}")
     );
     expect($response->get_status())
         ->toBe(200)
@@ -84,7 +84,7 @@ test('Retrieving a post by id', function () {
 test('Trying to retrieve a post without permissions', function () {
     $postId = $this::factory()->post->create();
     $response = $this->server->dispatch(
-        new \WP_REST_Request('GET', "/my-posts/v1/{$postId}")
+        new WP_REST_Request('GET', "/my-posts/v1/{$postId}")
     );
     $data = (object) $response->get_data();
     expect($response->get_status())->toBe(403)
@@ -127,7 +127,7 @@ test('Trying to update a post without permissions', function () {
     $firstUser->add_cap('edit_published_posts');
     $postId = $this::factory()->post->create(['post_author' => $allUserIds[1]]);
     wp_set_current_user($allUserIds[1]);
-    $request = new \WP_REST_Request('PUT', "/my-posts/v1/{$postId}");
+    $request = new WP_REST_Request('PUT', "/my-posts/v1/{$postId}");
     $response = $this->server->dispatch($request);
     expect($response->get_status())->toBe(403);
     $data = (object) $response->get_data();
@@ -143,7 +143,7 @@ test('Deleting a post', function () {
     $user->add_cap('delete_published_posts');
     $postId = $this::factory()->post->create(['post_author' => $userId]);
     wp_set_current_user($userId);
-    $request = new \WP_REST_Request('DELETE', "/my-posts/v1/{$postId}");
+    $request = new WP_REST_Request('DELETE', "/my-posts/v1/{$postId}");
     $response = $this->server->dispatch($request);
     expect($response->get_status())->toBe(200);
     $data = $response->get_data();
@@ -156,7 +156,7 @@ test('Trying to delete a post without permissions', function () {
     $user->add_cap('delete_published_posts');
     $postId = $this::factory()->post->create(['post_author' => $allUserIds[1]]);
     wp_set_current_user($allUserIds[0]);
-    $request = new \WP_REST_Request('DELETE', "/my-posts/v1/{$postId}");
+    $request = new WP_REST_Request('DELETE', "/my-posts/v1/{$postId}");
     $response = $this->server->dispatch($request);
     expect($response->get_status())->toBe(403);
     $data = (object) $response->get_data();

@@ -206,7 +206,7 @@ test('User not having enough permissions', function (string $capability, ...$arg
 test('Missing capability', function () {
     Functions\when('esc_html__')->returnArg();
     Functions\when('wp_die')->alias(function ($msg) {
-        throw new \Exception($msg);
+        throw new Exception($msg);
     });
     $endpoint = new Endpoint('GET', '/my-endpoint', '__return_false', ['my-custom-arg' => true], false);
     expect(function () use ($endpoint) {
