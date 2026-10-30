@@ -38,7 +38,7 @@ These changes are not mandatory and so, feel free to skip this section ⏩
 The main reason of these differences is to allow us to run tests without the
 need to always specify a group of tests. Those changes include:
 
-```php "tests/Helpers.php"
+```php title="tests/Helpers.php"
 <?php
 declare(strict_types=1);
  
@@ -56,7 +56,7 @@ class Helpers
 }
 ```
 
-```php "tests/Integration/PostsApiTest.php"
+```php title="tests/Integration/PostsApiTest.php"
 <?php
 declare(strict_types=1);
 
@@ -74,7 +74,7 @@ if (! Helpers::isIntegrationTest()) {
 
 The last step before creating our integration tests, is to set up the REST server and trigger the `*rest_api_init*` hook.
 
-```php "tests/Integration/PostsApiTest.php"
+```php title="tests/Integration/PostsApiTest.php"
 <?php
 beforeEach(function () {
     parent::setUp();
@@ -97,7 +97,7 @@ afterEach(function () {
 
 Now that everything is configured we can start creating integration tests:
 
-```php "tests/Integration/PostsApiTest.php"
+```php title="tests/Integration/PostsApiTest.php"
 <?php
 test('Create a new post', function () {
     // Create user with correct permissions

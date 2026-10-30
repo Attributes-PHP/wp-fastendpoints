@@ -4,7 +4,7 @@ title: "Router"
 
 The first thing we need to do is to create a Router.
 
-```php "Api/Routers/Posts.php"
+```php title="Api/Routers/Posts.php"
 <?php
 use Attributes\Wp\FastEndpoints\Router;
 
@@ -23,7 +23,7 @@ Each endpoint might require different types of data. Thanks to [Attributes-PHP/v
 we can simply create our own PHP classes with the shape of the data we need and use them to validate our request payload
 via type-hinting 🤯
 
-```php "Api/Models/Posts.php"
+```php title="Api/Models/Posts.php"
 <?php
 namespace MyPlugin\Api\Models;
 
@@ -61,7 +61,7 @@ class Post
 
 Let's now create an endpoint which needs this type of data.
 
-```php "Api/Routers/Posts.php"
+```php title="Api/Routers/Posts.php"
 <?php
 use MyPlugin\Api\Models\Post;
 
@@ -94,7 +94,7 @@ When a request is received by this endpoint the following happens:
 
 A great thing of dependency injection is that you only type what you need. And if you only need the ID of a post, so be it 😊
 
-```php "Api/Routers/Posts.php"
+```php title="Api/Routers/Posts.php"
 <?php
 use Attributes\Wp\FastEndpoints\Helpers\WpError;
 use Respect\Validation\Rules;
@@ -128,7 +128,7 @@ When a request is received, the following happens:
 A common scenario while building API's is to ensure that a user has permissions to a particular resource, in this
 case a blog post.
 
-```php "Api/Routers/Posts.php"
+```php title="Api/Routers/Posts.php"
 <?php
 use Attributes\Wp\FastEndpoints\Helpers\WpError;
 use Respect\Validation\Rules;
@@ -146,7 +146,7 @@ to successfully trigger this endpoint.
 
 ## Everything together
 
-```php "Api/Routers/Posts.php"
+```php title="Api/Routers/Posts.php"
 <?php
 /* Holds REST endpoints to interact with blog posts */
 
