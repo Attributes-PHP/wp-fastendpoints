@@ -1,0 +1,101 @@
+[project]
+site_name = "WP-FastEndpoints"
+site_url = "https://wp-fastendpoints.attributes-php.com/"
+site_description = "FastEndpoints is an elegant way of writing custom WordPress REST endpoints with a focus on readability and IDE auto completion support"
+copyright = "WP-FastEndpoints is open-sourced software licensed under the MIT license"
+
+repo_url = "https://github.com/Attributes-PHP/wp-fastendpoints"
+repo_name = "Attributes-PHP/wp-fastendpoints"
+edit_uri = "edit/main/docs/docs/"
+
+nav = [
+  { "WP-FastEndpoints" = "index.md" },
+  { "Quick Start" = [
+    { "Quick Start" = "quick-start/index.md" },
+    { "Router" = "quick-start/router.md" },
+    { "Service Provider" = "quick-start/service-provider.md" },
+    { "Testing" = [
+      { "Testing" = "quick-start/tests/index.md" },
+      { "Unit Tests" = "quick-start/tests/unit.md" },
+      { "Integration Tests" = "quick-start/tests/integration.md" },
+    ] },
+  ] },
+  { "Advanced User Guide" = [
+    { "Advanced User Guide" = "advanced-user-guide/index.md" },
+    { "Request Life Cycle" = "advanced-user-guide/request-life-cycle.md" },
+    { "Dependency Injection" = [
+      { "Dependency Injection" = "advanced-user-guide/dependency-injection/index.md" },
+      { "Request payload" = "advanced-user-guide/dependency-injection/request-payload.md" },
+      { "Injectables" = "advanced-user-guide/dependency-injection/injectables.md" },
+    ] },
+    { "Responses" = "advanced-user-guide/responses.md" },
+    { "Middlewares" = "advanced-user-guide/middlewares.md" },
+    { "Treat plugins as dependencies" = "advanced-user-guide/plugins-as-dependencies.md" },
+  ] },
+]
+
+extra_css = ["assets/css/extra.css"]
+
+[project.theme]
+language = "en"
+features = [
+  "content.code.copy",
+  "content.code.select",
+  "content.tabs.link",
+  "navigation.footer",
+  "navigation.indexes",
+  "navigation.instant",
+  "navigation.instant.prefetch",
+  "navigation.path",
+  "navigation.sections",
+  "navigation.top",
+  "navigation.tracking",
+  "search.highlight",
+  "search.share",
+]
+
+[project.theme.icon]
+repo = "fontawesome/brands/github"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: light)"
+scheme = "default"
+primary = "yellow"
+toggle.icon = "lucide/sun"
+toggle.name = "Switch to dark mode"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: dark)"
+scheme = "slate"
+primary = "yellow"
+toggle.icon = "lucide/moon"
+toggle.name = "Switch to light mode"
+
+[[project.extra.social]]
+icon = "fontawesome/brands/github"
+link = "https://github.com/Attributes-PHP/wp-fastendpoints"
+
+[project.markdown_extensions]
+abbr = {}
+admonition = {}
+attr_list = {}
+def_list = {}
+footnotes = {}
+md_in_html = {}
+toc.permalink = true
+pymdownx.betterem = {}
+pymdownx.caret = {}
+pymdownx.details = {}
+pymdownx.highlight.anchor_linenums = true
+pymdownx.highlight.line_spans = "__span"
+pymdownx.highlight.pygments_lang_class = true
+pymdownx.inlinehilite = {}
+pymdownx.keys = {}
+pymdownx.magiclink = {}
+pymdownx.mark = {}
+pymdownx.smartsymbols = {}
+pymdownx.superfences = {}
+pymdownx.tabbed.alternate_style = true
+pymdownx.tabbed.combine_header_slug = true
+pymdownx.tasklist.custom_checkbox = true
+pymdownx.tilde = {}

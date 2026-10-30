@@ -25,10 +25,9 @@ composer require dingo-d/wp-pest --dev
 ./vendor/bin/wp-pest setup plugin --plugin-slug my-plugin --wp-version 6.8.2
 ```
 
-::: callout tip
-If you use [attributes-php/wp-fastendpoints-my-plugin](https://github.com/Attributes-PHP/wp-fastendpoints-my-plugin?tab=readme-ov-file#setup-wordpress)
-you can use the already configured `composer setup:wp:6.x` commands
-:::
+!!! tip
+    If you use [attributes-php/wp-fastendpoints-my-plugin](https://github.com/Attributes-PHP/wp-fastendpoints-my-plugin?tab=readme-ov-file#setup-wordpress)
+    you can use the already configured `composer setup:wp:6.x` commands
 
 #### Optional changes
 

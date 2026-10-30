@@ -47,7 +47,6 @@ $router->get('/test', function () {
    [typed request data](/advanced-user-guide/dependency-injection/request-payload)
 4. Early response return is also supported. See [Responses page](/advanced-user-guide/responses)
 
-::: collapsible open "Tip"
-You can create both methods in a middleware: `onRequest` and `onResponse`.
-However, to save some CPU cycles only create the one you need [CPU emoji]
-:::
+???+ note "Tip"
+    You can create both methods in a middleware: `onRequest` and `onResponse`.
+    However, to save some CPU cycles only create the one you need [CPU emoji]
