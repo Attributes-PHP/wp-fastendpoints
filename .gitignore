@@ -2,7 +2,6 @@
 wp/
 wp-content/
 node_modules/
-package-lock.json
 *.cache
 /tests/coverage
 /coverage.xml
