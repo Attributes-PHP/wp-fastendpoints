@@ -46,7 +46,7 @@ jobs:
       run: composer run-script setup:wp:${{ matrix.wp_version }}
 
     - name: Run lint
-      run: npx wp-env run tests-cli --env-cwd=wp-content/plugins/fastendpoints -- bash -c 'php vendor/bin/pint --test'
+      run: npx wp-env run tests-cli --env-cwd=wp-content/plugins/wp-fastendpoints -- bash -c 'php vendor/bin/pint --test'
 
     - name: Run test suite
       run: composer run-script test:unit && composer run-script test:integration
