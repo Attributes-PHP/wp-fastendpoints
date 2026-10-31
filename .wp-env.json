@@ -2,7 +2,7 @@
     "$schema": "https://schemas.wp.org/trunk/wp-env.json",
     "core": null,
     "phpVersion": "8.1",
-    "plugins": [
-        "."
-    ]
+    "mappings": {
+        "wp-content/plugins/fastendpoints": "."
+    }
 }

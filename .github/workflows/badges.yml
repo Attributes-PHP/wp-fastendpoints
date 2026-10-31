@@ -46,7 +46,7 @@ jobs:
         run: composer run-script setup:wp:${{ matrix.wp_version }}
 
       - name: Code coverage
-        run: npx wp-env run tests-cli --env-cwd=wp-content/plugins/wp-fastendpoints -- bash -c 'php vendor/bin/pest --coverage --parallel'
+        run: npx wp-env run tests-cli --env-cwd=wp-content/plugins/fastendpoints -- bash -c 'php vendor/bin/pest --coverage --parallel'
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v7.1.1
