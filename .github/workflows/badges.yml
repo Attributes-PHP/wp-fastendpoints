@@ -45,6 +45,9 @@ jobs:
       - name: Setup WordPress test environment
         run: composer run-script setup:wp:${{ matrix.wp_version }}
 
+      - name: Enable coverage driver
+        run: npx wp-env start --xdebug=coverage
+
       - name: Code coverage
         run: npx wp-env run tests-cli --env-cwd=wp-content/plugins/fastendpoints -- bash -c 'php vendor/bin/pest --coverage --parallel'
 

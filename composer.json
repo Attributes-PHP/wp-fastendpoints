@@ -65,8 +65,8 @@
         "setup:wp:latest": "npm run env:start -- --update",
         "test:lint": "./vendor/bin/pint --test",
         "test:coverage": "npx wp-env run tests-cli --env-cwd=wp-content/plugins/fastendpoints -- bash -c 'php vendor/bin/pest --coverage --parallel'",
-        "test:unit": "npx wp-env run tests-cli --env-cwd=wp-content/plugins/fastendpoints -- bash -c 'php vendor/bin/pest --colors=always --exclude-group=integration --parallel'",
-        "test:integration": "npx wp-env run tests-cli --env-cwd=wp-content/plugins/fastendpoints -- bash -c 'php vendor/bin/pest --colors=always --group=integration'",
+        "test:unit": "npx wp-env run tests-cli --env-cwd=wp-content/plugins/fastendpoints -- bash -c 'php vendor/bin/pest --colors=always --no-coverage --exclude-group=integration --parallel'",
+        "test:integration": "npx wp-env run tests-cli --env-cwd=wp-content/plugins/fastendpoints -- bash -c 'php vendor/bin/pest --colors=always --no-coverage --group=integration'",
         "test": [
             "@test:lint",
             "@test:unit",
