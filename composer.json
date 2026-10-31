@@ -38,7 +38,6 @@
     "require-dev": {
         "mockery/mockery": "^1.6",
         "pestphp/pest": "^1.2",
-        "yoast/wp-test-utils": "^1.0",
         "roots/acorn": "^4.2",
         "brain/monkey": "2.*",
         "laravel/pint": "*",

@@ -1,6 +1,6 @@
 <?php
 
-use Yoast\WPTestUtils\BrainMonkey\TestCase;
+use PHPUnit\Framework\TestCase;
 
 $composer = __DIR__.'/../vendor/autoload.php';
 require_once $composer;
