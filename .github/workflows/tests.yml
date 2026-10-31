@@ -45,6 +45,9 @@ jobs:
     - name: Install PHP dependencies inside wp-env
       run: composer run-script test:setup
 
+    - name: Fix vendor file ownership
+      run: sudo chown -R $(id -u):$(id -g) vendor
+
     - name: Run lint
       run: npx wp-env run tests-cli --env-cwd=wp-content/plugins/fastendpoints -- ./vendor/bin/pint --test
 
