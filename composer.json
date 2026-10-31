@@ -48,6 +48,7 @@
         "env:start": "npx wp-env start",
         "env:stop": "npx wp-env stop",
         "env:destroy": "npx wp-env destroy",
+        "env:composer": "npx wp-env run tests-cli --env-cwd=wp-content/plugins/fastendpoints -- composer",
         "setup:wp:6.0": "WP_ENV_CORE=https://wordpress.org/wordpress-6.0.18.zip npm run env:start -- --update",
         "setup:wp:6.1": "WP_ENV_CORE=https://wordpress.org/wordpress-6.1.16.zip npm run env:start -- --update",
         "setup:wp:6.2": "WP_ENV_CORE=https://wordpress.org/wordpress-6.2.15.zip npm run env:start -- --update",
@@ -65,6 +66,7 @@
         "test:coverage": "npx wp-env run tests-cli --env-cwd=wp-content/plugins/fastendpoints -- ./vendor/bin/pest --coverage --parallel",
         "test:unit": "npx wp-env run tests-cli --env-cwd=wp-content/plugins/fastendpoints -- ./vendor/bin/pest --colors=always --exclude-group=integration --parallel",
         "test:integration": "npx wp-env run tests-cli --env-cwd=wp-content/plugins/fastendpoints -- ./vendor/bin/pest --colors=always --group=integration",
+        "test:setup": "npx wp-env run tests-cli --env-cwd=wp-content/plugins/fastendpoints -- composer update --prefer-stable --no-interaction --no-progress --ansi",
         "test": [
             "@test:lint",
             "@test:unit",

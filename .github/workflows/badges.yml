@@ -39,14 +39,14 @@ jobs:
       - name: Install JS dependencies
         run: npm ci
 
-      - name: Install PHP dependencies
-        run: composer update --prefer-stable --no-interaction --no-progress --ansi
-
       - name: Setup WordPress test environment
         run: composer run-script setup:wp:${{ matrix.wp_version }}
 
+      - name: Install PHP dependencies inside wp-env
+        run: composer run-script test:setup
+
       - name: Code coverage
-        run: npx wp-env start --xdebug=coverage && npx wp-env run tests-cli --env-cwd=wp-content/plugins/fastendpoints -- ./vendor/bin/pest --coverage --parallel
+        run: npx wp-env run tests-cli --env-cwd=wp-content/plugins/fastendpoints -- ./vendor/bin/pest --coverage --parallel
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v7.1.1
