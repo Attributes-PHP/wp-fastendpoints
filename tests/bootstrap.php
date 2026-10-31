@@ -6,41 +6,24 @@ use Yoast\WPTestUtils\WPIntegration;
 /**
  * Include core bootstrap for an integration test suite
  *
- * This will only work if you run the tests from the command line.
- * Running the tests from IDE such as PhpStorm will require you to
- * add additional argument to the test run command if you want to run
- * integration tests.
+ * Integration tests run inside the wp-env "tests-cli" container, which provides
+ * WordPress' PHPUnit test files through the WP_TESTS_DIR environment variable and
+ * a pre-generated wp-tests-config.php. Running the tests from the command line
+ * without wp-env (e.g. from an IDE) requires those files to be present locally.
  */
 if (! Helpers::isIntegrationTest()) {
     return;
 }
 
-if (! file_exists(dirname(__FILE__, 2).'/wp/tests/phpunit/wp-tests-config.php')) {
-    // We need to set up core config details and test details
-    copy(
-        dirname(__FILE__, 2).'/wp/wp-tests-config-sample.php',
-        dirname(__FILE__, 2).'/wp/tests/phpunit/wp-tests-config.php'
-    );
+$wpTestsDir = getenv('WP_TESTS_DIR') ?: dirname(__FILE__, 2).'/wp/tests/phpunit';
 
-    // Change certain constants from the test's config file.
-    $testConfigPath = dirname(__FILE__, 2).'/wp/tests/phpunit/wp-tests-config.php';
-    $testConfigContents = file_get_contents($testConfigPath);
-
-    $testConfigContents = str_replace(
-        "dirname( __FILE__ ) . '/src/'",
-        "dirname(__FILE__, 3) . '/src/'",
-        $testConfigContents
-    );
-    $testConfigContents = str_replace('youremptytestdbnamehere', $_SERVER['DB_NAME'], $testConfigContents);
-    $testConfigContents = str_replace('yourusernamehere', $_SERVER['DB_USER'], $testConfigContents);
-    $testConfigContents = str_replace('yourpasswordhere', $_SERVER['DB_PASSWORD'], $testConfigContents);
-    $testConfigContents = str_replace('localhost', $_SERVER['DB_HOST'], $testConfigContents);
-
-    file_put_contents($testConfigPath, $testConfigContents);
+// Point the WordPress test suite at the wp-env provided config when running in a container.
+if (getenv('WP_TESTS_DIR') && ! defined('WP_TESTS_CONFIG_FILE_PATH')) {
+    define('WP_TESTS_CONFIG_FILE_PATH', '/wordpress-phpunit/wp-tests-config.php');
 }
 
 // Give access to tests_add_filter() function.
-require_once dirname(__FILE__, 2).'/wp/tests/phpunit/includes/functions.php';
+require_once $wpTestsDir.'/includes/functions.php';
 
 require_once dirname(__DIR__).'/vendor/yoast/wp-test-utils/src/WPIntegration/bootstrap-functions.php';
 

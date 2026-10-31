@@ -30,16 +30,23 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           tools: composer:v2
-          coverage: pcov
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+
+      - name: Install JS dependencies
+        run: npm ci
 
       - name: Install PHP dependencies
         run: composer update --prefer-stable --no-interaction --no-progress --ansi
 
-      - name: Setup WordPress
+      - name: Setup WordPress test environment
         run: composer run-script setup:wp:${{ matrix.wp_version }}
 
       - name: Code coverage
-        run: composer run-script test:coverage
+        run: npx wp-env start --xdebug=coverage && npx wp-env run tests-cli --env-cwd=wp-content/plugins/fastendpoints -- ./vendor/bin/pest --coverage --parallel
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v7.1.1
