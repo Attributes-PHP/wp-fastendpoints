@@ -49,7 +49,7 @@ jobs:
       run: sudo chown -R $(id -u):$(id -g) vendor
 
     - name: Run lint
-      run: npx wp-env run tests-cli --env-cwd=wp-content/plugins/fastendpoints -- php ./vendor/bin/pint --test
+      run: npx wp-env run tests-cli --env-cwd=wp-content/plugins/fastendpoints -- php vendor/laravel/pint/builds/pint --test
 
     - name: Run test suite
       run: composer run-script test:unit && composer run-script test:integration
