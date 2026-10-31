@@ -21,6 +21,11 @@ if (getenv('WP_TESTS_DIR') && ! defined('WP_TESTS_CONFIG_FILE_PATH')) {
     define('WP_TESTS_CONFIG_FILE_PATH', '/wordpress-phpunit/wp-tests-config.php');
 }
 
+// The WP core test bootstrap requires the PHPUnit Polyfills to be loaded first.
+if (! defined('WP_TESTS_PHPUNIT_POLYFILLS_PATH')) {
+    define('WP_TESTS_PHPUNIT_POLYFILLS_PATH', dirname(__DIR__).'/vendor/yoast/phpunit-polyfills');
+}
+
 /*
  * Bootstrap WordPress. This will also load the Composer autoload file and the
  * custom autoloader for the TestCase and the mock object classes.

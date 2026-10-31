@@ -38,6 +38,7 @@
     "require-dev": {
         "mockery/mockery": "^1.6",
         "pestphp/pest": "^1.2",
+        "yoast/phpunit-polyfills": "^1.1.5",
         "roots/acorn": "^4.2",
         "brain/monkey": "2.*",
         "laravel/pint": "*",
