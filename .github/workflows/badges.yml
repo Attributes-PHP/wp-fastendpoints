@@ -39,14 +39,11 @@ jobs:
       - name: Install JS dependencies
         run: npm ci
 
+      - name: Install PHP dependencies
+        run: composer update --prefer-stable --no-interaction --no-progress --ansi
+
       - name: Setup WordPress test environment
         run: composer run-script setup:wp:${{ matrix.wp_version }}
-
-      - name: Install PHP dependencies inside wp-env
-        run: composer run-script test:setup
-
-      - name: Fix vendor file ownership
-        run: sudo chown -R $(id -u):$(id -g) vendor
 
       - name: Code coverage
         run: npx wp-env run tests-cli --env-cwd=wp-content/plugins/fastendpoints -- bash -c 'php vendor/bin/pest --coverage --parallel'
