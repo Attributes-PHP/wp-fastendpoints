@@ -39,6 +39,7 @@ extra_css = ["assets/css/extra.css"]
 [project.theme]
 language = "en"
 features = [
+  "content.code.annotate",
   "content.code.copy",
   "content.code.select",
   "content.tabs.link",
