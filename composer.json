@@ -63,9 +63,9 @@
         "setup:wp:7.1": "WP_ENV_CORE=https://wordpress.org/wordpress-7.1.4.zip npm run env:start -- --update",
         "setup:wp:latest": "npm run env:start -- --update",
         "test:lint": "./vendor/bin/pint --test",
-        "test:coverage": "npx wp-env run tests-cli --env-cwd=wp-content/plugins/fastendpoints -- php vendor/pestphp/pest/bin/pest --coverage --parallel",
-        "test:unit": "npx wp-env run tests-cli --env-cwd=wp-content/plugins/fastendpoints -- php vendor/pestphp/pest/bin/pest --colors=always --exclude-group=integration --parallel",
-        "test:integration": "npx wp-env run tests-cli --env-cwd=wp-content/plugins/fastendpoints -- php vendor/pestphp/pest/bin/pest --colors=always --group=integration",
+        "test:coverage": "npx wp-env run tests-cli --env-cwd=wp-content/plugins/fastendpoints -- bash -c 'php vendor/bin/pest --coverage --parallel'",
+        "test:unit": "npx wp-env run tests-cli --env-cwd=wp-content/plugins/fastendpoints -- bash -c 'php vendor/bin/pest --colors=always --exclude-group=integration --parallel'",
+        "test:integration": "npx wp-env run tests-cli --env-cwd=wp-content/plugins/fastendpoints -- bash -c 'php vendor/bin/pest --colors=always --group=integration'",
         "test:setup": "npx wp-env run tests-cli --env-cwd=wp-content/plugins/fastendpoints -- composer update --prefer-stable --no-interaction --no-progress --ansi",
         "test": [
             "@test:lint",
