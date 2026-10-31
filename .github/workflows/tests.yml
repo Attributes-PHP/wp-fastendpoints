@@ -30,13 +30,23 @@ jobs:
       with:
         php-version: ${{ matrix.php }}
         tools: composer:v2
-        coverage: pcov
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v6
+      with:
+        node-version: '22'
+
+    - name: Install JS dependencies
+      run: npm ci
 
     - name: Install PHP dependencies
       run: composer update --prefer-stable --no-interaction --no-progress --ansi
 
-    - name: Setup WordPress
+    - name: Setup WordPress test environment
       run: composer run-script setup:wp:${{ matrix.wp_version }}
 
+    - name: Run lint
+      run: npx wp-env run tests-cli --env-cwd=wp-content/plugins/fastendpoints -- bash -c 'php vendor/bin/pint --test'
+
     - name: Run test suite
-      run: composer run-script test
+      run: composer run-script test:unit && composer run-script test:integration

@@ -1,0 +1,14 @@
+{
+    "name": "wp-fastendpoints",
+    "private": true,
+    "description": "Fast to type. Fast to run WordPress REST endpoints",
+    "scripts": {
+        "wp-env": "wp-env",
+        "env:start": "wp-env start",
+        "env:stop": "wp-env stop",
+        "env:destroy": "wp-env destroy"
+    },
+    "devDependencies": {
+        "@wordpress/env": "^11.17.0"
+    }
+}

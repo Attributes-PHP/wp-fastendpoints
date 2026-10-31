@@ -15,7 +15,7 @@ namespace Attributes\Wp\FastEndpoints\Tests\Integration;
 use Attributes\Wp\FastEndpoints\Tests\Helpers\Helpers;
 use WP_REST_Request;
 use WP_REST_Server;
-use Yoast\WPTestUtils\WPIntegration\TestCase;
+use WP_UnitTestCase;
 
 if (! Helpers::isIntegrationTest()) {
     return;
@@ -26,7 +26,7 @@ if (! Helpers::isIntegrationTest()) {
  * This will enable us to use all the WordPress test goodies, such as
  * factories and proper test cleanup.
  */
-uses(TestCase::class);
+uses(WP_UnitTestCase::class);
 
 beforeEach(function () {
     parent::setUp();
