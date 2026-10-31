@@ -12,17 +12,18 @@ The following needs to happen in order to successfully run them:
 3. Create the REST server and boot it using the [`rest_api_init`](https://developer.wordpress.org/reference/hooks/rest_api_init/)
    hook
 
-### _wp-pest_ to the rescue 🦸
+### _wp-env_ to the rescue 🦸
 
-However, thanks to [wp-pest](https://github.com/dingo-d/wp-pest) most of this trouble is no longer
+However, thanks to [wp-env](https://developer.wordpress.org/block-editor/reference-guides/packages/packages-env/) most of this trouble is no longer
 an issue. Via a simple command it solves most of the troubles for us! 😎
 
 ```bash
-# Installs wp-pest
-composer require dingo-d/wp-pest --dev
+# Installs wp-env
+npm install @wordpress/env --save-dev
 
-# Set's up WP
-./vendor/bin/wp-pest setup plugin --plugin-slug my-plugin --wp-version 6.8.2
+# Set's up WP and runs the tests inside the tests container
+npx wp-env start
+npx wp-env run tests-cli --env-cwd=wp-content/plugins/my-plugin -- ./vendor/bin/pest --group=integration
 ```
 
 !!! tip

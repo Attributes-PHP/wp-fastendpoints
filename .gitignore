@@ -1,6 +1,7 @@
 .idea/
 wp/
 wp-content/
+node_modules/
 *.cache
 /tests/coverage
 /coverage.xml
