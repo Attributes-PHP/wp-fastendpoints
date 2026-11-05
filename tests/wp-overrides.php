@@ -6,9 +6,8 @@
  * @since 0.9.0
  */
 
-use Attributes\Wp\FastEndpoints\Tests\Helpers\Helpers;
-
-if (Helpers::isIntegrationTest()) {
+// WordPress itself is provided by wp-env, which sets WP_TESTS_DIR inside the container.
+if (getenv('WP_TESTS_DIR')) {
     return;
 }
 

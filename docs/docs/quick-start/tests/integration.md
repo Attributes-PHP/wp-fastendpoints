@@ -12,22 +12,49 @@ The following needs to happen in order to successfully run them:
 3. Create the REST server and boot it using the [`rest_api_init`](https://developer.wordpress.org/reference/hooks/rest_api_init/)
    hook
 
-### _wp-pest_ to the rescue 🦸
+### _wp-env_ to the rescue 🦸
 
-However, thanks to [wp-pest](https://github.com/dingo-d/wp-pest) most of this trouble is no longer
-an issue. Via a simple command it solves most of the troubles for us! 😎
+However, thanks to [wp-env](https://developer.wordpress.org/block-editor/reference-guides/packages/packages-env/)
+most of this trouble is no longer an issue. It provides a WordPress install, the
+PHPUnit test files and a database inside Docker, so integration tests become as
+simple as: 😎
 
 ```bash
-# Installs wp-pest
-composer require dingo-d/wp-pest --dev
-
-# Set's up WP
-./vendor/bin/wp-pest setup plugin --plugin-slug my-plugin --wp-version 6.8.2
+npm run test:integration
 ```
 
-!!! tip
-    If you use [attributes-php/wp-fastendpoints-my-plugin](https://github.com/Attributes-PHP/wp-fastendpoints-my-plugin?tab=readme-ov-file#setup-wordpress)
-    you can use the already configured `composer setup:wp:6.x` commands
+The pieces needed to get there:
+
+1. Add wp-env as a dev dependency: `npm install --save-dev @wordpress/env`
+2. Create a `.wp-env.test.json` file which maps your plugin into the test
+   environment (a full example can be found in
+   [wp-fastendpoints](https://github.com/Attributes-PHP/wp-fastendpoints/blob/main/.wp-env.test.json)):
+
+```json title=".wp-env.test.json"
+{
+    "$schema": "https://schemas.wp.org/trunk/wp-env.json",
+    "phpVersion": "8.1",
+    "port": 8889,
+    "mappings": {
+        "wp-content/plugins/my-plugin": "."
+    }
+}
+```
+
+3. Create npm scripts to start the environment and run the integration tests
+   inside it:
+
+```json title="package.json"
+{
+    "scripts": {
+        "wp-env-test": "wp-env --config .wp-env.test.json",
+        "test:integration": "npm run wp-env-test -- start && npm run wp-env-test -- run --env-cwd='wp-content/plugins/my-plugin' wordpress vendor/bin/pest --colors=always --group=integration"
+    }
+}
+```
+
+To test against a specific WordPress version set the `WP_ENV_CORE` environment
+variable to a wordpress.org zip, e.g. `WP_ENV_CORE=https://wordpress.org/wordpress-6.0.18.zip npm run test:integration`.
 
 #### Optional changes
 
@@ -35,40 +62,28 @@ If you take a closer look at the resultant tests structure you might notice that
 different from [attributes-php/wp-fastendpoints-my-plugin](https://github.com/Attributes-PHP/wp-fastendpoints-my-plugin?tab=readme-ov-file#setup-wordpress).
 These changes are not mandatory and so, feel free to skip this section ⏩
 
-The main reason of these differences is to allow us to run tests without the
-need to always specify a group of tests. Those changes include:
+The main reason for these differences is to allow unit tests to run without WordPress. Keep
+only the unit test suite in your `phpunit.xml` test suites and run integration tests by pointing
+Pest directly at their directory:
 
-```php title="tests/Helpers.php"
-<?php
-declare(strict_types=1);
- 
-namespace MyPlugin\Tests;
+```xml title="phpunit.xml"
+<testsuites>
+    <testsuite name="Unit Test Suite">
+        <directory>./tests/Unit/</directory>
+    </testsuite>
+</testsuites>
+```
 
-class Helpers
+```json title="package.json"
 {
-    /**
-     * Checks if weather we want to run integration tests or not
-     */
-    public static function isIntegrationTest(): bool
-    {
-        return isset($GLOBALS['argv']) && in_array('--group=integration', $GLOBALS['argv'], true);
+    "scripts": {
+        "test:integration": "… vendor/bin/pest tests/Integration --colors=always --group=integration"
     }
 }
 ```
 
-```php title="tests/Integration/PostsApiTest.php"
-<?php
-declare(strict_types=1);
-
-namespace MyPlugin\Tests\Integration;
-
-use MyPlugin\Tests\Helpers;
-
-// Needs to add this check to every Integration test file
-if (! Helpers::isIntegrationTest()) {
-    return;
-}
-```
+This keeps PHPUnit from ever loading the integration tests (which need WordPress) during a
+unit test run.
 
 ### SetUp and TearDown
 

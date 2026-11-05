@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Attributes\Wp\FastEndpoints\Tests\Helpers;
 
 use Attributes\Wp\FastEndpoints\Router;
-use Illuminate\Support\Str;
 
 class Helpers
 {
@@ -97,21 +96,15 @@ class Helpers
     }
 
     /**
-     * Checks if weather we want to run integration tests or not
-     */
-    public static function isIntegrationTest(): bool
-    {
-        return isset($GLOBALS['argv']) && in_array('--group=integration', $GLOBALS['argv'], true);
-    }
-
-    /**
      * Retrieves a router from a file
      *
      * @param  string  $filename  The router filename to be included
      */
     public static function getRouter(string $filename): Router
     {
-        $filename = Str::finish($filename, '.php');
+        if (! str_ends_with($filename, '.php')) {
+            $filename .= '.php';
+        }
 
         return require \ROUTERS_DIR.$filename;
     }

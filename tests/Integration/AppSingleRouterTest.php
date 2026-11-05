@@ -15,11 +15,6 @@ namespace Attributes\Wp\FastEndpoints\Tests\Integration;
 use Attributes\Wp\FastEndpoints\Tests\Helpers\Helpers;
 use WP_REST_Request;
 use WP_REST_Server;
-use Yoast\WPTestUtils\WPIntegration\TestCase;
-
-if (! Helpers::isIntegrationTest()) {
-    return;
-}
 
 /*
  * We need to provide the base test class to every integration test.

@@ -1,0 +1,9 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/wp-env.json",
+    "testsEnvironment": false,
+    "phpVersion": "8.1",
+    "port": 8889,
+    "mappings": {
+        "wp-content/plugins/fastendpoints": "."
+    }
+}

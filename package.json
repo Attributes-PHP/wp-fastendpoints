@@ -1,0 +1,11 @@
+{
+    "name": "wp-fastendpoints",
+    "private": true,
+    "scripts": {
+        "wp-env-test": "wp-env --config .wp-env.test.json",
+        "test:integration": "npm run wp-env-test -- start && npm run wp-env-test -- run --env-cwd='wp-content/plugins/fastendpoints' wordpress vendor/bin/pest tests/Integration --colors=always --group=integration"
+    },
+    "devDependencies": {
+        "@wordpress/env": "^12.1.0"
+    }
+}
