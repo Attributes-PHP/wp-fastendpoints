@@ -48,10 +48,12 @@
         "test:coverage": "php -d error_reporting=24575 vendor/bin/pest --coverage",
         "test:unit": "php -d error_reporting=24575 vendor/bin/pest --colors=always",
         "test:integration": "npm run test:integration",
+        "test:endtoend": "npm run test:endtoend",
         "test": [
             "@test:lint",
             "@test:unit",
-            "@test:integration"
+            "@test:integration",
+            "@test:endtoend"
         ]
     },
     "prefer-stable": true,
