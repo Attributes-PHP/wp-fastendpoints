@@ -1,5 +1,6 @@
 .idea/
 node_modules/
+.DS_Store
 wp/
 wp-content/
 *.cache
