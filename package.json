@@ -3,7 +3,8 @@
     "private": true,
     "scripts": {
         "wp-env-test": "wp-env --config .wp-env.test.json",
-        "test:integration": "npm run wp-env-test -- start && npm run wp-env-test -- run --env-cwd='wp-content/plugins/fastendpoints' wordpress vendor/bin/pest tests/Integration --colors=always --group=integration"
+        "test:integration": "npm run wp-env-test -- start && npm run wp-env-test -- run --env-cwd='wp-content/plugins/fastendpoints' wordpress vendor/bin/pest tests/Integration --colors=always --group=integration",
+        "test:endtoend": "npm run wp-env-test -- start && npm run wp-env-test -- run cli wp plugin activate fastendpoints && npm run wp-env-test -- run --env-cwd='wp-content/plugins/fastendpoints' wordpress vendor/bin/pest tests/Endtoend --colors=always --group=endtoend"
     },
     "devDependencies": {
         "@wordpress/env": "^12.1.0"
