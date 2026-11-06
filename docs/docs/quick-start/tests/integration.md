@@ -56,35 +56,6 @@ The pieces needed to get there:
 To test against a specific WordPress version set the `WP_ENV_CORE` environment
 variable to a wordpress.org zip, e.g. `WP_ENV_CORE=https://wordpress.org/wordpress-6.0.18.zip npm run test:integration`.
 
-#### Optional changes
-
-If you take a closer look at the resultant tests structure you might notice that is slightly
-different from [attributes-php/wp-fastendpoints-my-plugin](https://github.com/Attributes-PHP/wp-fastendpoints-my-plugin?tab=readme-ov-file#setup-wordpress).
-These changes are not mandatory and so, feel free to skip this section ⏩
-
-The main reason for these differences is to allow unit tests to run without WordPress. Keep
-only the unit test suite in your `phpunit.xml` test suites and run integration tests by pointing
-Pest directly at their directory:
-
-```xml title="phpunit.xml"
-<testsuites>
-    <testsuite name="Unit Test Suite">
-        <directory>./tests/Unit/</directory>
-    </testsuite>
-</testsuites>
-```
-
-```json title="package.json"
-{
-    "scripts": {
-        "test:integration": "… vendor/bin/pest tests/Integration --colors=always --group=integration"
-    }
-}
-```
-
-This keeps PHPUnit from ever loading the integration tests (which need WordPress) during a
-unit test run.
-
 ### SetUp and TearDown
 
 The last step before creating our integration tests, is to set up the REST server and trigger the `*rest_api_init*` hook.
