@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-defined('ABSPATH') || exit;
+defined('ABSPATH') || exit();
 
 if (! defined('FASTENDPOINTS_ENDTOEND_TESTS')) {
     return;

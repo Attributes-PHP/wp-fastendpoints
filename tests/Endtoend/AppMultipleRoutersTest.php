@@ -68,12 +68,13 @@ test('Deleting a post', function () {
 test('Trigger error in a middleware', function (string $middlewareType, string $errorMessage) {
     [$status, $data] = $this->request(
         'GET',
-        "/my-api/v1/my-actions/v2/middleware/{$middlewareType}/error"
+        "/my-api/v1/my-actions/v2/middleware/{$middlewareType}/error",
     );
     // Note: WP core's status_header() silently drops status codes it has no
     // description for, so over real HTTP the custom 469 code is served as a 200.
     // The error details still reach the consumer through the response body.
-    expect($status)->toBe(200)
+    expect($status)
+        ->toBe(200)
         ->and($data)
         ->toBe([
             'code' => 469,
@@ -81,20 +82,22 @@ test('Trigger error in a middleware', function (string $middlewareType, string $
             'data' => ['status' => 469],
         ]);
 })->with([
-    ['on-request', 'Triggered error action before handling request'],
-    ['on-response', 'Triggered error action before sending response']])->group('multiple');
+    ['on-request',  'Triggered error action before handling request'],
+    ['on-response', 'Triggered error action before sending response'],
+])->group('multiple');
 
 test('Trigger success in a middleware', function (string $middlewareType) {
     [$status] = $this->request(
         'GET',
-        "/my-api/v1/my-actions/v2/middleware/{$middlewareType}/success"
+        "/my-api/v1/my-actions/v2/middleware/{$middlewareType}/success",
     );
     expect($status)->toBe(200);
 })->with(['on-request', 'on-response'])->group('multiple');
 
 test('Trigger no permissions in permission callback - WP Error', function () {
     [$status, $data] = $this->request('GET', '/my-api/v1/my-actions/v2/permission/notAllowed');
-    expect($status)->toBe(403)
+    expect($status)
+        ->toBe(403)
         ->and($data)
         ->toBe([
             'code' => 403,
@@ -105,7 +108,8 @@ test('Trigger no permissions in permission callback - WP Error', function () {
 
 test('Trigger no permissions in permission callback - boolean', function () {
     [$status, $data] = $this->request('GET', '/my-api/v1/my-actions/v2/bool/permission/notAllowed');
-    expect($status)->toBe(401)
+    expect($status)
+        ->toBe(401)
         ->and($data)
         ->toBe([
             'code' => 'rest_forbidden',

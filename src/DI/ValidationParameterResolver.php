@@ -49,10 +49,14 @@ class ValidationParameterResolver implements ParameterResolver
     public function getParameters(
         ReflectionFunctionAbstract $reflection,
         array $providedParameters,
-        array $resolvedParameters
+        array $resolvedParameters,
     ): array {
         $request = $providedParameters['request'];
-        $allParameters = new LazyLoadParameters(reflection: $reflection, request: $request, resolvedData: $resolvedParameters);
+        $allParameters = new LazyLoadParameters(
+            reflection: $reflection,
+            request: $request,
+            resolvedData: $resolvedParameters,
+        );
         $allParameters = $this->validator->validateCallable($allParameters, $reflection->getClosure());
 
         return $this->convertToNumericArgs($allParameters, $reflection);

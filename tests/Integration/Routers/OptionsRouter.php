@@ -33,7 +33,8 @@ $router->get('default/(?P<urlParam>[\d]+)', function (int $urlParam, int $queryP
     ];
 });
 
-$router->get('query', #[AliasGenerator('snake')] function (#[Query] int $postId, #[Query] array $allPosts = []): array {
+$router->get('query', #[AliasGenerator('snake')]
+function (#[Query] int $postId, #[Query] array $allPosts = []): array {
     return [
         'post_id' => $postId,
         'all_posts' => $allPosts,
@@ -48,18 +49,21 @@ $router->get('json', function (#[Json, Alias('post_id')] int $id): int {
     return $id;
 });
 
-$router->get('body', #[AliasGenerator('camel')] function (#[Body, Alias('post_id')] int $postId): int {
+$router->get('body', #[AliasGenerator('camel')]
+function (#[Body, Alias('post_id')] int $postId): int {
     return $postId;
 });
 
-$router->get('header', #[AliasGenerator('snake')] function (#[Header] int $postId, #[Header] array $allPosts = []): array {
+$router->get('header', #[AliasGenerator('snake')]
+function (#[Header] int $postId, #[Header] array $allPosts = []): array {
     return [
         'post_id' => $postId,
         'all_posts' => $allPosts,
     ];
 });
 
-$router->get('cookie', #[AliasGenerator('snake')] function (#[Cookie] int $postId, #[Cookie] array $allPosts = []): array {
+$router->get('cookie', #[AliasGenerator('snake')]
+function (#[Cookie] int $postId, #[Cookie] array $allPosts = []): array {
     return [
         'post_id' => $postId,
         'all_posts' => $allPosts,
@@ -70,7 +74,8 @@ $router->post('file', function (#[File] array $my_file) {
     return $my_file;
 });
 
-$router->post('any', #[AliasGenerator('snake')] function (#[Any] int $postId): int {
+$router->post('any', #[AliasGenerator('snake')]
+function (#[Any] int $postId): int {
     return $postId;
 });
 

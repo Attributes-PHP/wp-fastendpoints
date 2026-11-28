@@ -17,20 +17,22 @@ use Attributes\Wp\FastEndpoints\Tests\Models\Post;
 $router = new Router('my-posts', 'v1');
 
 // Fetches a single post
-$router->get('(?P<ID>[\d]+)', function (int $ID) {
-    return get_post($ID);
-})
+$router
+    ->get('(?P<ID>[\d]+)', function (int $ID) {
+        return get_post($ID);
+    })
     ->returns(Post::class)
     ->hasCap('read');
 
 // Updates a post
-$router->put('(?P<ID>[\d]+)', function (int|float $ID, Post $post, WP_REST_Response $response) {
-    $response->set_status(204);
-    $post->id = $ID;
-    $error = wp_update_post($post->serialize(), true);
+$router
+    ->put('(?P<ID>[\d]+)', function (int|float $ID, Post $post, WP_REST_Response $response) {
+        $response->set_status(204);
+        $post->id = $ID;
+        $error = wp_update_post($post->serialize(), true);
 
-    return is_wp_error($error) ? $error : get_post($post->id);
-})
+        return is_wp_error($error) ? $error : get_post($post->id);
+    })
     ->returns(Post::class)
     ->hasCap('edit_post', '<ID>');
 

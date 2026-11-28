@@ -87,7 +87,7 @@ class LazyLoadParameters extends ArrayObject
         }
 
         $parameterType = $parameter->getType();
-        if (! ($parameterType instanceof ReflectionUnionType)) {
+        if (! $parameterType instanceof ReflectionUnionType) {
             return $this->findParam($fromParams, $key);
         }
 
@@ -191,7 +191,11 @@ class LazyLoadParameters extends ArrayObject
 
     protected function isToFindParamByKey(ReflectionParameter $parameter): bool
     {
-        return ! $parameter->hasType() || ($parameter->getType() instanceof ReflectionNamedType && $parameter->getType()->isBuiltin());
+        return (
+            ! $parameter->hasType()
+            || $parameter->getType() instanceof ReflectionNamedType
+            && $parameter->getType()->isBuiltin()
+        );
     }
 
     protected function getUrlOrQueryParams(mixed $key): array
@@ -210,7 +214,9 @@ class LazyLoadParameters extends ArrayObject
 
     protected function getJsonOrBodyParams(): array
     {
-        $allParams = $this->request->is_json_content_type() ? $this->request->get_json_params() : $this->request->get_body_params();
+        $allParams = $this->request->is_json_content_type()
+            ? $this->request->get_json_params()
+            : $this->request->get_body_params();
 
         return $allParams ?: [];
     }

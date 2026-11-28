@@ -29,8 +29,7 @@ $router->inject('post', function (int|Post $post, #[Inject] Validatable $validat
 
 $router->endpoint('GET,POST', 'retrieve', function (#[Inject] Post $post) {
     return $post;
-})
-    ->returns(Post::class);
+})->returns(Post::class);
 
 if (! defined('INJECTORS')) {
     define('INJECTORS', true);

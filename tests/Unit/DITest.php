@@ -42,14 +42,28 @@ afterEach(function () {
 // Inject parameter resolver
 
 test('Inject dependencies', function () {
-    $endpoint = new Endpoint('POST', '/inject', function (#[Inject] string $user, #[Inject] Validatable $validator, #[Inject] Serializable $serializer) {
+    $endpoint = new Endpoint('POST', '/inject', function (
+        #[Inject]
+        string $user,
+        #[Inject]
+        Validatable $validator,
+        #[Inject]
+        Serializable $serializer,
+    ) {
         return $user;
     });
-    $endpoint->getInvoker()->setInjectables([
-        'getFirstName' => fn () => 'Andre',
-        'getLastName' => fn () => 'Gil',
-        'user' => fn (#[Inject] string $getFirstName, #[Inject('getLastName')] string $lastName) => "$getFirstName $lastName",
-    ]);
+    $endpoint
+        ->getInvoker()
+        ->setInjectables([
+            'getFirstName' => fn () => 'Andre',
+            'getLastName' => fn () => 'Gil',
+            'user' => fn (
+                #[Inject]
+                string $getFirstName,
+                #[Inject('getLastName')]
+                string $lastName,
+            ) => "$getFirstName $lastName",
+        ]);
     $req = Mockery::mock(WP_REST_Request::class);
     expect($endpoint->callback($req))
         ->toBeInstanceOf(WP_REST_Response::class)
@@ -58,27 +72,36 @@ test('Inject dependencies', function () {
 })->group('di', 'inject');
 
 test('Only resolves injected dependencies once', function () {
-    $endpoint = new Endpoint('POST', '/inject', function (#[Inject] string $user, #[Inject('getFirstName')] string $firstName) {
+    $endpoint = new Endpoint('POST', '/inject', function (
+        #[Inject]
+        string $user,
+        #[Inject('getFirstName')]
+        string $firstName,
+    ) {
         return "$firstName $user";
     });
     $calledTimes = ['firstName' => 0, 'lastName' => 0, 'user' => 0];
-    $endpoint->getInvoker()->setInjectables([
-        'getFirstName' => function () use (&$calledTimes) {
-            $calledTimes['firstName']++;
+    $endpoint
+        ->getInvoker()
+        ->setInjectables([
+            'getFirstName' => function () use (&$calledTimes) {
+                $calledTimes['firstName']++;
 
-            return 'Andre';
-        },
-        'getLastName' => function () use (&$calledTimes) {
-            $calledTimes['lastName']++;
+                return 'Andre';
+            },
+            'getLastName' => function () use (&$calledTimes) {
+                $calledTimes['lastName']++;
 
-            return 'Gil';
-        },
-        'user' => function (#[Inject] string $getFirstName, #[Inject('getLastName')] string $lastName) use (&$calledTimes) {
-            $calledTimes['user']++;
+                return 'Gil';
+            },
+            'user' => function (#[Inject] string $getFirstName, #[Inject('getLastName')] string $lastName) use (
+                &$calledTimes,
+            ) {
+                $calledTimes['user']++;
 
-            return "$getFirstName $lastName";
-        },
-    ]);
+                return "$getFirstName $lastName";
+            },
+        ]);
 
     $req = Mockery::mock(WP_REST_Request::class);
     expect($endpoint->callback($req))
@@ -109,9 +132,11 @@ test('Infinite injectable loop', function () {
     $endpoint = new Endpoint('POST', '/inject', function (#[Inject] string $user) {
         return $user;
     });
-    $endpoint->getInvoker()->setInjectables([
-        'user' => fn (#[Inject] string $user) => $user,
-    ]);
+    $endpoint
+        ->getInvoker()
+        ->setInjectables([
+            'user' => fn (#[Inject] string $user) => $user,
+        ]);
     $req = Mockery::mock(WP_REST_Request::class);
     expect($endpoint->callback($req))
         ->toBeInstanceOf(WpError::class)
@@ -125,9 +150,11 @@ test('Infinite injectable loop', function () {
 test('Static dependencies', function () {
     $req = Mockery::mock(WP_REST_Request::class);
     $endpoint = new Endpoint('GET', '/static', fn () => true);
-    $handler = function (WP_REST_Request $request, WP_REST_Response $response, Endpoint $currentEndpoint) use ($req, $endpoint) {
-        expect($request)->toBe($req)
-            ->and($currentEndpoint)->toBe($endpoint);
+    $handler = function (WP_REST_Request $request, WP_REST_Response $response, Endpoint $currentEndpoint) use (
+        $req,
+        $endpoint,
+    ) {
+        expect($request)->toBe($req)->and($currentEndpoint)->toBe($endpoint);
 
         $response->set_status(204);
     };
@@ -153,13 +180,16 @@ test('Validates dependencies', function () {
     $req->expects()->get_url_params()->times(2)->andReturn(['id' => 15]);
     $req->expects()->get_query_params()->andReturn(['anyValue' => 'My value']);
     $req->expects()->is_json_content_type()->andReturn(true);
-    $req->expects()->get_json_params()->andReturn([
-        'ID' => 10,
-        'post_author' => 1,
-        'post_title' => 'My title',
-        'post_status' => 'publish',
-        'post_type' => 'post',
-    ]);
+    $req
+        ->expects()
+        ->get_json_params()
+        ->andReturn([
+            'ID' => 10,
+            'post_author' => 1,
+            'post_title' => 'My title',
+            'post_status' => 'publish',
+            'post_type' => 'post',
+        ]);
 
     expect($endpoint->callback($req))
         ->toBeInstanceOf(WP_REST_Response::class)
@@ -187,7 +217,10 @@ test('Load parameters from respective options', function (int|array $post) {
     $req = Mockery::mock(WP_REST_Request::class);
     $req->expects()->get_headers()->andReturn(['userIds' => '10,20,30']);
     $req->expects()->get_header('userIds')->andReturn('10,20,30');
-    $req->expects()->get_json_params()->andReturn(is_int($post) ? ['post' => $post] : $post);
+    $req
+        ->expects()
+        ->get_json_params()
+        ->andReturn(is_int($post) ? ['post' => $post] : $post);
 
     expect($endpoint->callback($req))
         ->toBeInstanceOf(WP_REST_Response::class)

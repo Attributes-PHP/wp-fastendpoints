@@ -63,24 +63,46 @@ test('Creating a Router instance with invalid parameters', function ($api, $vers
 
 // REST endpoints
 
-test('Create a REST endpoint', function (string $method, string $api, string $version, string $route, ?array $args = [], $override = false) {
+test('Create a REST endpoint', function (
+    string $method,
+    string $api,
+    string $version,
+    string $route,
+    ?array $args = [],
+    $override = false,
+) {
     $router = new Router($api, $version);
-    $endpoint = $router->{strtolower($method)}($route, function ($request) {
-        return 'endpoint-success';
-    }, $args, $override);
-    expect($endpoint)->toBeInstanceOf(Endpoint::class)
-        ->and(Helpers::getNonPublicClassProperty($endpoint, 'method'))->toBe($method)
-        ->and(Helpers::getNonPublicClassProperty($endpoint, 'route'))->toBe($route)
-        ->and(Helpers::getNonPublicClassProperty($endpoint, 'handler')(null))->toBe('endpoint-success')
-        ->and(Helpers::getNonPublicClassProperty($endpoint, 'args'))->toBe($args)
-        ->and(Helpers::getNonPublicClassProperty($endpoint, 'override'))->toBe($override)
-        ->and(Helpers::getNonPublicClassProperty($router, 'endpoints'))->toMatchArray([$endpoint]);
-})->with('http_methods')->with([
-    ['my-api2', 'v2', 'my-custom-route2'],
-    ['my-api3', 'v3', '/my-custom-route3', ['my-custom-arg' => 'hello'], true],
-    ['my-api4', '/v4', 'my-custom-route4'],
-    ['my-api5', '/v5', '/my-custom-route5'],
-])->group('router', 'endpoints');
+    $endpoint = $router->{strtolower($method)}(
+        $route,
+        function ($request) {
+            return 'endpoint-success';
+        },
+        $args,
+        $override,
+    );
+    expect($endpoint)
+        ->toBeInstanceOf(Endpoint::class)
+        ->and(Helpers::getNonPublicClassProperty($endpoint, 'method'))
+        ->toBe($method)
+        ->and(Helpers::getNonPublicClassProperty($endpoint, 'route'))
+        ->toBe($route)
+        ->and(Helpers::getNonPublicClassProperty($endpoint, 'handler')(null))
+        ->toBe('endpoint-success')
+        ->and(Helpers::getNonPublicClassProperty($endpoint, 'args'))
+        ->toBe($args)
+        ->and(Helpers::getNonPublicClassProperty($endpoint, 'override'))
+        ->toBe($override)
+        ->and(Helpers::getNonPublicClassProperty($router, 'endpoints'))
+        ->toMatchArray([$endpoint]);
+})
+    ->with('http_methods')
+    ->with([
+        ['my-api2', 'v2', 'my-custom-route2'],
+        ['my-api3', 'v3', '/my-custom-route3', ['my-custom-arg' => 'hello'], true],
+        ['my-api4', '/v4', 'my-custom-route4'],
+        ['my-api5', '/v5', '/my-custom-route5'],
+    ])
+    ->group('router', 'endpoints');
 
 // Sub routers
 
@@ -97,9 +119,12 @@ test('Include sub-routers', function () {
         return 'Current user';
     });
     $mainRouter->includeRouter($usersRouter);
-    expect($mainRouter->getEndpoints())->toMatchArray([$readyzEndpoint])
-        ->and($usersRouter->getEndpoints())->toMatchArray([$user123Endpoint, $currentUserEndpoint])
-        ->and($mainRouter->getSubRouters())->toMatchArray([$usersRouter]);
+    expect($mainRouter->getEndpoints())
+        ->toMatchArray([$readyzEndpoint])
+        ->and($usersRouter->getEndpoints())
+        ->toMatchArray([$user123Endpoint, $currentUserEndpoint])
+        ->and($mainRouter->getSubRouters())
+        ->toMatchArray([$usersRouter]);
 })->group('router', 'includeRouter');
 
 // Router namespace
@@ -157,7 +182,8 @@ test('Get router REST path', function (string $api, string $version) {
 
 test('Register endpoints', function () {
     $invoker = Mockery::mock(Invoker::class);
-    $invoker->expects()
+    $invoker
+        ->expects()
         ->setInjectables([])
         ->times(2);
     $permissionCallable = fn () => true;
@@ -378,7 +404,8 @@ test('Specifying router permission callable', function () {
     $permissionHandlers = Helpers::getNonPublicClassProperty($router, 'permissionHandlers');
     expect($permissionHandlers)
         ->toHaveCount(1)
-        ->and($permissionHandlers[0])->toBe($permissionCallable);
+        ->and($permissionHandlers[0])
+        ->toBe($permissionCallable);
 })->group('router', 'permission');
 
 test('Router permission callbacks preserve registration order', function () {
@@ -388,9 +415,12 @@ test('Router permission callbacks preserve registration order', function () {
     $router->permission($permissionCallable);
     $router->permission($secondPermissionCallable);
     $permissionHandlers = Helpers::getNonPublicClassProperty($router, 'permissionHandlers');
-    expect($permissionHandlers)->toHaveCount(2)
-        ->and($permissionHandlers[0])->toBe($permissionCallable)
-        ->and($permissionHandlers[1])->toBe($secondPermissionCallable);
+    expect($permissionHandlers)
+        ->toHaveCount(2)
+        ->and($permissionHandlers[0])
+        ->toBe($permissionCallable)
+        ->and($permissionHandlers[1])
+        ->toBe($secondPermissionCallable);
 })->group('router', 'permission');
 
 test('Router permission callbacks are inherited by sub-routers before endpoint callbacks', function () {

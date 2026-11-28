@@ -25,7 +25,8 @@ test('Inject Post via ID', function (?array $jsonBody) {
         $args['json'] = $jsonBody;
     }
     [$status, $data] = $this->request('GET', '/injectors/v1/retrieve', $args);
-    expect($status)->toBe(200)
+    expect($status)
+        ->toBe(200)
         ->and($data)
         ->toBeArray()
         ->toBe([
@@ -59,7 +60,8 @@ test('Inject Post via JSON data', function (bool $isJson) {
     [$status, $data] = $this->request($isJson ? 'GET' : 'POST', '/injectors/v1/retrieve', [
         $isJson ? 'json' : 'form' => $bodyParams,
     ]);
-    expect($status)->toBe(200)
+    expect($status)
+        ->toBe(200)
         ->and($data)
         ->toBeArray()
         ->toBe([
@@ -73,7 +75,8 @@ test('Inject Post via JSON data', function (bool $isJson) {
 
 test('Injected function result', function () {
     [$status, $data] = $this->request('GET', '/injectors/v1/hello-world');
-    expect($status)->toBe(200)
+    expect($status)
+        ->toBe(200)
         ->and($data)
         ->toBeString()
         ->toBe('Hello World!Hello World!');

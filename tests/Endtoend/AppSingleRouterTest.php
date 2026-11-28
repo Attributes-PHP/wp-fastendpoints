@@ -32,7 +32,8 @@ test('Retrieving a post by id', function () {
     $this->authenticateAs($userId);
 
     [$status, $data] = $this->request('GET', "/my-posts/v1/{$postId}");
-    expect($status)->toBe(200)
+    expect($status)
+        ->toBe(200)
         ->and($data)
         ->toBeArray()
         ->toBe([
@@ -48,7 +49,8 @@ test('Trying to retrieve a post without permissions', function () {
     $postId = $this->createPost();
 
     [$status, $data] = $this->request('GET', "/my-posts/v1/{$postId}");
-    expect($status)->toBe(403)
+    expect($status)
+        ->toBe(403)
         ->and($data)
         ->toBe([
             'code' => 403,
@@ -74,9 +76,12 @@ test('Updating a post', function () {
     // is verified against the database instead.
     expect($status)->toBe(204);
     $post = get_post($postId);
-    expect($post->post_author)->toBe((string) $userId)
-        ->and($post->post_title)->toBe('My title')
-        ->and($post->post_status)->toBe('publish');
+    expect($post->post_author)
+        ->toBe((string) $userId)
+        ->and($post->post_title)
+        ->toBe('My title')
+        ->and($post->post_status)
+        ->toBe('publish');
 })->group('single');
 
 test('Trying to update a post without permissions', function () {
@@ -86,7 +91,8 @@ test('Trying to update a post without permissions', function () {
     $this->authenticateAs($allUserIds[1]);
 
     [$status, $data] = $this->request('PUT', "/my-posts/v1/{$postId}");
-    expect($status)->toBe(403)
+    expect($status)
+        ->toBe(403)
         ->and($data)
         ->toBe([
             'code' => 403,
@@ -102,7 +108,8 @@ test('Deleting a post', function () {
     $this->authenticateAs($userId);
 
     [$status, $data] = $this->request('DELETE', "/my-posts/v1/{$postId}");
-    expect($status)->toBe(200)
+    expect($status)
+        ->toBe(200)
         ->and($data)
         ->toBeString()
         ->toBe('Post deleted with success');
@@ -115,7 +122,8 @@ test('Trying to delete a post without permissions', function () {
     $this->authenticateAs($allUserIds[0]);
 
     [$status, $data] = $this->request('DELETE', "/my-posts/v1/{$postId}");
-    expect($status)->toBe(403)
+    expect($status)
+        ->toBe(403)
         ->and($data)
         ->toBe([
             'code' => 403,

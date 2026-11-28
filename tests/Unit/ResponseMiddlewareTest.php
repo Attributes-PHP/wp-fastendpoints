@@ -85,8 +85,7 @@ test('Retrieves multiple posts', function () {
 
         return ['posts' => $allPosts];
     });
-    $endpoint->returns(new class
-    {
+    $endpoint->returns(new class {
         public PostsArr $posts;
     });
 
@@ -94,35 +93,36 @@ test('Retrieves multiple posts', function () {
     expect($endpoint->callback($req))
         ->toBeInstanceOf(WP_REST_Response::class)
         ->toHaveProperty('status', 200)
-        ->toHaveProperty('data', ['posts' => [
-            [
-                'ID' => 10,
-                'post_author' => 15,
-                'post_title' => 'Hello World',
-                'post_status' => 'publish',
-                'post_type' => 'post',
+        ->toHaveProperty('data', [
+            'posts' => [
+                [
+                    'ID' => 10,
+                    'post_author' => 15,
+                    'post_title' => 'Hello World',
+                    'post_status' => 'publish',
+                    'post_type' => 'post',
+                ],
+                [
+                    'ID' => 11,
+                    'post_author' => 16,
+                    'post_title' => 'Hello World',
+                    'post_status' => 'publish',
+                    'post_type' => 'post',
+                ],
+                [
+                    'ID' => 12,
+                    'post_author' => 17,
+                    'post_title' => 'Hello World',
+                    'post_status' => 'publish',
+                    'post_type' => 'post',
+                ],
             ],
-            [
-                'ID' => 11,
-                'post_author' => 16,
-                'post_title' => 'Hello World',
-                'post_status' => 'publish',
-                'post_type' => 'post',
-            ],
-            [
-                'ID' => 12,
-                'post_author' => 17,
-                'post_title' => 'Hello World',
-                'post_status' => 'publish',
-                'post_type' => 'post',
-            ],
-        ]]);
+        ]);
 })->group('response', 'middleware');
 
 test('Retrieves data from to_array function', function () {
     $endpoint = new Endpoint('GET', '/returns/to_array', function () {
-        $newPost = new class extends Post
-        {
+        $newPost = new class extends Post {
             public function to_array(): array
             {
                 return [
@@ -196,7 +196,9 @@ test('Invalid response data', function (mixed $invalidData) {
     $endpoint->returns(Post::class);
 
     $req = Mockery::mock(WP_REST_Request::class);
-    $errorMessage = is_object($invalidData) || is_array($invalidData) ? 'Invalid response' : 'Invalid response data. Expected \'array\' or \'object\' but '.gettype($invalidData).' given.';
+    $errorMessage = is_object($invalidData) || is_array($invalidData)
+        ? 'Invalid response'
+        : 'Invalid response data. Expected \'array\' or \'object\' but '.gettype($invalidData).' given.';
     expect($endpoint->callback($req))
         ->toBeInstanceOf(WpError::class)
         ->toHaveProperty('code', 500)

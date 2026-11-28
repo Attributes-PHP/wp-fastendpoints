@@ -43,11 +43,16 @@ test('Creating Endpoint instance', function () {
     $endpoint = new Endpoint('GET', '/my-endpoint', '__return_false', ['my-args'], false);
     expect($endpoint)
         ->toBeInstanceOf(Endpoint::class)
-        ->and(Helpers::getNonPublicClassProperty($endpoint, 'method'))->toBe('GET')
-        ->and(Helpers::getNonPublicClassProperty($endpoint, 'route'))->toBe('/my-endpoint')
-        ->and(Helpers::getNonPublicClassProperty($endpoint, 'handler'))->toBe('__return_false')
-        ->and(Helpers::getNonPublicClassProperty($endpoint, 'args'))->toEqual(['my-args'])
-        ->and(Helpers::getNonPublicClassProperty($endpoint, 'override'))->toBeFalse();
+        ->and(Helpers::getNonPublicClassProperty($endpoint, 'method'))
+        ->toBe('GET')
+        ->and(Helpers::getNonPublicClassProperty($endpoint, 'route'))
+        ->toBe('/my-endpoint')
+        ->and(Helpers::getNonPublicClassProperty($endpoint, 'handler'))
+        ->toBe('__return_false')
+        ->and(Helpers::getNonPublicClassProperty($endpoint, 'args'))
+        ->toEqual(['my-args'])
+        ->and(Helpers::getNonPublicClassProperty($endpoint, 'override'))
+        ->toBeFalse();
 })->group('endpoint', 'constructor');
 
 // Register
@@ -89,7 +94,10 @@ test('Registering an endpoint', function (bool $withResponseSchema, $permissionC
         ->toBeTrue()
         ->and($endpoint->getFullRoute())
         ->toBe('/my-namespace/v1/users/my-endpoint');
-})->with([true, false])->with([null, '__return_false'])->group('endpoint', 'register');
+})
+    ->with([true, false])
+    ->with([null, '__return_false'])
+    ->group('endpoint', 'register');
 
 test('Skipping registering endpoint if no args specified', function () {
     $endpoint = new Endpoint('GET', '/my-endpoint', '__return_false', ['my-custom-arg' => true], false);
@@ -146,9 +154,11 @@ test('User with valid permissions', function (string $capability, ...$args) {
         ->andReturn(true);
     expect($permissionHandlers[0]($mockedRequest))->toBeTrue();
 })->with([
-    'create_users', ['edit_plugins', 'delete_plugins', 98],
+    'create_users',
+    ['edit_plugins', 'delete_plugins', 98],
     ['create_users', '<post_id>', '<another_var>', false],
-    ['edit_posts', '<argument-missing>'], '<custom-cap>',
+    ['edit_posts', '<argument-missing>'],
+    '<custom-cap>',
 ])->group('endpoint', 'hasCap');
 
 test('User not having enough permissions', function (string $capability, ...$args) {
@@ -198,8 +208,10 @@ test('User not having enough permissions', function (string $capability, ...$arg
         ->toHaveProperty('message', 'Not enough permissions')
         ->toHaveProperty('data', ['status' => 403]);
 })->with([
-    'create_users', ['edit_plugins', 'delete_plugins'],
-    '<custom_capability>', ['create_users', '<post_id>', '<another_var>'],
+    'create_users',
+    ['edit_plugins', 'delete_plugins'],
+    '<custom_capability>',
+    ['create_users', '<post_id>', '<another_var>'],
     ['create_users', '<post_id>', '<argument-missing>'],
 ])->group('endpoint', 'hasCap');
 
@@ -211,8 +223,10 @@ test('Missing capability', function () {
     $endpoint = new Endpoint('GET', '/my-endpoint', '__return_false', ['my-custom-arg' => true], false);
     expect(function () use ($endpoint) {
         $endpoint->hasCap('');
-    })->toThrow(Exception::class, 'Invalid capability. Empty capability given')
-        ->and(Helpers::getNonPublicClassProperty($endpoint, 'permissionHandlers'))->toBeEmpty();
+    })
+        ->toThrow(Exception::class, 'Invalid capability. Empty capability given')
+        ->and(Helpers::getNonPublicClassProperty($endpoint, 'permissionHandlers'))
+        ->toBeEmpty();
 })->group('endpoint', 'hasCap');
 
 // returns
@@ -240,12 +254,14 @@ test('Adding middleware before handling a request', function () {
             return 'onRequest';
         }
     }
+
     $middleware = new MyRequestMiddleware;
     $endpoint = new Endpoint('GET', '/my-endpoint', '__return_false', ['my-custom-arg' => true], false);
     expect(Helpers::getNonPublicClassProperty($endpoint, 'onRequestHandlers'))->toBeEmpty();
     $endpoint->middleware($middleware);
     $onRequestHandlers = Helpers::getNonPublicClassProperty($endpoint, 'onRequestHandlers');
-    expect($onRequestHandlers)->toHaveCount(1)
+    expect($onRequestHandlers)
+        ->toHaveCount(1)
         ->and($onRequestHandlers[0])
         ->toBeCallable()
         ->and($onRequestHandlers[0]->call($middleware))
@@ -260,12 +276,14 @@ test('Adding middleware before sending response', function () {
             return 'onResponse';
         }
     }
+
     $middleware = new MyResponseMiddleware;
     $endpoint = new Endpoint('GET', '/my-endpoint', '__return_false', ['my-custom-arg' => true], false);
     expect(Helpers::getNonPublicClassProperty($endpoint, 'onResponseHandlers'))->toBeEmpty();
     $endpoint->middleware($middleware);
     $onResponseHandlers = Helpers::getNonPublicClassProperty($endpoint, 'onResponseHandlers');
-    expect($onResponseHandlers)->toHaveCount(1)
+    expect($onResponseHandlers)
+        ->toHaveCount(1)
         ->and($onResponseHandlers[0])
         ->toBeCallable()
         ->and($onResponseHandlers[0]->call($middleware))
@@ -285,19 +303,24 @@ test('Adding middleware to trigger before handling a request and before sending 
             return 'onResponse';
         }
     }
+
     $middleware = new MyMiddleware;
     $endpoint = new Endpoint('GET', '/my-endpoint', '__return_false', ['my-custom-arg' => true], false);
-    expect(Helpers::getNonPublicClassProperty($endpoint, 'onResponseHandlers'))->toBeEmpty()
-        ->and(Helpers::getNonPublicClassProperty($endpoint, 'onRequestHandlers'))->toBeEmpty();
+    expect(Helpers::getNonPublicClassProperty($endpoint, 'onResponseHandlers'))
+        ->toBeEmpty()
+        ->and(Helpers::getNonPublicClassProperty($endpoint, 'onRequestHandlers'))
+        ->toBeEmpty();
     $endpoint->middleware($middleware);
     $onRequestHandlers = Helpers::getNonPublicClassProperty($endpoint, 'onRequestHandlers');
-    expect($onRequestHandlers)->toHaveCount(1)
+    expect($onRequestHandlers)
+        ->toHaveCount(1)
         ->and($onRequestHandlers[0])
         ->toBeCallable()
         ->and($onRequestHandlers[0]->call($middleware))
         ->toBe('onRequest');
     $onResponseHandlers = Helpers::getNonPublicClassProperty($endpoint, 'onResponseHandlers');
-    expect($onResponseHandlers)->toHaveCount(1)
+    expect($onResponseHandlers)
+        ->toHaveCount(1)
         ->and($onResponseHandlers[0])
         ->toBeCallable()
         ->and($onResponseHandlers[0]->call($middleware))
@@ -310,6 +333,7 @@ test('Adding middleware with missing methods', function () {
     {
         public function hey(): void {}
     }
+
     expect(fn () => new InvalidMiddleware)
         ->toThrow(Exception::class, 'At least one method onRequest() or onResponse() must be declared on the class.');
 })->group('endpoint', 'middleware');
@@ -324,8 +348,7 @@ test('Adding permission callable', function () {
     expect(Helpers::getNonPublicClassProperty($endpoint, 'permissionHandlers'))->toBeEmpty();
     $endpoint->permission($permissionCallable);
     $permissionHandlers = Helpers::getNonPublicClassProperty($endpoint, 'permissionHandlers');
-    expect($permissionHandlers)->toHaveCount(1)
-        ->and($permissionHandlers[0])->toBe($permissionCallable);
+    expect($permissionHandlers)->toHaveCount(1)->and($permissionHandlers[0])->toBe($permissionCallable);
 })->group('endpoint', 'permission');
 
 test('Endpoint permission callbacks preserve registration order', function () {
@@ -335,9 +358,12 @@ test('Endpoint permission callbacks preserve registration order', function () {
     $endpoint->permission($permissionCallable);
     $endpoint->permission($secondPermissionCallable);
     $permissionHandlers = Helpers::getNonPublicClassProperty($endpoint, 'permissionHandlers');
-    expect($permissionHandlers)->toHaveCount(2)
-        ->and($permissionHandlers[0])->toBe($permissionCallable)
-        ->and($permissionHandlers[1])->toBe($secondPermissionCallable);
+    expect($permissionHandlers)
+        ->toHaveCount(2)
+        ->and($permissionHandlers[0])
+        ->toBe($permissionCallable)
+        ->and($permissionHandlers[1])
+        ->toBe($secondPermissionCallable);
 })->group('endpoint', 'permission');
 
 // permissionCallback
@@ -352,7 +378,8 @@ test('Running permission handlers in permission callback', function ($returnValu
         ->makePartial();
     Helpers::setNonPublicClassProperty($mockedEndpoint, 'invoker', new Invoker);
     Helpers::setNonPublicClassProperty($mockedEndpoint, 'permissionHandlers', ['test-permission-handler']);
-    $mockedEndpoint->shouldReceive('runHandlers')
+    $mockedEndpoint
+        ->shouldReceive('runHandlers')
         ->once()
         ->with(['test-permission-handler'], Mockery::type('array'), true, true)
         ->andReturn($returnValue);
@@ -365,9 +392,15 @@ test('Running permission handlers in permission callback', function ($returnValu
 // callback
 
 test('Endpoint request handler', function (bool $hasRequestHandlers, bool $hasResponseHandlers) {
-    $endpoint = new Endpoint('GET', '/my-endpoint', function () {
-        return 'my-response';
-    }, ['my-custom-arg' => true], true);
+    $endpoint = new Endpoint(
+        'GET',
+        '/my-endpoint',
+        function () {
+            return 'my-response';
+        },
+        ['my-custom-arg' => true],
+        true,
+    );
     $req = Mockery::mock(WP_REST_Request::class);
     if ($hasRequestHandlers) {
         $onRequestHandlers = [function () {
@@ -384,12 +417,25 @@ test('Endpoint request handler', function (bool $hasRequestHandlers, bool $hasRe
     expect($endpoint->callback($req))
         ->toBeInstanceOf(WP_REST_Response::class)
         ->toHaveProperty('data', 'my-response');
-})->with([true, false])->with([true, false])->group('endpoint', 'callback');
+})
+    ->with([true, false])
+    ->with([true, false])
+    ->group('endpoint', 'callback');
 
-test('Handling request and a WpError is returned', function ($onRequestReturnVal, $handlerReturnVal, $onResponseReturnVal) {
-    $endpoint = new Endpoint('GET', '/my-endpoint', function () use ($handlerReturnVal) {
-        return is_string($handlerReturnVal) ? new $handlerReturnVal(123, 'my-error-msg') : $handlerReturnVal;
-    }, ['my-custom-arg' => true], true);
+test('Handling request and a WpError is returned', function (
+    $onRequestReturnVal,
+    $handlerReturnVal,
+    $onResponseReturnVal,
+) {
+    $endpoint = new Endpoint(
+        'GET',
+        '/my-endpoint',
+        function () use ($handlerReturnVal) {
+            return is_string($handlerReturnVal) ? new $handlerReturnVal(123, 'my-error-msg') : $handlerReturnVal;
+        },
+        ['my-custom-arg' => true],
+        true,
+    );
     $req = Mockery::mock(WP_REST_Request::class);
     $onRequestHandlers = [function () use ($onRequestReturnVal) {
         return is_string($onRequestReturnVal) ? new $onRequestReturnVal(123, 'my-error-msg') : $onRequestReturnVal;
@@ -405,9 +451,9 @@ test('Handling request and a WpError is returned', function ($onRequestReturnVal
         ->toHaveProperty('message', 'my-error-msg')
         ->toHaveProperty('data', ['status' => 123]);
 })->with([
-    [WpError::class, true, true],
-    [true, WpError::class, true],
-    [true, true, WpError::class],
+    [WpError::class, true,           true],
+    [true,           WpError::class, true],
+    [true,           true,           WpError::class],
 ])->group('endpoint', 'callback');
 
 test('Handling request with an invalid request payload', function () {
@@ -417,11 +463,13 @@ test('Handling request with an invalid request payload', function () {
         return $missingField + $postId;
     });
     $req = Mockery::mock(WP_REST_Request::class);
-    $req->expects()
+    $req
+        ->expects()
         ->get_url_params()
         ->times(2)
         ->andReturn(['postId' => 10]);
-    $req->expects()
+    $req
+        ->expects()
         ->get_query_params()
         ->once()
         ->andReturn(['another' => 2]);
@@ -437,7 +485,8 @@ test('Handling request with an invalid request payload', function () {
                     'field' => 'missingField',
                     'reason' => 'Missing required argument \'missingField\'',
                 ],
-            ]]);
+            ],
+        ]);
 })->group('endpoint', 'callback');
 
 test('Handling request and invoker is unable to resolve dependencies', function () {
@@ -453,7 +502,10 @@ test('Handling request and invoker is unable to resolve dependencies', function 
     expect($endpoint->callback($req))
         ->toBeInstanceOf(WpError::class)
         ->toHaveProperty('code', 500)
-        ->toHaveProperty('message', 'Unable to invoke the callable because no value was given for parameter 1 ($missingField)')
+        ->toHaveProperty(
+            'message',
+            'Unable to invoke the callable because no value was given for parameter 1 ($missingField)',
+        )
         ->toHaveProperty('data', ['status' => 500]);
 })->group('endpoint', 'callback');
 
@@ -467,10 +519,10 @@ test('Getting endpoint route', function (string $route, string $expectedRoute) {
     expect(Helpers::invokeNonPublicClassMethod($endpoint, 'getRoute', '/my-base'))
         ->toBe($expectedRoute);
 })->with([
-    ['', '/my-base/'],
-    ['/', '/my-base/'],
-    ['/hello', '/my-base/hello'],
-    ['hello', '/my-base/hello'],
+    ['',              '/my-base/'],
+    ['/',             '/my-base/'],
+    ['/hello',        '/my-base/hello'],
+    ['hello',         '/my-base/hello'],
     ['hello/another', '/my-base/hello/another'],
 ])->group('endpoint', 'getRoute');
 
