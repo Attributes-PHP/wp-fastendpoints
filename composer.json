@@ -45,7 +45,7 @@
     "scripts": {
         "lint": "./vendor/bin/mago format",
         "test:lint": "./vendor/bin/mago format --check",
-        "test:coverage": "php -d error_reporting=24575 vendor/bin/pest --coverage",
+        "test:coverage": "php -d error_reporting=24575 vendor/bin/pest --coverage --coverage-clover tests/coverage/clover.xml --coverage-html tests/coverage/html",
         "test:mutate": "php -d error_reporting=24575 vendor/bin/pest --mutate --parallel",
         "test:unit": "php -d error_reporting=24575 vendor/bin/pest --colors=always",
         "test:integration": "npm run test:integration",

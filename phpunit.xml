@@ -8,12 +8,6 @@
   <php>
     <env name="TEST" value="true" force="true"/>
   </php>
-  <coverage>
-    <report>
-      <clover outputFile="tests/coverage/clover.xml"/>
-      <html outputDirectory="tests/coverage/html" lowUpperBound="50" highLowerBound="90"/>
-    </report>
-  </coverage>
   <source>
     <include>
       <directory suffix=".php">./src</directory>
