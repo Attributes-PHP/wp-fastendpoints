@@ -230,7 +230,7 @@ test('Load parameters from respective options', function (int|array $post) {
             'post' => $post,
         ]);
 })
-    ->with([1, ['post_author' => 11, 'post_title' => 'My first post', 'post_status' => 'publish']])
+    ->with([1, [['post_author' => 11, 'post_title' => 'My first post', 'post_status' => 'publish']]])
     ->group('di', 'lazyload', 'options');
 
 test('Unable to find parameter', function () {
