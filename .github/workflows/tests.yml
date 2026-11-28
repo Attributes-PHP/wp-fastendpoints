@@ -44,25 +44,5 @@ jobs:
     - name: Run test suite
       run: composer run-script test
 
-  mutation:
-
-    runs-on: ubuntu-latest
-
-    name: Mutation testing - PHP 8.3
-
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v7
-
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.3'
-        tools: composer:v2
-        coverage: pcov
-
-    - name: Install PHP dependencies
-      run: composer update --prefer-stable --no-interaction --no-progress --ansi
-
     - name: Run mutation testing
       run: composer run-script test:mutate
