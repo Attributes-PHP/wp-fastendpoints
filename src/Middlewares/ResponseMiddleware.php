@@ -62,20 +62,27 @@ class ResponseMiddleware extends Middleware
      * @param  mixed  $response  Current REST response.
      * @return null|WP_Error|WP_REST_Response null if nothing to change, WP_Error on error or WP_REST_Response for early return.
      */
-    public function onResponse(WP_REST_Request $request, WP_REST_Response $response, #[Inject] Serializable $serializer): null|WP_Error|WP_REST_Response
-    {
+    public function onResponse(
+        WP_REST_Request $request,
+        WP_REST_Response $response,
+        #[Inject]
+        Serializable $serializer,
+    ): WP_Error|WP_REST_Response|null {
         $data = $this->getData($request, $response);
         if (is_wp_error($data) || $data instanceof WP_REST_Response) {
             return $data;
         }
 
         if (! is_object($data) && ! is_array($data)) {
-            return new WpError(WP_Http::INTERNAL_SERVER_ERROR, 'Invalid response data. Expected \'array\' or \'object\' but '.gettype($data).' given.');
+            return new WpError(
+                WP_Http::INTERNAL_SERVER_ERROR,
+                'Invalid response data. Expected \'array\' or \'object\' but '.gettype($data).' given.',
+            );
         }
 
         $schemaClass = is_object($this->schema) ? $this->schema::class : $this->schema;
         try {
-            if (! ($data instanceof $schemaClass)) {
+            if (! $data instanceof $schemaClass) {
                 $validator = $this->getValidator();
                 $data = $validator->validate((array) $data, $this->schema);
             }
@@ -86,7 +93,10 @@ class ResponseMiddleware extends Middleware
 
             return apply_filters('fastendpoints_response_error', $wpError, $e, $response, $request, $this);
         } catch (SerializeException $e) {
-            $wpError = new WpError(WP_Http::INTERNAL_SERVER_ERROR, sprintf(__('Unable to serialize response due to %s'), $e->getMessage()));
+            $wpError = new WpError(WP_Http::INTERNAL_SERVER_ERROR, sprintf(
+                __('Unable to serialize response due to %s'),
+                $e->getMessage(),
+            ));
 
             return apply_filters('fastendpoints_response_error', $wpError, $e, $response, $request, $this);
         }

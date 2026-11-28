@@ -375,7 +375,7 @@ class Router implements RouterContract
         string $route,
         callable $handler,
         array $args = [],
-        bool $override = false
+        bool $override = false,
     ): EndpointContract {
         $endpoint = new Endpoint($method, $route, $handler, $args, $override);
         $this->endpoints[] = $endpoint;

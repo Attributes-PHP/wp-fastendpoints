@@ -82,7 +82,7 @@ test('Retrieving a post by id', function () {
     $postId = $this::factory()->post->create(['post_author' => $userId]);
     wp_set_current_user($userId);
     $response = $this->server->dispatch(
-        new WP_REST_Request('GET', "/my-api/v1/my-posts/v1/{$postId}")
+        new WP_REST_Request('GET', "/my-api/v1/my-posts/v1/{$postId}"),
     );
     expect($response->get_status())->toBe(200);
 })->group('multiple');
@@ -118,14 +118,16 @@ test('Deleting a post', function () {
 test('Trigger error in a middleware', function (string $middlewareType, string $errorMessage) {
     $request = new WP_REST_Request('GET', "/my-api/v1/my-actions/v2/middleware/{$middlewareType}/error");
     $response = $this->server->dispatch($request);
-    expect($response->get_status())->toBe(469)
+    expect($response->get_status())
+        ->toBe(469)
         ->and((object) $response->get_data())
         ->toHaveProperty('code', 469)
         ->toHaveProperty('message', $errorMessage)
         ->toHaveProperty('data', ['status' => 469]);
 })->with([
-    ['on-request', 'Triggered error action before handling request'],
-    ['on-response', 'Triggered error action before sending response']])->group('multiple');
+    ['on-request',  'Triggered error action before handling request'],
+    ['on-response', 'Triggered error action before sending response'],
+])->group('multiple');
 
 test('Trigger success in a middleware', function (string $middlewareType) {
     $request = new WP_REST_Request('GET', "/my-api/v1/my-actions/v2/middleware/{$middlewareType}/success");
@@ -136,7 +138,8 @@ test('Trigger success in a middleware', function (string $middlewareType) {
 test('Trigger no permissions in permission callback - WP Error', function () {
     $request = new WP_REST_Request('GET', '/my-api/v1/my-actions/v2/permission/notAllowed');
     $response = $this->server->dispatch($request);
-    expect($response->get_status())->toBe(403)
+    expect($response->get_status())
+        ->toBe(403)
         ->and((object) $response->get_data())
         ->toHaveProperty('code', 403)
         ->toHaveProperty('message', 'Failed permission callback check')
@@ -146,7 +149,8 @@ test('Trigger no permissions in permission callback - WP Error', function () {
 test('Trigger no permissions in permission callback - boolean', function () {
     $request = new WP_REST_Request('GET', '/my-api/v1/my-actions/v2/bool/permission/notAllowed');
     $response = $this->server->dispatch($request);
-    expect($response->get_status())->toBe(401)
+    expect($response->get_status())
+        ->toBe(401)
         ->and((object) $response->get_data())
         ->toHaveProperty('code', 'rest_forbidden')
         ->toHaveProperty('message', 'Sorry, you are not allowed to do that.')

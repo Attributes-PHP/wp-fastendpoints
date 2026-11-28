@@ -1,5 +1,9 @@
 <?php
 
+set_error_handler(static function (int $severity): bool {
+    return ($severity & (E_DEPRECATED | E_USER_DEPRECATED)) !== 0;
+});
+
 /**
  * Include core bootstrap for an integration test suite
  *
@@ -18,10 +22,11 @@ $argv = $GLOBALS['argv'] ?? [];
 $wpLoad = dirname(__DIR__, 4).'/wp-load.php';
 if (in_array('--group=endtoend', $argv, true)) {
     if (! file_exists($wpLoad)) {
-        echo PHP_EOL,
-        'ERROR: End-to-end tests require the wp-env test environment to be running.'.PHP_EOL,
-        'Start it with: npm install && npm run test:endtoend'.PHP_EOL,
-        PHP_EOL;
+        echo
+            PHP_EOL,
+            'ERROR: End-to-end tests require the wp-env test environment to be running.'.PHP_EOL,
+            'Start it with: npm install && npm run test:endtoend'.PHP_EOL,
+            PHP_EOL;
         exit(1);
     }
 
@@ -39,9 +44,10 @@ if (getenv('WP_TESTS_DIR') !== false && file_exists(getenv('WP_TESTS_DIR').'/inc
 
 // Pointed at integration tests while wp-env isn't running, meaning WordPress is nowhere to be found.
 if (in_array('--group=integration', $argv, true)) {
-    echo PHP_EOL,
-    'ERROR: Integration tests require the wp-env test environment to be running.'.PHP_EOL,
-    'Start it with: npm install && npm run test:integration'.PHP_EOL,
-    PHP_EOL;
+    echo
+        PHP_EOL,
+        'ERROR: Integration tests require the wp-env test environment to be running.'.PHP_EOL,
+        'Start it with: npm install && npm run test:integration'.PHP_EOL,
+        PHP_EOL;
     exit(1);
 }

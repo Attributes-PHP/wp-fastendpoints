@@ -27,7 +27,8 @@ use WP_REST_Request;
 test('Fetch query params', function () {
     $from = new Query;
     $request = Mockery::mock(WP_REST_Request::class);
-    $request->shouldReceive('get_query_params')
+    $request
+        ->shouldReceive('get_query_params')
         ->once()
         ->andReturn(['post_id' => 10]);
     $params = $from->getParams($request);
@@ -41,7 +42,8 @@ test('Fetch query params', function () {
 test('Fetch url params', function () {
     $from = new Url;
     $request = Mockery::mock(WP_REST_Request::class);
-    $request->shouldReceive('get_url_params')
+    $request
+        ->shouldReceive('get_url_params')
         ->once()
         ->andReturn(['post_id' => 10]);
     $params = $from->getParams($request);
@@ -55,7 +57,8 @@ test('Fetch url params', function () {
 test('Fetch json params', function () {
     $from = new Json;
     $request = Mockery::mock(WP_REST_Request::class);
-    $request->shouldReceive('get_json_params')
+    $request
+        ->shouldReceive('get_json_params')
         ->once()
         ->andReturn(['post_id' => 10]);
     $params = $from->getParams($request);
@@ -69,7 +72,8 @@ test('Fetch json params', function () {
 test('Fetch body params', function () {
     $from = new Body;
     $request = Mockery::mock(WP_REST_Request::class);
-    $request->shouldReceive('get_body_params')
+    $request
+        ->shouldReceive('get_body_params')
         ->once()
         ->andReturn(['post_id' => 10]);
     $params = $from->getParams($request);
@@ -83,10 +87,12 @@ test('Fetch body params', function () {
 test('Fetch header params', function () {
     $from = new Header;
     $request = Mockery::mock(WP_REST_Request::class);
-    $request->shouldReceive('get_headers')
+    $request
+        ->shouldReceive('get_headers')
         ->once()
         ->andReturn(['post_id' => true]);
-    $request->shouldReceive('get_header')
+    $request
+        ->shouldReceive('get_header')
         ->once()
         ->with('post_id')
         ->andReturn(10);
@@ -113,7 +119,8 @@ test('Fetch cookie params', function () {
 test('Fetch file params', function () {
     $from = new File;
     $request = Mockery::mock(WP_REST_Request::class);
-    $request->shouldReceive('get_file_params')
+    $request
+        ->shouldReceive('get_file_params')
         ->once()
         ->andReturn(['my-file' => ['full_path' => ['hello-world.txt']]]);
     $params = $from->getParams($request);
@@ -127,7 +134,8 @@ test('Fetch file params', function () {
 test('Fetch any params', function () {
     $from = new Any;
     $request = Mockery::mock(WP_REST_Request::class);
-    $request->shouldReceive('get_params')
+    $request
+        ->shouldReceive('get_params')
         ->once()
         ->andReturn(['post_id' => 10]);
     $params = $from->getParams($request);

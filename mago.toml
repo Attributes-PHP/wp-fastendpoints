@@ -1,0 +1,10 @@
+version = "1"
+php-version = "8.2"
+
+[source]
+paths = ["src", "tests", "fastendpoints.php"]
+includes = ["vendor"]
+excludes = ["wp", "wp-content"]
+
+[formatter]
+preset = "laravel"

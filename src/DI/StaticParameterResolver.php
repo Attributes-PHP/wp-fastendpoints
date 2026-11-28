@@ -29,7 +29,7 @@ class StaticParameterResolver implements ParameterResolver
     public function getParameters(
         ReflectionFunctionAbstract $reflection,
         array $providedParameters,
-        array $resolvedParameters
+        array $resolvedParameters,
     ): array {
         $parameters = $reflection->getParameters();
 
@@ -44,7 +44,7 @@ class StaticParameterResolver implements ParameterResolver
             }
 
             $type = $parameter->getType();
-            if (! ($type instanceof ReflectionNamedType) || $type->isBuiltin()) {
+            if (! $type instanceof ReflectionNamedType || $type->isBuiltin()) {
                 continue;
             }
 
@@ -65,7 +65,6 @@ class StaticParameterResolver implements ParameterResolver
 
                     continue 2;
             }
-
         }
 
         return $resolvedParameters;

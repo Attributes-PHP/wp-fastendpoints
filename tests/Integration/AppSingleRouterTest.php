@@ -61,7 +61,7 @@ test('Retrieving a post by id', function () {
     $postId = $this::factory()->post->create(['post_author' => $userId, 'post_title' => 'My title']);
     wp_set_current_user($userId);
     $response = $this->server->dispatch(
-        new WP_REST_Request('GET', "/my-posts/v1/{$postId}")
+        new WP_REST_Request('GET', "/my-posts/v1/{$postId}"),
     );
     expect($response->get_status())
         ->toBe(200)
@@ -79,10 +79,11 @@ test('Retrieving a post by id', function () {
 test('Trying to retrieve a post without permissions', function () {
     $postId = $this::factory()->post->create();
     $response = $this->server->dispatch(
-        new WP_REST_Request('GET', "/my-posts/v1/{$postId}")
+        new WP_REST_Request('GET', "/my-posts/v1/{$postId}"),
     );
     $data = (object) $response->get_data();
-    expect($response->get_status())->toBe(403)
+    expect($response->get_status())
+        ->toBe(403)
         ->and($data)
         ->toHaveProperty('code', 403)
         ->toHaveProperty('message', 'Not enough permissions')

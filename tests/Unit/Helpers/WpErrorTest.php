@@ -44,7 +44,11 @@ test('Setting correct params', function () {
         ->toBeInstanceOf(WP_Error::class)
         ->toHaveProperty('code', 543)
         ->toHaveProperty('message')
-        ->toHaveProperty('data', ['status' => 543, 'all_messages' => ['My error message'], 'custom-field' => 'Testing']);
+        ->toHaveProperty('data', [
+            'status' => 543,
+            'all_messages' => ['My error message'],
+            'custom-field' => 'Testing',
+        ]);
 })->group('helpers', 'WpError', 'constructor');
 
 // Getting first message

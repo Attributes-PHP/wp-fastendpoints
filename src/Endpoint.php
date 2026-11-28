@@ -125,8 +125,13 @@ class Endpoint implements EndpointInterface
      *                       WP FastEndpoints arguments.
      * @param  bool  $override  Same as the WordPress register_rest_route $override parameter. Default value: false.
      */
-    public function __construct(string $method, string $route, callable $handler, array $args = [], bool $override = false)
-    {
+    public function __construct(
+        string $method,
+        string $route,
+        callable $handler,
+        array $args = [],
+        bool $override = false,
+    ) {
         $this->method = $method;
         $this->route = $route;
         $this->fullRoute = $route;
@@ -334,7 +339,12 @@ class Endpoint implements EndpointInterface
             'endpoint' => $this,
             'request' => $request,
         ];
-        $result = $this->runHandlers($this->getPermissionHandlers(), $dependencies, isToReturnResult: true, isPermissionCallback: true);
+        $result = $this->runHandlers(
+            $this->getPermissionHandlers(),
+            $dependencies,
+            isToReturnResult: true,
+            isPermissionCallback: true,
+        );
         if (is_wp_error($result) || $result === false) {
             return $result;
         }
@@ -403,8 +413,12 @@ class Endpoint implements EndpointInterface
      *
      * @throws InvocationException
      */
-    protected function runHandlers(array $allHandlers, array $dependencies, bool $isToReturnResult = false, bool $isPermissionCallback = false): mixed
-    {
+    protected function runHandlers(
+        array $allHandlers,
+        array $dependencies,
+        bool $isToReturnResult = false,
+        bool $isPermissionCallback = false,
+    ): mixed {
         $result = null;
         foreach ($allHandlers as $handler) {
             try {

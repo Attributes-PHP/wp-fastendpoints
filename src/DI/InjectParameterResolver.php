@@ -52,7 +52,7 @@ class InjectParameterResolver implements ParameterResolver
     public function getParameters(
         ReflectionFunctionAbstract $reflection,
         array $providedParameters,
-        array $resolvedParameters
+        array $resolvedParameters,
     ): array {
         $parameters = $reflection->getParameters();
 

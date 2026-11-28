@@ -36,7 +36,10 @@ class Invoker extends BaseInvoker
     {
         $validator = apply_filters('fastendpoints_validator', new Validator);
         $serializer = apply_filters('fastendpoints_serializer', new Serializer);
-        $this->injectableParameterResolver = new InjectParameterResolver(validator: $validator, serializer: $serializer);
+        $this->injectableParameterResolver = new InjectParameterResolver(
+            validator: $validator,
+            serializer: $serializer,
+        );
 
         return new ResolverChain([
             new StaticParameterResolver,

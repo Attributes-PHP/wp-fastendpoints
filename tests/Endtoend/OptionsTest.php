@@ -32,7 +32,8 @@ test('Default option', function (bool $isJson) {
         'query' => ['queryParam' => '11'],
         $isJson ? 'json' : 'form' => $post,
     ]);
-    expect($status)->toBe(200)
+    expect($status)
+        ->toBe(200)
         ->and($data)
         ->toBeArray()
         ->toMatchArray([
@@ -57,7 +58,8 @@ test('Query option', function (mixed $value, mixed $expectedValue) {
             'all_posts' => "$value,$value,$value",
         ],
     ]);
-    expect($status)->toBe(200)
+    expect($status)
+        ->toBe(200)
         ->and($data)
         ->toBeArray()
         ->toMatchArray([
@@ -72,7 +74,8 @@ test('Query option', function (mixed $value, mixed $expectedValue) {
 
 test('Url option', function (mixed $value, mixed $expectedValue) {
     [$status, $data] = $this->request('GET', "/options/v1/url/$value");
-    expect($status)->toBe(200)
+    expect($status)
+        ->toBe(200)
         ->and($data)
         ->toBeInt()
         ->toBe($expectedValue);
@@ -86,7 +89,8 @@ test('Json option', function () {
     [$status, $data] = $this->request('GET', '/options/v1/json', [
         'json' => ['post_id' => 10],
     ]);
-    expect($status)->toBe(200)
+    expect($status)
+        ->toBe(200)
         ->and($data)
         ->toBeInt()
         ->toBe(10);
@@ -98,7 +102,8 @@ test('Body option', function () {
     [$status, $data] = $this->request('POST', '/options/v1/body', [
         'form' => ['post_id' => 10],
     ]);
-    expect($status)->toBe(200)
+    expect($status)
+        ->toBe(200)
         ->and($data)
         ->toBeInt()
         ->toBe(10);
@@ -116,7 +121,8 @@ test('Header option', function (mixed $value, mixed $expectedValue) {
             'all-posts' => "$value,$value,$value",
         ],
     ]);
-    expect($status)->toBe(200)
+    expect($status)
+        ->toBe(200)
         ->and($data)
         ->toBeArray()
         ->toMatchArray([
@@ -135,7 +141,8 @@ test('Cookie option', function (mixed $value, mixed $expectedValue) {
             'Cookie' => "post_id={$value}; all_posts={$value},{$value},{$value}",
         ],
     ]);
-    expect($status)->toBe(200)
+    expect($status)
+        ->toBe(200)
         ->and($data)
         ->toBeArray()
         ->toMatchArray([
@@ -152,14 +159,16 @@ test('File option', function () {
     $boundary = uniqid();
     [$status, $data] = $this->request('POST', '/options/v1/file', [
         'headers' => ['Content-Type' => "multipart/form-data; boundary={$boundary}"],
-        'body' => "--{$boundary}\r\n"
-            ."Content-Disposition: form-data; name=\"my_file\"; filename=\"hello-world.txt\"\r\n"
-            ."Content-Type: text/plain\r\n"
-            ."\r\n"
-            ."Hello World!\r\n"
-            ."--{$boundary}--\r\n",
+        'body' =>
+            "--{$boundary}\r\n"
+                ."Content-Disposition: form-data; name=\"my_file\"; filename=\"hello-world.txt\"\r\n"
+                ."Content-Type: text/plain\r\n"
+                ."\r\n"
+                ."Hello World!\r\n"
+                ."--{$boundary}--\r\n",
     ]);
-    expect($status)->toBe(200)
+    expect($status)
+        ->toBe(200)
         ->and($data)
         ->toBeArray()
         ->toMatchArray([
@@ -176,7 +185,8 @@ test('Any option - query', function () {
     [$status, $data] = $this->request('POST', '/options/v1/any', [
         'query' => ['post_id' => 10],
     ]);
-    expect($status)->toBe(200)
+    expect($status)
+        ->toBe(200)
         ->and($data)
         ->toBeInt()
         ->toBe(10);
@@ -184,7 +194,8 @@ test('Any option - query', function () {
 
 test('Any option - url', function () {
     [$status, $data] = $this->request('POST', '/options/v1/any/10');
-    expect($status)->toBe(200)
+    expect($status)
+        ->toBe(200)
         ->and($data)
         ->toBeInt()
         ->toBe(10);
@@ -194,7 +205,8 @@ test('Any option - json', function () {
     [$status, $data] = $this->request('POST', '/options/v1/any', [
         'json' => ['post_id' => 10],
     ]);
-    expect($status)->toBe(200)
+    expect($status)
+        ->toBe(200)
         ->and($data)
         ->toBeInt()
         ->toBe(10);
@@ -204,7 +216,8 @@ test('Any option - body', function () {
     [$status, $data] = $this->request('POST', '/options/v1/any', [
         'form' => ['post_id' => 10],
     ]);
-    expect($status)->toBe(200)
+    expect($status)
+        ->toBe(200)
         ->and($data)
         ->toBeInt()
         ->toBe(10);
