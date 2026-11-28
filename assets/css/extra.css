@@ -1,0 +1,18 @@
+/* Keep the index page badges on a single centered row instead of stacking. */
+article p[align="center"] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+}
+
+article p[align="center"] img {
+    display: inline;
+    margin: 0;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    flex: 0 1 auto;
+    min-width: 0;
+}
