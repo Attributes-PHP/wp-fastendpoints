@@ -43,6 +43,8 @@ afterEach(function () {
 
 // returns
 
+mutates(ResponseMiddleware::class);
+
 test('Retrieves a single post', function () {
     $endpoint = new Endpoint('POST', '/returns/single', function () {
         return [

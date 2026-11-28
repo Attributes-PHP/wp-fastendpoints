@@ -43,6 +43,8 @@ dataset('http_methods', [
 
 // Constructor
 
+mutates(Router::class);
+
 test('Creating Router instance', function () {
     $router = new Router;
     expect($router)->toBeInstanceOf(Router::class);

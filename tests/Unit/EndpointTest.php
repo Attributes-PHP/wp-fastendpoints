@@ -39,6 +39,8 @@ afterEach(function () {
 
 // Constructor
 
+mutates(Endpoint::class);
+
 test('Creating Endpoint instance', function () {
     $endpoint = new Endpoint('GET', '/my-endpoint', '__return_false', ['my-args'], false);
     expect($endpoint)

@@ -25,4 +25,14 @@ if (! class_exists('WP_UnitTestCase')) {
  * Base test case for integration tests, which makes both the WordPress test
  * factories and the database cleanup between tests available.
  */
-abstract class TestCase extends WP_UnitTestCase {}
+abstract class TestCase extends WP_UnitTestCase
+{
+    public function expectDeprecated()
+    {
+        if (! method_exists(\PHPUnit\Util\Test::class, 'parseTestMethodAnnotations')) {
+            return;
+        }
+
+        parent::expectDeprecated();
+    }
+}
