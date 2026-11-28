@@ -4,7 +4,8 @@
     "phpVersion": "8.2",
     "port": 8889,
     "config": {
-        "FASTENDPOINTS_ENDTOEND_TESTS": true
+        "FASTENDPOINTS_ENDTOEND_TESTS": true,
+        "WP_DEBUG": false
     },
     "mappings": {
         "wp-content/plugins/fastendpoints": "."
