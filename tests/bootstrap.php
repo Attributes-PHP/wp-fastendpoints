@@ -1,5 +1,9 @@
 <?php
 
+set_error_handler(static function (int $severity): bool {
+    return ($severity & (E_DEPRECATED | E_USER_DEPRECATED)) !== 0;
+});
+
 /**
  * Include core bootstrap for an integration test suite
  *
