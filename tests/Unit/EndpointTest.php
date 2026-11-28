@@ -234,6 +234,7 @@ test('Missing capability', function () {
 // returns
 
 test('Adding response validation schema', function ($schema) {
+    $schema = $schema === 'post-instance' ? new Post : $schema;
     $endpoint = new Endpoint('GET', '/my-endpoint', '__return_false', ['my-custom-arg' => true], false);
     expect(Helpers::getNonPublicClassProperty($endpoint, 'onResponseHandlers'))
         ->toBeEmpty()
@@ -244,7 +245,7 @@ test('Adding response validation schema', function ($schema) {
         ->toHaveCount(1)
         ->and($onResponseHandlers[0])
         ->toBeCallable();
-})->with([Post::class, new Post])->group('endpoint', 'returns');
+})->with([[Post::class], ['post-instance']])->group('endpoint', 'returns');
 
 // middleware
 
