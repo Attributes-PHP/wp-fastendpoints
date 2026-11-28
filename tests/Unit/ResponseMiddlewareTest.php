@@ -43,6 +43,8 @@ afterEach(function () {
 
 // returns
 
+mutates(ResponseMiddleware::class);
+
 test('Retrieves a single post', function () {
     $endpoint = new Endpoint('POST', '/returns/single', function () {
         return [
@@ -157,7 +159,12 @@ test('Retrieves data from to_array function', function () {
         ]);
 })->group('response', 'middleware');
 
-test('Ignores response validation via early return', function (WP_REST_Response|WP_Error $earlyResponse) {
+test('Ignores response validation via early return', function (mixed $earlyResponse) {
+    $earlyResponse = match ($earlyResponse) {
+        'response' => new WP_REST_Response(status: 204),
+        'error' => new WP_Error(code: 404, message: 'Not Found'),
+        default => $earlyResponse,
+    };
     $endpoint = new Endpoint('POST', '/returns', function () use ($earlyResponse) {
         return $earlyResponse;
     });
@@ -166,13 +173,15 @@ test('Ignores response validation via early return', function (WP_REST_Response|
     $req = Mockery::mock(WP_REST_Request::class);
     expect($endpoint->callback($req))->toBe($earlyResponse);
 })
-    ->with([
-        new WP_REST_Response(status: 204),
-        new WP_Error(code: 404, message: 'Not Found'),
-    ])
+    ->with(['response', 'error'])
     ->group('response', 'middleware');
 
-test('Ignores response validation via hook', function (WP_REST_Response|WP_Error $earlyResponse) {
+test('Ignores response validation via hook', function (mixed $earlyResponse) {
+    $earlyResponse = match ($earlyResponse) {
+        'response' => new WP_REST_Response(status: 204),
+        'error' => new WP_Error(code: 404, message: 'Not Found'),
+        default => $earlyResponse,
+    };
     Filters\expectApplied('fastendpoints_response_data')->andReturn($earlyResponse);
     $req = Mockery::mock(WP_REST_Request::class);
     $res = Mockery::mock(WP_REST_Response::class);
@@ -183,13 +192,11 @@ test('Ignores response validation via hook', function (WP_REST_Response|WP_Error
     $result = $responseMiddleware->onResponse($req, $res, $serializer);
     expect($result)->toBe($earlyResponse);
 })
-    ->with([
-        new WP_REST_Response(status: 204),
-        new WP_Error(code: 404, message: 'Not Found'),
-    ])
+    ->with(['response', 'error'])
     ->group('response', 'middleware');
 
 test('Invalid response data', function (mixed $invalidData) {
+    $invalidData = $invalidData === 'datetime' ? new DateTime : $invalidData;
     $endpoint = new Endpoint('GET', '/returns/invalid', function () use ($invalidData) {
         return $invalidData;
     });
@@ -204,7 +211,7 @@ test('Invalid response data', function (mixed $invalidData) {
         ->toHaveProperty('code', 500)
         ->toHaveProperty('message', $errorMessage);
 })
-    ->with([true, false, null, 'yup', [['ID' => 10]], new DateTime])
+    ->with([true, false, null, 'yup', [['ID' => 10]], 'datetime'])
     ->group('response', 'middleware');
 
 test('Unable to serialise', function () {

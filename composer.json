@@ -9,7 +9,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^8.2",
+        "php": "^8.3",
         "attributes-php/validation": "^0.9",
         "php-di/invoker": "^2.0",
         "attributes-php/wp-fastendpoints-contracts": "^3.1",
@@ -37,15 +37,16 @@
     },
     "require-dev": {
         "mockery/mockery": "^1.6",
-        "brain/monkey": "2.*",
+        "brain/monkey": "^2.8",
         "carthage-software/mago": "^1.0",
-        "pestphp/pest": "^1.23",
-        "yoast/phpunit-polyfills": "^1.0 || ^4.0"
+        "pestphp/pest": "^4.0",
+        "yoast/phpunit-polyfills": "^4.0"
     },
     "scripts": {
         "lint": "./vendor/bin/mago format",
         "test:lint": "./vendor/bin/mago format --check",
-        "test:coverage": "php -d error_reporting=24575 vendor/bin/pest --coverage",
+        "test:coverage": "php -d error_reporting=24575 vendor/bin/pest --coverage --coverage-clover tests/coverage/clover.xml --coverage-html tests/coverage/html",
+        "test:mutate": "php -d error_reporting=24575 vendor/bin/pest --mutate --parallel",
         "test:unit": "php -d error_reporting=24575 vendor/bin/pest --colors=always",
         "test:integration": "npm run test:integration",
         "test:endtoend": "npm run test:endtoend",

@@ -31,6 +31,8 @@ afterEach(function () {
 
 // Constructor
 
+mutates(WpError::class);
+
 test('Setting correct params', function () {
     $wpError = new WpError(123, 'My error message');
     expect($wpError)

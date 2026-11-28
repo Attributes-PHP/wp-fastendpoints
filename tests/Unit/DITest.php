@@ -14,7 +14,11 @@ namespace Attributes\Wp\FastEndpoints\Tests\Unit\Schemas;
 
 use Attributes\Serialization\Serializable;
 use Attributes\Validation\Validatable;
+use Attributes\Wp\FastEndpoints\DI\InjectParameterResolver;
+use Attributes\Wp\FastEndpoints\DI\Invoker;
 use Attributes\Wp\FastEndpoints\DI\LazyLoadParameters;
+use Attributes\Wp\FastEndpoints\DI\StaticParameterResolver;
+use Attributes\Wp\FastEndpoints\DI\ValidationParameterResolver;
 use Attributes\Wp\FastEndpoints\Endpoint;
 use Attributes\Wp\FastEndpoints\Helpers\WpError;
 use Attributes\Wp\FastEndpoints\Options\Header;
@@ -40,6 +44,14 @@ afterEach(function () {
 });
 
 // Inject parameter resolver
+
+mutates(
+    InjectParameterResolver::class,
+    Invoker::class,
+    LazyLoadParameters::class,
+    StaticParameterResolver::class,
+    ValidationParameterResolver::class,
+);
 
 test('Inject dependencies', function () {
     $endpoint = new Endpoint('POST', '/inject', function (
@@ -230,7 +242,7 @@ test('Load parameters from respective options', function (int|array $post) {
             'post' => $post,
         ]);
 })
-    ->with([1, ['post_author' => 11, 'post_title' => 'My first post', 'post_status' => 'publish']])
+    ->with([1, [['post_author' => 11, 'post_title' => 'My first post', 'post_status' => 'publish']]])
     ->group('di', 'lazyload', 'options');
 
 test('Unable to find parameter', function () {

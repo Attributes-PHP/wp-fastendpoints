@@ -14,6 +14,7 @@ use Attributes\Wp\FastEndpoints\Options\Any;
 use Attributes\Wp\FastEndpoints\Options\Body;
 use Attributes\Wp\FastEndpoints\Options\Cookie;
 use Attributes\Wp\FastEndpoints\Options\File;
+use Attributes\Wp\FastEndpoints\Options\From;
 use Attributes\Wp\FastEndpoints\Options\Header;
 use Attributes\Wp\FastEndpoints\Options\Inject;
 use Attributes\Wp\FastEndpoints\Options\Json;
@@ -23,6 +24,19 @@ use Mockery;
 use WP_REST_Request;
 
 // Query
+
+mutates(
+    Any::class,
+    Body::class,
+    Cookie::class,
+    File::class,
+    From::class,
+    Header::class,
+    Inject::class,
+    Json::class,
+    Query::class,
+    Url::class,
+);
 
 test('Fetch query params', function () {
     $from = new Query;

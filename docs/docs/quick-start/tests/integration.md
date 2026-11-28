@@ -33,7 +33,7 @@ The pieces needed to get there:
 ```json title=".wp-env.test.json"
 {
     "$schema": "https://schemas.wp.org/trunk/wp-env.json",
-    "phpVersion": "8.2",
+    "phpVersion": "8.3",
     "port": 8889,
     "mappings": {
         "wp-content/plugins/my-plugin": "."

@@ -24,7 +24,7 @@
 
 ## Requirements
 
-- PHP 8.2+
+- PHP 8.3+
 - WordPress 6.x
 - [attributes-php/validation](https://packagist.org/packages/Attributes-PHP/validation)
 - [attributes-php/serialization](https://packagist.org/packages/Attributes-PHP/serialization)
